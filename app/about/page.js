@@ -1,4 +1,4 @@
-export default function Home() {
+export default function About() {
   return (
     <div className="page">
       {/* Header */}
@@ -7,21 +7,17 @@ export default function Home() {
           <a className="logo" href="/">Dario Schlegel</a>
 
           <nav>
-            <a className="navLink" href="/about">About</a>
+            <a className="navLink active" href="/about">About</a>
           </nav>
         </div>
       </header>
 
       <main className="container">
-        {/* Hero */}
-        <section className="hero">
-          <h1 className="title">
-            Hi, ich bin <span className="accent">Dario Schlegel</span>.
-          </h1>
+        <section className="section">
+          <h1 className="title">About</h1>
 
-          <p className="subtitle">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <p className="text">
+            Ich bin Schüler in der IMS.
           </p>
         </section>
       </main>
@@ -90,24 +86,23 @@ export default function Home() {
           color: var(--text);
         }
 
-        /* Hero */
-        .hero {
+        .active {
+          color: var(--accent);
+          font-weight: 500;
+        }
+
+        /* Section */
+        .section {
           padding: 120px 0;
         }
 
         .title {
-          font-size: 48px;
-          margin: 0;
-          line-height: 1.1;
+          font-size: 40px;
+          margin: 0 0 24px;
           letter-spacing: -0.02em;
         }
 
-        .accent {
-          color: var(--accent);
-        }
-
-        .subtitle {
-          margin-top: 20px;
+        .text {
           font-size: 18px;
           line-height: 1.7;
           color: var(--muted);
