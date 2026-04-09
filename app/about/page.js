@@ -45,7 +45,7 @@ export default function About() {
       const viewportHeight = window.innerHeight;
 
       const stickyTop = viewportHeight / 2 - 270;
-      const startScroll = stickyTop;
+      const startScroll = stickyTop + 120;
       const endScroll = stickyTop - 750;
 
       let progress = (startScroll - rect.top) / (startScroll - endScroll);
@@ -201,9 +201,7 @@ export default function About() {
           <div className={`diveCopy ${nunito.className}`}>
             <h2 className="diveTitle">Tauchen</h2>
             <p className="diveText">
-              Tauchen ist ein weiteres Hobby von mir. Seit 2019 bin ich
-              zertifizierter Taucher und liebe es, die Unterwasserwelt ganz
-              ruhig und nah zu erleben.
+              Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
             </p>
           </div>
         </section>
@@ -286,7 +284,7 @@ export default function About() {
         }
 
         .section {
-          padding: 120px 0;
+          padding: 72px 0 40px;
         }
 
         .title {
@@ -366,7 +364,7 @@ export default function About() {
           margin: 0;
           font-size: 22px;
           font-weight: 700;
-          color: #ad6464;
+          color: #726359;
           letter-spacing: 0.04em;
           text-transform: uppercase;
           will-change: transform;
@@ -380,7 +378,7 @@ export default function About() {
           font-style: italic;
           font-size: 34px;
           font-weight: bold;
-          color: #ad6464;
+          color: #726359;
           margin: 0;
           will-change: transform;
         }
@@ -390,7 +388,7 @@ export default function About() {
           justify-content: flex-start;
           align-items: flex-start;
           gap: 50px;
-          padding: 100px 0 80px;
+          padding: 50px 0 80px;
         }
 
         .diveCopy {
@@ -410,7 +408,7 @@ export default function About() {
           font-style: italic;
           font-size: 34px;
           font-weight: bold;
-          color: #82c2d9;
+          color: #6ea5b9;
         }
 
         .diveTitle {
@@ -418,7 +416,7 @@ export default function About() {
           width: 800px;
           font-size: 22px;
           font-weight: 700;
-          color: #82c2d9;
+          color: #6ea5b9;
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
