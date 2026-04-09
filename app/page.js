@@ -7,7 +7,7 @@ export default function Home() {
           <a className="logo" href="/">Dario Schlegel</a>
 
           <nav>
-            <a className="navLink" href="/about">About</a>
+            <a className="navLink" href="/about">Freizeit</a>
           </nav>
         </div>
       </header>

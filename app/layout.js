@@ -3,7 +3,7 @@ export default function RootLayout({ children }) {
     <html lang="de">
       <body>
         <nav>
-          <a href="/">Home</a> | <a href="/about">About</a>
+          <a href="/">Home</a> | <a href="/about">Freizeit</a>
         </nav>
 
         {children}

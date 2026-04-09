@@ -1,6 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Nunito } from 'next/font/google';
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+});
 
 export default function About() {
   const sceneRef = useRef(null);
@@ -10,6 +16,7 @@ export default function About() {
   const frontwheelRef = useRef(null);
   const shadingbackRef = useRef(null);
   const shadingfrontRef = useRef(null);
+  const bikeTextRef = useRef(null);
 
   const [sceneHeight, setSceneHeight] = useState(1800);
 
@@ -77,6 +84,10 @@ export default function About() {
         shadingfrontRef.current.style.transform = `translateX(${moveX}px)`;
       }
 
+      if (bikeTextRef.current) {
+        bikeTextRef.current.style.transform = `translateX(${moveX}px)`;
+      }
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -102,14 +113,14 @@ export default function About() {
         <div className="container headerInner">
           <a className="logo" href="/">Dario Schlegel</a>
           <nav>
-            <a className="navLink active" href="/about">About</a>
+            <a className="navLink active" href="/about">Freizeit</a>
           </nav>
         </div>
       </header>
 
       <main className="container">
         <section className="section">
-          <h1 className="title">About</h1>
+          <h1 className="title">Freizeit</h1>
         </section>
 
         <section
@@ -154,6 +165,14 @@ export default function About() {
                 className="shadingfront"
                 width="93"
               />
+              <p
+                ref={bikeTextRef}
+                className={`bikeText ${nunito.className}`}
+              >
+                Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer
+                125er angefangen und bin nun diesen Winter auf eine gedrosselte
+                650er aufgestiegen.
+              </p>
             </div>
           </div>
         </section>
@@ -306,6 +325,18 @@ export default function About() {
           z-index: 2;
           pointer-events: none;
           will-change: transform;
+        }
+
+        .bikeText {
+          position: absolute;
+          left: -850px; 
+          top: 350px;
+          font-style: italic;
+          font-size: 34px;
+          font-weight: bold;
+          color: #726359;
+          margin: 0;
+          width: 800px;
         }
 
         .spacer {
