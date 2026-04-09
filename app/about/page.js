@@ -16,6 +16,7 @@ export default function About() {
   const frontwheelRef = useRef(null);
   const shadingbackRef = useRef(null);
   const shadingfrontRef = useRef(null);
+  const bikeTitleRef = useRef(null);
   const bikeTextRef = useRef(null);
 
   const [sceneHeight, setSceneHeight] = useState(1800);
@@ -84,6 +85,10 @@ export default function About() {
         shadingfrontRef.current.style.transform = `translateX(${moveX}px)`;
       }
 
+      if (bikeTitleRef.current) {
+        bikeTitleRef.current.style.transform = `translateX(${moveX}px)`;
+      }
+
       if (bikeTextRef.current) {
         bikeTextRef.current.style.transform = `translateX(${moveX}px)`;
       }
@@ -133,7 +138,7 @@ export default function About() {
               <img
                 ref={nakedbikeRef}
                 src="/cbnaked1.png"
-                alt="Crossbike"
+                alt="Motorcycleframe"
                 className="nakedbike"
                 width="400"
               />
@@ -165,6 +170,12 @@ export default function About() {
                 className="shadingfront"
                 width="93"
               />
+              <h2
+                ref={bikeTitleRef}
+                className={`bikeTitle ${nunito.className}`}
+              >
+               Motorradfahren
+              </h2>
               <p
                 ref={bikeTextRef}
                 className={`bikeText ${nunito.className}`}
@@ -174,6 +185,26 @@ export default function About() {
                 650er aufgestiegen.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="diveSection">
+          <video
+            className="whalesharkVideo"
+            src="/whaleshark.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls
+          />
+          <div className={`diveCopy ${nunito.className}`}>
+            <h2 className="diveTitle">Tauchen</h2>
+            <p className="diveText">
+              Tauchen ist ein weiteres Hobby von mir. Seit 2019 bin ich
+              zertifizierter Taucher und liebe es, die Unterwasserwelt ganz
+              ruhig und nah zu erleben.
+            </p>
           </div>
         </section>
 
@@ -327,18 +358,70 @@ export default function About() {
           will-change: transform;
         }
 
+        .bikeTitle {
+          position: absolute;
+          left: -850px;
+          top: 320px;
+          width: 800px;
+          margin: 0;
+          font-size: 22px;
+          font-weight: 700;
+          color: #ad6464;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          will-change: transform;
+        }
+
         .bikeText {
           position: absolute;
-          left: -850px; 
-          top: 350px;
+          left: -850px;
+          top: 365px;
+          width: 800px;
           font-style: italic;
           font-size: 34px;
           font-weight: bold;
-          color: #726359;
+          color: #ad6464;
           margin: 0;
-          width: 800px;
+          will-change: transform;
         }
 
+        .diveSection {
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          gap: 50px;
+          padding: 100px 0 80px;
+        }
+
+        .diveCopy {
+          width: 800px;
+          padding-top: 20px;
+        }
+
+        .whalesharkVideo {
+          width: min(500px, 100%);
+          display: block;
+          border-radius: 40px;
+        }
+
+        .diveText {
+          margin: 0;
+          width: 640px;
+          font-style: italic;
+          font-size: 34px;
+          font-weight: bold;
+          color: #82c2d9;
+        }
+
+        .diveTitle {
+          margin: 0 0 12px;
+          width: 800px;
+          font-size: 22px;
+          font-weight: 700;
+          color: #82c2d9;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
         .spacer {
           height: 1300px;
         }
