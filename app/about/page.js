@@ -2,10 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Nunito } from 'next/font/google';
+import localFont from 'next/font/local';
 
 const nunito = Nunito({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
+});
+
+const dseg14ClassicMini = localFont({
+  src: './fonts/dseg14-classic-mini-latin-400-normal.woff2',
+  display: 'swap',
 });
 
 export default function About() {
@@ -172,13 +178,13 @@ export default function About() {
               />
               <h2
                 ref={bikeTitleRef}
-                className={`bikeTitle ${nunito.className}`}
+                className={`bikeTitle ${dseg14ClassicMini.className}`}
               >
                Motorradfahren
               </h2>
               <p
                 ref={bikeTextRef}
-                className={`bikeText ${nunito.className}`}
+                className={`bikeText ${dseg14ClassicMini.className}`}
               >
                 Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer
                 125er angefangen und bin nun diesen Winter auf eine gedrosselte
@@ -198,9 +204,9 @@ export default function About() {
             playsInline
             controls
           />
-          <div className={`diveCopy ${nunito.className}`}>
-            <h2 className="diveTitle">Tauchen</h2>
-            <p className="diveText">
+          <div className="diveCopy">
+            <h2 className={`diveTitle ${dseg14ClassicMini.className}`}>Tauchen</h2>
+            <p className={`diveText ${dseg14ClassicMini.className}`}>
               Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
             </p>
           </div>
@@ -363,7 +369,7 @@ export default function About() {
           width: 800px;
           margin: 0;
           font-size: 22px;
-          font-weight: 700;
+          font-weight: 400;
           color: #726359;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -375,9 +381,9 @@ export default function About() {
           left: -850px;
           top: 365px;
           width: 800px;
-          font-style: italic;
+          font-style: normal;
           font-size: 34px;
-          font-weight: bold;
+          font-weight: 400;
           color: #726359;
           margin: 0;
           will-change: transform;
@@ -405,9 +411,9 @@ export default function About() {
         .diveText {
           margin: 0;
           width: 640px;
-          font-style: italic;
+          font-style: normal;
           font-size: 34px;
-          font-weight: bold;
+          font-weight: 400;
           color: #6ea5b9;
         }
 
@@ -415,7 +421,7 @@ export default function About() {
           margin: 0 0 12px;
           width: 800px;
           font-size: 22px;
-          font-weight: 700;
+          font-weight: 400;
           color: #6ea5b9;
           letter-spacing: 0.04em;
           text-transform: uppercase;
