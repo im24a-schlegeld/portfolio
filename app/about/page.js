@@ -260,12 +260,21 @@ export default function About() {
         body {
           margin: 0;
           padding: 0;
+          overflow-x: clip;
         }
 
         body {
           font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
           background: var(--bg);
           color: var(--text);
+        }
+
+        body::-webkit-scrollbar:horizontal {
+          display: none;
+        }
+
+        body {
+          scrollbar-width: none;
         }
 
         a {
@@ -278,7 +287,7 @@ export default function About() {
         }
 
         .container {
-          width: 1440px;
+          width: min(1440px, 100%);
           max-width: 1440px;
           margin: 0 auto;
           padding: 0 24px;
