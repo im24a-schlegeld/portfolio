@@ -287,7 +287,7 @@ export default function About() {
         }
 
         .container {
-          width: min(1440px, 100%);
+          width: auto;
           max-width: 1440px;
           margin: 0 auto;
           padding: 0 24px;
