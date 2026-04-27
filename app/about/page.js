@@ -1,17 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Nunito } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Orbitron } from 'next/font/google';
 
-const nunito = Nunito({
+const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
-});
-
-const dseg14ClassicMini = localFont({
-  src: './fonts/dseg14-classic-mini-latin-400-normal.woff2',
-  display: 'swap',
 });
 
 export default function About() {
@@ -26,6 +20,11 @@ export default function About() {
   const bikeTextRef = useRef(null);
 
   const [sceneHeight, setSceneHeight] = useState(1800);
+  const [swordAnimationKey, setSwordAnimationKey] = useState(0);
+
+  const replaySwordAnimation = () => {
+    setSwordAnimationKey((key) => key + 1);
+  };
 
   useEffect(() => {
     let animationFrameId;
@@ -178,18 +177,46 @@ export default function About() {
               />
               <h2
                 ref={bikeTitleRef}
-                className={`bikeTitle ${dseg14ClassicMini.className}`}
+                className={`bikeTitle ${orbitron.className}`}
               >
-               Motorradfahren
+                Motorradfahren
               </h2>
               <p
                 ref={bikeTextRef}
-                className={`bikeText ${dseg14ClassicMini.className}`}
+                className={`bikeText ${orbitron.className}`}
               >
                 Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer
                 125er angefangen und bin nun diesen Winter auf eine gedrosselte
                 650er aufgestiegen.
               </p>
+              <div className="swordGroup">
+                <div className="swordImageWrap">
+                  <div
+                    key={swordAnimationKey}
+                    className="swordAnimationLayer"
+                    onClick={replaySwordAnimation}
+                  >
+                    <img
+                      src="/flambergschwert.png"
+                      alt="Schwert"
+                      className="swordImage"
+                    />
+                    <span className="swordSpark swordSparkOne" aria-hidden="true"></span>
+                    <span className="swordSpark swordSparkTwo" aria-hidden="true"></span>
+                    <span className="swordSpark swordSparkThree" aria-hidden="true"></span>
+                  </div>
+                </div>
+
+                <div className="swordCopy">
+                  <h2 className={`swordTitle ${orbitron.className}`}>
+                    Schwert
+                  </h2>
+                  <p className={`swordText ${orbitron.className}`}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer vitae arcu sed neque tempus fermentum.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -205,8 +232,8 @@ export default function About() {
             controls
           />
           <div className="diveCopy">
-            <h2 className={`diveTitle ${dseg14ClassicMini.className}`}>Tauchen</h2>
-            <p className={`diveText ${dseg14ClassicMini.className}`}>
+            <h2 className={`diveTitle ${orbitron.className}`}>Tauchen</h2>
+            <p className={`diveText ${orbitron.className}`}>
               Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
             </p>
           </div>
@@ -299,6 +326,153 @@ export default function About() {
           letter-spacing: -0.02em;
         }
 
+        .swordGroup {
+          position: absolute;
+          left: -60px;
+          top: 28px;
+          width: 1450px;
+          height: 260px;
+        }
+
+        .swordImageWrap {
+          position: absolute;
+          left: -300px;
+          top: 142px;
+          width: 575px;
+          min-height: 220px;
+          overflow: visible;
+        }
+
+        .swordAnimationLayer {
+          position: relative;
+          width: 100%;
+          transform-origin: 6% 86%;
+          transform: rotate(-15deg);
+          cursor: pointer;
+          animation: swordRotateIn 1.15s cubic-bezier(0.2, 0.9, 0.1, 1) forwards;
+        }
+
+        .swordImage {
+          width: 100%;
+          display: block;
+          opacity: 1;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18));
+          pointer-events: none;
+        }
+
+        .swordSpark {
+          position: absolute;
+          left: 96%;
+          top: 55%;
+          width: 9px;
+          height: 9px;
+          border-radius: 999px;
+          background: #ffffff;
+          box-shadow: 0 0 16px #ffffff, 0 0 34px rgba(255, 255, 255, 0.95);
+          opacity: 0;
+          pointer-events: none;
+          z-index: 5;
+        }
+
+        .swordSparkOne {
+          animation: swordSparkOne 0.42s ease-out 1.01s forwards;
+        }
+
+        .swordSparkTwo {
+          animation: swordSparkTwo 0.42s ease-out 1.03s forwards;
+        }
+
+        .swordSparkThree {
+          animation: swordSparkThree 0.42s ease-out 1.05s forwards;
+        }
+
+        @keyframes swordRotateIn {
+          0% {
+            transform: rotate(-17deg);
+          }
+
+          85% {
+            transform: rotate(-23deg);
+          }
+
+          100% {
+            transform: rotate(-17deg);
+          }
+        }
+
+        @keyframes swordSparkOne {
+          0% {
+            opacity: 0;
+            transform: translate(0, 0) scale(0.3);
+          }
+
+          20% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+            transform: translate(64px, -46px) scale(0.12);
+          }
+        }
+
+        @keyframes swordSparkTwo {
+          0% {
+            opacity: 0;
+            transform: translate(0, 0) scale(0.3);
+          }
+
+          20% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+            transform: translate(78px, 8px) scale(0.12);
+          }
+        }
+
+        @keyframes swordSparkThree {
+          0% {
+            opacity: 0;
+            transform: translate(0, 0) scale(0.3);
+          }
+
+          20% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+            transform: translate(38px, 58px) scale(0.12);
+          }
+        }
+
+
+        .swordCopy {
+          position: absolute;
+          left: 220px;
+          top: 66px;
+          width: 520px;
+        }
+
+        .swordTitle {
+          margin: 0 0 12px;
+          font-size: 22px;
+          font-weight: 400;
+          color: #c8c8c8;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .swordText {
+          margin: 0;
+          font-size: 30px;
+          font-weight: 400;
+          line-height: 1.35;
+          color: #a8a8a8;
+        }
+
         .bikeScene {
           position: relative;
         }
@@ -370,7 +544,7 @@ export default function About() {
           margin: 0;
           font-size: 22px;
           font-weight: 400;
-          color: #726359;
+          color: #9a8679;
           letter-spacing: 0.04em;
           text-transform: uppercase;
           will-change: transform;
@@ -382,9 +556,9 @@ export default function About() {
           top: 365px;
           width: 800px;
           font-style: normal;
-          font-size: 34px;
+          font-size: 30px;
           font-weight: 400;
-          color: #726359;
+          color: #9a8679;
           margin: 0;
           will-change: transform;
         }
@@ -393,36 +567,42 @@ export default function About() {
           display: flex;
           justify-content: flex-start;
           align-items: flex-start;
+          flex-wrap: wrap;
           gap: 50px;
           padding: 50px 0 80px;
         }
 
         .diveCopy {
-          width: 800px;
-          padding-top: 20px;
+          flex: 1 1 420px;
+          min-width: 0;
+          max-width: 800px;
+          padding-top: 10px;
         }
 
         .whalesharkVideo {
           width: min(500px, 100%);
+          flex: 0 1 500px;
           display: block;
           border-radius: 40px;
         }
 
         .diveText {
           margin: 0;
-          width: 640px;
+          width: 100%;
+          max-width: 640px;
           font-style: normal;
-          font-size: 34px;
+          font-size: 30px;
           font-weight: 400;
-          color: #6ea5b9;
+          color: #8bbfd1;
         }
 
         .diveTitle {
           margin: 0 0 12px;
-          width: 800px;
+          width: 100%;
+          max-width: 800px;
           font-size: 22px;
           font-weight: 400;
-          color: #6ea5b9;
+          color: #8bbfd1;
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
