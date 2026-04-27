@@ -278,9 +278,17 @@ export default function About() {
         }
 
         .container {
-          max-width: 3000px;
+          width: 1440px;
+          max-width: 1440px;
           margin: 0 auto;
           padding: 0 24px;
+        }
+
+        @media (max-width: 767px) {
+          .container {
+            width: 100%;
+            max-width: 100%;
+          }
         }
 
         .header {
