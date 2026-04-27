@@ -45,6 +45,7 @@ export default function Home() {
           font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
           background: var(--bg);
           color: var(--text);
+          overflow-x: hidden;
         }
 
         a {
@@ -112,6 +113,53 @@ export default function Home() {
           line-height: 1.7;
           color: var(--muted);
           max-width: 600px;
+        }
+
+        @media (max-width: 1199px) and (min-width: 768px) {
+          .container {
+            max-width: 820px;
+          }
+
+          .hero {
+            padding: 88px 0;
+          }
+
+          .title {
+            font-size: 40px;
+          }
+
+          .subtitle {
+            font-size: 16px;
+            max-width: 560px;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .container {
+            padding: 0 18px;
+          }
+
+          .headerInner {
+            height: 64px;
+          }
+
+          .logo {
+            font-size: 16px;
+          }
+
+          .hero {
+            padding: 56px 0;
+          }
+
+          .title {
+            font-size: 30px;
+            line-height: 1.15;
+          }
+
+          .subtitle {
+            font-size: 15px;
+            line-height: 1.6;
+          }
         }
       `}</style>
     </div>

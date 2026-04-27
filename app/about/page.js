@@ -28,23 +28,48 @@ export default function About() {
 
   useEffect(() => {
     let animationFrameId;
+    let swordIntervalId;
 
     let targetProgress = 0;
     let currentProgress = 0;
+    let isMobileViewport = false;
 
     const startOffsetX = -700;  // Start further left for longer travel
     const endOffsetX = 475;     // End further right
     const totalRotation = 1080;
     const smoothing = 0.08;
 
+    const updateSwordInterval = () => {
+      if (isMobileViewport) {
+        if (swordIntervalId) {
+          window.clearInterval(swordIntervalId);
+          swordIntervalId = undefined;
+        }
+
+        return;
+      }
+
+      if (!swordIntervalId) {
+        swordIntervalId = window.setInterval(replaySwordAnimation, 10000);
+      }
+    };
+
     const updateMeasurements = () => {
       const viewportHeight = window.innerHeight;
-      setSceneHeight(viewportHeight + 900);
+      isMobileViewport = window.innerWidth < 1200;
+      updateSwordInterval();
+      setSceneHeight(isMobileViewport ? 720 : viewportHeight + 900);
     };
 
     const updateTargetProgress = () => {
       const scene = sceneRef.current;
       if (!scene) return;
+
+      if (isMobileViewport) {
+        targetProgress = 0;
+        currentProgress = 0;
+        return;
+      }
 
       const rect = scene.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -62,9 +87,10 @@ export default function About() {
     const animate = () => {
       currentProgress += (targetProgress - currentProgress) * smoothing;
 
-      const moveX =
-        startOffsetX + currentProgress * (endOffsetX - startOffsetX);
-      const rotation = currentProgress * totalRotation;
+      const moveX = isMobileViewport
+        ? 0
+        : startOffsetX + currentProgress * (endOffsetX - startOffsetX);
+      const rotation = isMobileViewport ? 0 : currentProgress * totalRotation;
 
       if (bikegroupRef.current) {
         bikegroupRef.current.style.opacity = '1';
@@ -114,6 +140,9 @@ export default function About() {
       window.removeEventListener('resize', updateTargetProgress);
       window.removeEventListener('scroll', updateTargetProgress);
       cancelAnimationFrame(animationFrameId);
+      if (swordIntervalId) {
+        window.clearInterval(swordIntervalId);
+      }
     };
   }, []);
 
@@ -207,13 +236,12 @@ export default function About() {
                   </div>
                 </div>
 
-                <div className="swordCopy">
-                  <h2 className={`swordTitle ${orbitron.className}`}>
-                    Schwert
+                <div className="pfadiCopy">
+                  <h2 className={`pfadiTitle ${orbitron.className}`}>
+                    Pfadi
                   </h2>
-                  <p className={`swordText ${orbitron.className}`}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer vitae arcu sed neque tempus fermentum.
+                  <p className={`pfadiText ${orbitron.className}`}>
+                    Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite Samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau gemacht.
                   </p>
                 </div>
               </div>
@@ -229,7 +257,6 @@ export default function About() {
             muted
             loop
             playsInline
-            controls
           />
           <div className="diveCopy">
             <h2 className={`diveTitle ${orbitron.className}`}>Tauchen</h2>
@@ -237,6 +264,83 @@ export default function About() {
               Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
             </p>
           </div>
+        </section>
+
+        <section className="responsiveFreizeitSections">
+          <article className="responsiveFeature">
+            <div className="responsiveVisual pfadiVisual">
+              <img
+                src="/flambergschwert.png"
+                alt="Schwert"
+                className="responsiveSword"
+              />
+            </div>
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle ${orbitron.className}`}>
+                Pfadi
+              </h2>
+              <p className={`responsiveText ${orbitron.className}`}>
+                Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig.
+              </p>
+            </div>
+          </article>
+
+          <article className="responsiveFeature">
+            <div className="responsiveVisual bikeVisual">
+              <img
+                src="/cbnaked1.png"
+                alt="Motorrad"
+                className="responsiveBikeFrame"
+              />
+              <img
+                src="/cbbackwheel.png"
+                alt=""
+                className="responsiveBikeWheel responsiveBackWheel"
+              />
+              <img
+                src="/cbfrontwheel2.png"
+                alt=""
+                className="responsiveBikeWheel responsiveFrontWheel"
+              />
+              <img
+                src="/wheelshading1.png"
+                alt=""
+                className="responsiveBikeShading responsiveBackShading"
+              />
+              <img
+                src="/wheelshading2.png"
+                alt=""
+                className="responsiveBikeShading responsiveFrontShading"
+              />
+            </div>
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle bikeResponsiveTitle ${orbitron.className}`}>
+                Motorradfahren
+              </h2>
+              <p className={`responsiveText bikeResponsiveText ${orbitron.className}`}>
+                Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer 125er angefangen und bin nun diesen Winter auf eine gedrosselte 650er aufgestiegen.
+              </p>
+            </div>
+          </article>
+
+          <article className="responsiveFeature">
+            <video
+              className="responsiveWhaleshark"
+              src="/whaleshark.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle diveResponsiveTitle ${orbitron.className}`}>
+                Tauchen
+              </h2>
+              <p className={`responsiveText diveResponsiveText ${orbitron.className}`}>
+                Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41 Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
+              </p>
+            </div>
+          </article>
         </section>
 
         <div className="spacer"></div>
@@ -466,14 +570,14 @@ export default function About() {
         }
 
 
-        .swordCopy {
+        .pfadiCopy {
           position: absolute;
           left: 220px;
           top: 66px;
           width: 520px;
         }
 
-        .swordTitle {
+        .pfadiTitle {
           margin: 0 0 12px;
           font-size: 22px;
           font-weight: 400;
@@ -482,8 +586,9 @@ export default function About() {
           text-transform: uppercase;
         }
 
-        .swordText {
+        .pfadiText {
           margin: 0;
+          width: 700px;
           font-size: 30px;
           font-weight: 400;
           line-height: 1.35;
@@ -622,6 +727,270 @@ export default function About() {
           color: #8bbfd1;
           letter-spacing: 0.04em;
           text-transform: uppercase;
+        }
+
+        .responsiveFreizeitSections {
+          display: none;
+        }
+
+        .responsiveFeature {
+          width: 100%;
+          max-width: 760px;
+          margin: 0 auto;
+        }
+
+        .responsiveVisual {
+          position: relative;
+          width: 100%;
+        }
+
+        .responsiveCopy {
+          width: 100%;
+        }
+
+        .responsiveTitle {
+          margin: 0 0 12px;
+          font-size: 20px;
+          font-weight: 400;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .responsiveText {
+          margin: 0;
+          font-size: 22px;
+          font-weight: 400;
+          line-height: 1.35;
+        }
+
+        .pfadiVisual {
+          height: 180px;
+          display: flex;
+          align-items: center;
+        }
+
+        .responsiveSword {
+          width: min(520px, 100%);
+          display: block;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18));
+          transform: rotate(-17deg);
+          transform-origin: 6% 86%;
+        }
+
+        .bikeVisual {
+          height: 370px;
+          max-width: 420px;
+          margin: 0 auto;
+        }
+
+        .responsiveBikeFrame {
+          position: absolute;
+          width: 360px;
+          height: auto;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%) translateX(-47px);
+          z-index: 3;
+        }
+
+        .responsiveBikeWheel {
+          position: absolute;
+          width: 84px;
+          height: auto;
+          z-index: 1;
+        }
+
+        .responsiveBackWheel {
+          top: 261px;
+          left: calc(50% - 180px);
+        }
+
+        .responsiveFrontWheel {
+          top: 264px;
+          left: calc(50% + 1px);
+        }
+
+        .responsiveBikeShading {
+          position: absolute;
+          width: 84px;
+          height: auto;
+          z-index: 2;
+          pointer-events: none;
+        }
+
+        .responsiveBackShading {
+          top: 261px;
+          left: calc(50% - 180px);
+        }
+
+        .responsiveFrontShading {
+          top: 264px;
+          left: calc(50% + 1px);
+        }
+
+        .responsiveWhaleshark {
+          width: min(500px, 100%);
+          display: block;
+          border-radius: 40px;
+        }
+
+        @media (max-width: 1199px) and (min-width: 768px) {
+          .bikeScene,
+          .diveSection {
+            display: none;
+          }
+
+          .responsiveFreizeitSections {
+            display: flex;
+            flex-direction: column;
+            gap: 72px;
+            padding: 28px 0 96px;
+          }
+
+          .responsiveFeature {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+          }
+
+          .responsiveTitle {
+            font-size: 20px;
+          }
+
+          .responsiveText {
+            font-size: 22px;
+          }
+
+          .pfadiTitle,
+          .pfadiText {
+            color: #a8a8a8;
+          }
+
+          .bikeResponsiveTitle,
+          .bikeResponsiveText {
+            color: #9a8679;
+          }
+
+          .diveResponsiveTitle,
+          .diveResponsiveText {
+            color: #8bbfd1;
+          }
+        }
+
+        @media (max-width: 767px) {
+          html,
+          body {
+            overflow-x: hidden;
+          }
+
+          body::-webkit-scrollbar:horizontal {
+            display: none;
+          }
+
+          .headerInner {
+            height: 64px;
+          }
+
+          .logo {
+            font-size: 16px;
+          }
+
+          .section {
+            padding: 48px 0 24px;
+          }
+
+          .title {
+            font-size: 32px;
+          }
+
+          .bikeScene,
+          .diveSection {
+            display: none;
+          }
+
+          .responsiveFreizeitSections {
+            display: flex;
+            flex-direction: column;
+            gap: 56px;
+            padding: 24px 0 72px;
+          }
+
+          .responsiveFeature {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .pfadiVisual {
+            height: 150px;
+          }
+
+          .responsiveSword {
+            width: min(320px, 100%);
+          }
+
+          .bikeVisual {
+            height: 290px;
+            max-width: 320px;
+          }
+
+          .responsiveBikeFrame {
+            width: 280px;
+            top: 0;
+            transform: translateX(-50%) translateX(-37px);
+          }
+
+          .responsiveBikeWheel {
+            width: 65px;
+          }
+
+          .responsiveBackWheel {
+            top: 203px;
+            left: calc(50% - 141px);
+          }
+
+          .responsiveFrontWheel {
+            top: 205px;
+            left: 50%;
+          }
+
+          .responsiveBikeShading {
+            width: 65px;
+          }
+
+          .responsiveBackShading {
+            top: 203px;
+            left: calc(50% - 141px);
+          }
+
+          .responsiveFrontShading {
+            top: 205px;
+            left: 50%;
+          }
+
+          .responsiveTitle {
+            font-size: 16px;
+          }
+
+          .responsiveText {
+            font-size: 17px;
+            line-height: 1.45;
+          }
+
+          .pfadiTitle,
+          .pfadiText {
+            color: #a8a8a8;
+          }
+
+          .bikeResponsiveTitle,
+          .bikeResponsiveText {
+            color: #9a8679;
+          }
+
+          .diveResponsiveTitle,
+          .diveResponsiveText {
+            color: #8bbfd1;
+          }
         }
         .spacer {
           height: 1300px;
