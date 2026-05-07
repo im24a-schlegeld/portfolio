@@ -1,13 +1,15 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <div className="page">
       {/* Header */}
       <header className="header">
         <div className="container headerInner">
-          <a className="logo" href="/">Dario Schlegel</a>
+          <Link className="logo" href="/">Dario Schlegel</Link>
 
           <nav>
-            <a className="navLink" href="/about">Freizeit</a>
+            <Link className="navLink" href="/about">Freizeit</Link>
           </nav>
         </div>
       </header>

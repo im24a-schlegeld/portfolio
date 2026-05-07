@@ -1,11 +1,23 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Orbitron } from 'next/font/google';
+import Link from 'next/link';
+import localFont from 'next/font/local';
+import { New_Rocker, Racing_Sans_One } from 'next/font/google';
 
-const orbitron = Orbitron({
+const racingSansOne = Racing_Sans_One({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: '400',
+});
+
+const wavy = localFont({
+  src: './fonts/wavy/Wavy.ttf',
+  display: 'swap',
+});
+
+const newRocker = New_Rocker({
+  subsets: ['latin'],
+  weight: '400',
 });
 
 export default function About() {
@@ -56,7 +68,7 @@ export default function About() {
 
     const updateMeasurements = () => {
       const viewportHeight = window.innerHeight;
-      isMobileViewport = window.innerWidth < 1200;
+      isMobileViewport = window.innerWidth < 768;
       updateSwordInterval();
       setSceneHeight(isMobileViewport ? 720 : viewportHeight + 900);
     };
@@ -150,9 +162,9 @@ export default function About() {
     <div className="page">
       <header className="header">
         <div className="container headerInner">
-          <a className="logo" href="/">Dario Schlegel</a>
+          <Link className="logo" href="/">Dario Schlegel</Link>
           <nav>
-            <a className="navLink active" href="/about">Freizeit</a>
+            <Link className="navLink active" href="/about">Freizeit</Link>
           </nav>
         </div>
       </header>
@@ -206,13 +218,13 @@ export default function About() {
               />
               <h2
                 ref={bikeTitleRef}
-                className={`bikeTitle ${orbitron.className}`}
+                className={`bikeTitle ${racingSansOne.className}`}
               >
                 Motorradfahren
               </h2>
               <p
                 ref={bikeTextRef}
-                className={`bikeText ${orbitron.className}`}
+                className={`bikeText ${racingSansOne.className}`}
               >
                 Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer
                 125er angefangen und bin nun diesen Winter auf eine gedrosselte
@@ -237,10 +249,10 @@ export default function About() {
                 </div>
 
                 <div className="pfadiCopy">
-                  <h2 className={`pfadiTitle ${orbitron.className}`}>
+                  <h2 className={`pfadiTitle ${newRocker.className}`}>
                     Pfadi
                   </h2>
-                  <p className={`pfadiText ${orbitron.className}`}>
+                  <p className={`pfadiText ${newRocker.className}`}>
                     Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite Samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau gemacht.
                   </p>
                 </div>
@@ -259,8 +271,8 @@ export default function About() {
             playsInline
           />
           <div className="diveCopy">
-            <h2 className={`diveTitle ${orbitron.className}`}>Tauchen</h2>
-            <p className={`diveText ${orbitron.className}`}>
+            <h2 className={`diveTitle ${wavy.className}`}>Tauchen</h2>
+            <p className={`diveText ${wavy.className}`}>
               Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
             </p>
           </div>
@@ -276,10 +288,10 @@ export default function About() {
               />
             </div>
             <div className="responsiveCopy">
-              <h2 className={`responsiveTitle ${orbitron.className}`}>
+              <h2 className={`responsiveTitle ${newRocker.className}`}>
                 Pfadi
               </h2>
-              <p className={`responsiveText ${orbitron.className}`}>
+              <p className={`responsiveText ${newRocker.className}`}>
                 Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig.
               </p>
             </div>
@@ -314,10 +326,10 @@ export default function About() {
               />
             </div>
             <div className="responsiveCopy">
-              <h2 className={`responsiveTitle bikeResponsiveTitle ${orbitron.className}`}>
+              <h2 className={`responsiveTitle bikeResponsiveTitle ${racingSansOne.className}`}>
                 Motorradfahren
               </h2>
-              <p className={`responsiveText bikeResponsiveText ${orbitron.className}`}>
+              <p className={`responsiveText bikeResponsiveText ${racingSansOne.className}`}>
                 Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer 125er angefangen und bin nun diesen Winter auf eine gedrosselte 650er aufgestiegen.
               </p>
             </div>
@@ -333,10 +345,10 @@ export default function About() {
               playsInline
             />
             <div className="responsiveCopy">
-              <h2 className={`responsiveTitle diveResponsiveTitle ${orbitron.className}`}>
+              <h2 className={`responsiveTitle diveResponsiveTitle ${wavy.className}`}>
                 Tauchen
               </h2>
-              <p className={`responsiveText diveResponsiveText ${orbitron.className}`}>
+              <p className={`responsiveText diveResponsiveText ${wavy.className}`}>
                 Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41 Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
               </p>
             </div>
@@ -588,11 +600,13 @@ export default function About() {
 
         .pfadiText {
           margin: 0;
-          width: 700px;
+          width: min(700px, calc(100vw - 620px));
+          max-width: 700px;
           font-size: 30px;
           font-weight: 400;
           line-height: 1.35;
           color: #a8a8a8;
+          overflow-wrap: break-word;
         }
 
         .bikeScene {
@@ -617,7 +631,7 @@ export default function About() {
         .nakedbike {
           position: absolute;
           top: 120px;
-          left: -52px;
+          left: -142px;
           z-index: 3;
           will-change: transform;
         }
@@ -625,7 +639,7 @@ export default function About() {
         .backwheel {
           position: absolute;
           top: 410px;
-          left: 0;
+          left: -90px;
           z-index: 1;
           will-change: transform;
           transform-origin: center center;
@@ -634,7 +648,7 @@ export default function About() {
         .frontwheel {
           position: absolute;
           top: 413px;
-          left: 201px;
+          left: 111px;
           z-index: 1;
           will-change: transform;
           transform-origin: center center;
@@ -643,7 +657,7 @@ export default function About() {
         .shadingback {
           position: absolute;
           top: 410px;
-          left: 0;
+          left: -90px;
           z-index: 2;
           pointer-events: none;
           will-change: transform;
@@ -652,7 +666,7 @@ export default function About() {
         .shadingfront {
           position: absolute;
           top: 413px;
-          left: 201px;
+          left: 111px;
           z-index: 2;
           pointer-events: none;
           will-change: transform;
@@ -676,9 +690,9 @@ export default function About() {
           position: absolute;
           left: -850px;
           top: 365px;
-          width: 800px;
+          width: 750px;
           font-style: normal;
-          font-size: 30px;
+          font-size: 32px;
           font-weight: 400;
           color: #9a8679;
           margin: 0;
@@ -709,11 +723,11 @@ export default function About() {
         }
 
         .diveText {
-          margin: 0;
+          margin: 0px 0px 0px 0px;
           width: 100%;
           max-width: 640px;
           font-style: normal;
-          font-size: 30px;
+          font-size: 26px;
           font-weight: 400;
           color: #8bbfd1;
         }
@@ -832,49 +846,6 @@ export default function About() {
           width: min(500px, 100%);
           display: block;
           border-radius: 40px;
-        }
-
-        @media (max-width: 1199px) and (min-width: 768px) {
-          .bikeScene,
-          .diveSection {
-            display: none;
-          }
-
-          .responsiveFreizeitSections {
-            display: flex;
-            flex-direction: column;
-            gap: 72px;
-            padding: 28px 0 96px;
-          }
-
-          .responsiveFeature {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-          }
-
-          .responsiveTitle {
-            font-size: 20px;
-          }
-
-          .responsiveText {
-            font-size: 22px;
-          }
-
-          .pfadiTitle,
-          .pfadiText {
-            color: #a8a8a8;
-          }
-
-          .bikeResponsiveTitle,
-          .bikeResponsiveText {
-            color: #9a8679;
-          }
-
-          .diveResponsiveTitle,
-          .diveResponsiveText {
-            color: #8bbfd1;
-          }
         }
 
         @media (max-width: 767px) {
