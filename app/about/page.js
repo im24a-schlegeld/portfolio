@@ -20,6 +20,285 @@ const newRocker = New_Rocker({
   weight: '400',
 });
 
+const FREIZEIT_COPY = {
+  pageTitle: 'Freizeit',
+  bike: {
+    title: 'Motorradfahren',
+    text: 'Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer 125er angefangen und bin nun diesen Winter auf eine gedrosselte 650er aufgestiegen.',
+  },
+  pfadi: {
+    title: 'Pfadi',
+    text: 'Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau gemacht.',
+    shortText: 'Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig.',
+  },
+  dive: {
+    title: 'Tauchen',
+    text: 'Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mittlerweile habe ich 41 Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.',
+  },
+};
+
+function FreizeitHeader() {
+  return (
+    <header className="header">
+      <div className="container headerInner">
+        <Link className="logo" href="/">
+          Dario Schlegel
+        </Link>
+
+        <nav className="nav" aria-label="Seitennavigation">
+          <Link className="navLink" href="/">
+            Portfolio
+          </Link>
+          <Link className="navLink active" href="/about" aria-current="page">
+            Freizeit
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function PageIntro() {
+  return (
+    <section className="section">
+      <p className="kicker">Persönliche Interessen</p>
+      <h1 className="title">{FREIZEIT_COPY.pageTitle}</h1>
+    </section>
+  );
+}
+
+function BikeScene({
+  sceneRef,
+  sceneHeight,
+  bikegroupRef,
+  nakedbikeRef,
+  backwheelRef,
+  frontwheelRef,
+  shadingbackRef,
+  shadingfrontRef,
+  bikeTitleRef,
+  bikeTextRef,
+  swordAnimationKey,
+  onReplaySwordAnimation,
+}) {
+  return (
+    <section
+      ref={sceneRef}
+      className="bikeScene"
+      style={{ height: `${sceneHeight}px` }}
+    >
+      <div className="bikeStickyLayer">
+        <div className="bikegroup" ref={bikegroupRef}>
+          <img
+            ref={nakedbikeRef}
+            src="/cbnaked1.png"
+            alt="Motorrad"
+            className="nakedbike"
+            width="400"
+          />
+          <img
+            ref={backwheelRef}
+            src="/cbbackwheel.png"
+            alt="Hinterrad"
+            className="backwheel"
+            width="93"
+          />
+          <img
+            ref={frontwheelRef}
+            src="/cbfrontwheel2.png"
+            alt="Vorderrad"
+            className="frontwheel"
+            width="93"
+          />
+          <img
+            ref={shadingbackRef}
+            src="/wheelshading1.png"
+            alt=""
+            className="shadingback"
+            width="93"
+          />
+          <img
+            ref={shadingfrontRef}
+            src="/wheelshading2.png"
+            alt=""
+            className="shadingfront"
+            width="93"
+          />
+          <h2
+            ref={bikeTitleRef}
+            className={`bikeTitle ${racingSansOne.className}`}
+          >
+            {FREIZEIT_COPY.bike.title}
+          </h2>
+          <p
+            ref={bikeTextRef}
+            className={`bikeText ${racingSansOne.className}`}
+          >
+            {FREIZEIT_COPY.bike.text}
+          </p>
+
+          <PfadiSwordGroup
+            swordAnimationKey={swordAnimationKey}
+            onReplaySwordAnimation={onReplaySwordAnimation}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
+  return (
+    <div className="swordGroup">
+      <div className="swordImageWrap">
+        <div
+          key={swordAnimationKey}
+          className="swordAnimationLayer"
+          onClick={onReplaySwordAnimation}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onReplaySwordAnimation();
+            }
+          }}
+        >
+          <img
+            src="/flambergschwert.png"
+            alt="Schwert"
+            className="swordImage"
+          />
+          <SwordSparks />
+        </div>
+      </div>
+
+      <div className="pfadiCopy">
+        <h2 className={`pfadiTitle ${newRocker.className}`}>
+          {FREIZEIT_COPY.pfadi.title}
+        </h2>
+        <p className={`pfadiText ${newRocker.className}`}>
+          {FREIZEIT_COPY.pfadi.text}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SwordSparks() {
+  return (
+    <>
+      <span className="swordSpark swordSparkOne" aria-hidden="true" />
+      <span className="swordSpark swordSparkTwo" aria-hidden="true" />
+      <span className="swordSpark swordSparkThree" aria-hidden="true" />
+    </>
+  );
+}
+
+function DiveSection() {
+  return (
+    <section className="diveSection">
+      <video
+        className="whalesharkVideo"
+        src="/whaleshark.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="diveCopy">
+        <h2 className={`diveTitle ${wavy.className}`}>
+          {FREIZEIT_COPY.dive.title}
+        </h2>
+        <p className={`diveText ${wavy.className}`}>
+          {FREIZEIT_COPY.dive.text}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function ResponsiveFreizeitSections() {
+  return (
+    <section className="responsiveFreizeitSections">
+      <article className="responsiveFeature">
+        <div className="responsiveVisual pfadiVisual">
+          <img
+            src="/flambergschwert.png"
+            alt="Schwert"
+            className="responsiveSword"
+          />
+        </div>
+        <div className="responsiveCopy">
+          <h2 className={`responsiveTitle ${newRocker.className}`}>
+            {FREIZEIT_COPY.pfadi.title}
+          </h2>
+          <p className={`responsiveText ${newRocker.className}`}>
+            {FREIZEIT_COPY.pfadi.shortText}
+          </p>
+        </div>
+      </article>
+
+      <article className="responsiveFeature">
+        <div className="responsiveVisual bikeVisual">
+          <img
+            src="/cbnaked1.png"
+            alt="Motorrad"
+            className="responsiveBikeFrame"
+          />
+          <img
+            src="/cbbackwheel.png"
+            alt=""
+            className="responsiveBikeWheel responsiveBackWheel"
+          />
+          <img
+            src="/cbfrontwheel2.png"
+            alt=""
+            className="responsiveBikeWheel responsiveFrontWheel"
+          />
+          <img
+            src="/wheelshading1.png"
+            alt=""
+            className="responsiveBikeShading responsiveBackShading"
+          />
+          <img
+            src="/wheelshading2.png"
+            alt=""
+            className="responsiveBikeShading responsiveFrontShading"
+          />
+        </div>
+        <div className="responsiveCopy">
+          <h2 className={`responsiveTitle bikeResponsiveTitle ${racingSansOne.className}`}>
+            {FREIZEIT_COPY.bike.title}
+          </h2>
+          <p className={`responsiveText bikeResponsiveText ${racingSansOne.className}`}>
+            {FREIZEIT_COPY.bike.text}
+          </p>
+        </div>
+      </article>
+
+      <article className="responsiveFeature">
+        <video
+          className="responsiveWhaleshark"
+          src="/whaleshark.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="responsiveCopy">
+          <h2 className={`responsiveTitle diveResponsiveTitle ${wavy.className}`}>
+            {FREIZEIT_COPY.dive.title}
+          </h2>
+          <p className={`responsiveText diveResponsiveText ${wavy.className}`}>
+            {FREIZEIT_COPY.dive.text}
+          </p>
+        </div>
+      </article>
+    </section>
+  );
+}
+
 export default function About() {
   const sceneRef = useRef(null);
   const bikegroupRef = useRef(null);
@@ -160,200 +439,29 @@ export default function About() {
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container headerInner">
-          <Link className="logo" href="/">Dario Schlegel</Link>
-          <nav>
-            <Link className="navLink active" href="/about">Freizeit</Link>
-          </nav>
-        </div>
-      </header>
+      <FreizeitHeader />
 
       <main className="container">
-        <section className="section">
-          <h1 className="title">Freizeit</h1>
-        </section>
+        <PageIntro />
 
-        <section
-          ref={sceneRef}
-          className="bikeScene"
-          style={{ height: `${sceneHeight}px` }}
-        >
-          <div className="bikeStickyLayer">
-            <div className="bikegroup" ref={bikegroupRef}>
-              <img
-                ref={nakedbikeRef}
-                src="/cbnaked1.png"
-                alt="Motorcycleframe"
-                className="nakedbike"
-                width="400"
-              />
-              <img
-                ref={backwheelRef}
-                src="/cbbackwheel.png"
-                alt="Rear wheel"
-                className="backwheel"
-                width="93"
-              />
-              <img
-                ref={frontwheelRef}
-                src="/cbfrontwheel2.png"
-                alt="Front wheel"
-                className="frontwheel"
-                width="93"
-              />
-              <img
-                ref={shadingbackRef}
-                src="/wheelshading1.png"
-                alt=""
-                className="shadingback"
-                width="93"
-              />
-              <img
-                ref={shadingfrontRef}
-                src="/wheelshading2.png"
-                alt=""
-                className="shadingfront"
-                width="93"
-              />
-              <h2
-                ref={bikeTitleRef}
-                className={`bikeTitle ${racingSansOne.className}`}
-              >
-                Motorradfahren
-              </h2>
-              <p
-                ref={bikeTextRef}
-                className={`bikeText ${racingSansOne.className}`}
-              >
-                Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer
-                125er angefangen und bin nun diesen Winter auf eine gedrosselte
-                650er aufgestiegen.
-              </p>
-              <div className="swordGroup">
-                <div className="swordImageWrap">
-                  <div
-                    key={swordAnimationKey}
-                    className="swordAnimationLayer"
-                    onClick={replaySwordAnimation}
-                  >
-                    <img
-                      src="/flambergschwert.png"
-                      alt="Schwert"
-                      className="swordImage"
-                    />
-                    <span className="swordSpark swordSparkOne" aria-hidden="true"></span>
-                    <span className="swordSpark swordSparkTwo" aria-hidden="true"></span>
-                    <span className="swordSpark swordSparkThree" aria-hidden="true"></span>
-                  </div>
-                </div>
+        <BikeScene
+          sceneRef={sceneRef}
+          sceneHeight={sceneHeight}
+          bikegroupRef={bikegroupRef}
+          nakedbikeRef={nakedbikeRef}
+          backwheelRef={backwheelRef}
+          frontwheelRef={frontwheelRef}
+          shadingbackRef={shadingbackRef}
+          shadingfrontRef={shadingfrontRef}
+          bikeTitleRef={bikeTitleRef}
+          bikeTextRef={bikeTextRef}
+          swordAnimationKey={swordAnimationKey}
+          onReplaySwordAnimation={replaySwordAnimation}
+        />
 
-                <div className="pfadiCopy">
-                  <h2 className={`pfadiTitle ${newRocker.className}`}>
-                    Pfadi
-                  </h2>
-                  <p className={`pfadiText ${newRocker.className}`}>
-                    Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite Samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau gemacht.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <DiveSection />
 
-        <section className="diveSection">
-          <video
-            className="whalesharkVideo"
-            src="/whaleshark.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          <div className="diveCopy">
-            <h2 className={`diveTitle ${wavy.className}`}>Tauchen</h2>
-            <p className={`diveText ${wavy.className}`}>
-              Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41  Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
-            </p>
-          </div>
-        </section>
-
-        <section className="responsiveFreizeitSections">
-          <article className="responsiveFeature">
-            <div className="responsiveVisual pfadiVisual">
-              <img
-                src="/flambergschwert.png"
-                alt="Schwert"
-                className="responsiveSword"
-              />
-            </div>
-            <div className="responsiveCopy">
-              <h2 className={`responsiveTitle ${newRocker.className}`}>
-                Pfadi
-              </h2>
-              <p className={`responsiveText ${newRocker.className}`}>
-                Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig.
-              </p>
-            </div>
-          </article>
-
-          <article className="responsiveFeature">
-            <div className="responsiveVisual bikeVisual">
-              <img
-                src="/cbnaked1.png"
-                alt="Motorrad"
-                className="responsiveBikeFrame"
-              />
-              <img
-                src="/cbbackwheel.png"
-                alt=""
-                className="responsiveBikeWheel responsiveBackWheel"
-              />
-              <img
-                src="/cbfrontwheel2.png"
-                alt=""
-                className="responsiveBikeWheel responsiveFrontWheel"
-              />
-              <img
-                src="/wheelshading1.png"
-                alt=""
-                className="responsiveBikeShading responsiveBackShading"
-              />
-              <img
-                src="/wheelshading2.png"
-                alt=""
-                className="responsiveBikeShading responsiveFrontShading"
-              />
-            </div>
-            <div className="responsiveCopy">
-              <h2 className={`responsiveTitle bikeResponsiveTitle ${racingSansOne.className}`}>
-                Motorradfahren
-              </h2>
-              <p className={`responsiveText bikeResponsiveText ${racingSansOne.className}`}>
-                Seit 2 Jahren fahre ich Motorrad. Mit 16 habe ich auf einer 125er angefangen und bin nun diesen Winter auf eine gedrosselte 650er aufgestiegen.
-              </p>
-            </div>
-          </article>
-
-          <article className="responsiveFeature">
-            <video
-              className="responsiveWhaleshark"
-              src="/whaleshark.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-            <div className="responsiveCopy">
-              <h2 className={`responsiveTitle diveResponsiveTitle ${wavy.className}`}>
-                Tauchen
-              </h2>
-              <p className={`responsiveText diveResponsiveText ${wavy.className}`}>
-                Vor 3 Jahren habe ich mit dem Tauchen angefangen. Mitlerweile habe ich 41 Tauchgänge, Advanced Open Water und Nitrox. Mein speziellster Tauchgang war mit einem Walhai in Indonesien.
-              </p>
-            </div>
-          </article>
-        </section>
+        <ResponsiveFreizeitSections />
 
         <div className="spacer"></div>
       </main>
@@ -361,11 +469,11 @@ export default function About() {
       <style>{`
         :root {
           --bg: #101010;
-          --card: #ffffff;
           --text: #b7b7b7;
           --muted: #6b7280;
-          --border: #e5e7eb;
-          --accent: #2563eb;
+          --header-bg: rgba(16, 16, 16, 0.78);
+          --header-border: rgba(255, 255, 255, 0.08);
+          --header-active: #e8ded6;
         }
 
         * {
@@ -417,8 +525,12 @@ export default function About() {
         }
 
         .header {
-          border-bottom: 1px solid var(--border);
-          background: var(--card);
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          border-bottom: 1px solid var(--header-border);
+          background: var(--header-bg);
+          backdrop-filter: blur(16px);
         }
 
         .headerInner {
@@ -429,28 +541,54 @@ export default function About() {
         }
 
         .logo {
-          font-weight: 600;
+          font-weight: 700;
           font-size: 18px;
-          color: #111827;
+          color: #f0f0f0;
+          letter-spacing: 0.04em;
+        }
+
+        .nav {
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
 
         .navLink {
-          font-size: 15px;
-          color: var(--muted);
-          transition: color 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          min-height: 36px;
+          padding: 0 14px;
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #a7a7a7;
+          letter-spacing: 0.04em;
+          transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
         }
 
         .navLink:hover {
-          color: #111827;
+          border-color: rgba(255, 255, 255, 0.22);
+          color: #ffffff;
         }
 
         .active {
-          color: var(--accent);
-          font-weight: 500;
+          border-color: rgba(232, 222, 214, 0.55);
+          background: var(--header-active);
+          color: #101010;
         }
 
         .section {
           padding: 72px 0 40px;
+        }
+
+        .kicker {
+          margin: 0 0 10px;
+          color: #777;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
         }
 
         .title {
@@ -483,6 +621,11 @@ export default function About() {
           transform: rotate(-15deg);
           cursor: pointer;
           animation: swordRotateIn 1.15s cubic-bezier(0.2, 0.9, 0.1, 1) forwards;
+        }
+
+        .swordAnimationLayer:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.75);
+          outline-offset: 10px;
         }
 
         .swordImage {
@@ -702,7 +845,7 @@ export default function About() {
         .diveSection {
           display: flex;
           justify-content: flex-start;
-          align-items: flex-start;
+          align-items: center;
           flex-wrap: wrap;
           gap: 50px;
           padding: 50px 0 80px;
@@ -712,7 +855,7 @@ export default function About() {
           flex: 1 1 420px;
           min-width: 0;
           max-width: 800px;
-          padding-top: 10px;
+          padding-top: 0;
         }
 
         .whalesharkVideo {
@@ -723,7 +866,7 @@ export default function About() {
         }
 
         .diveText {
-          margin: 0px 0px 0px 0px;
+          margin: 0;
           width: 100%;
           max-width: 640px;
           font-style: normal;
