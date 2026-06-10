@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import localFont from 'next/font/local';
 import { New_Rocker, Racing_Sans_One } from 'next/font/google';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const racingSansOne = Racing_Sans_One({
   subsets: ['latin'],
@@ -19,6 +21,8 @@ const newRocker = New_Rocker({
   subsets: ['latin'],
   weight: '400',
 });
+
+const SWORD_MODEL_URL = '/about/models/longsword.glb';
 
 const FREIZEIT_COPY = {
   pageTitle: 'Freizeit',
@@ -150,13 +154,13 @@ function BikeScene({
 function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
   return (
     <div className="swordGroup">
-      <div className="swordImageWrap">
+      <div className="swordModelWrap">
         <div
-          key={swordAnimationKey}
-          className="swordAnimationLayer"
+          className="swordCanvasButton"
           onClick={onReplaySwordAnimation}
           role="button"
           tabIndex={0}
+          aria-label="Schwert-Animation erneut abspielen"
           onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
@@ -164,12 +168,10 @@ function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
             }
           }}
         >
-          <img
-            src="/flambergschwert.png"
-            alt="Schwert"
-            className="swordImage"
+          <SwordModel
+            animationTrigger={swordAnimationKey}
+            className="swordModel"
           />
-          <SwordSparks />
         </div>
       </div>
 
@@ -185,14 +187,163 @@ function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
   );
 }
 
-function SwordSparks() {
-  return (
-    <>
-      <span className="swordSpark swordSparkOne" aria-hidden="true" />
-      <span className="swordSpark swordSparkTwo" aria-hidden="true" />
-      <span className="swordSpark swordSparkThree" aria-hidden="true" />
-    </>
-  );
+function SwordModel({ animationTrigger = 0, className = '' }) {
+  const mountRef = useRef(null);
+  const flourishStartRef = useRef(0);
+
+  useEffect(() => {
+    flourishStartRef.current = performance.now();
+  }, [animationTrigger]);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return undefined;
+
+    let animationFrameId;
+    let modelRoot;
+    let isDisposed = false;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
+    camera.position.set(0, 0.08, 7.2);
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.domElement.className = 'swordCanvas';
+    renderer.domElement.setAttribute('aria-hidden', 'true');
+    mount.appendChild(renderer.domElement);
+
+    const swordGroup = new THREE.Group();
+    scene.add(swordGroup);
+
+    const fillLight = new THREE.HemisphereLight(0xf4f0e9, 0x141414, 2.3);
+    const keyLight = new THREE.DirectionalLight(0xfff3df, 3.2);
+    keyLight.position.set(3.6, 5.4, 6.2);
+    const rimLight = new THREE.DirectionalLight(0xaebed6, 2.4);
+    rimLight.position.set(-4.4, 0.5, 4.8);
+    const glintLight = new THREE.PointLight(0xffffff, 2.2, 9);
+    glintLight.position.set(2.4, 0.5, 2.2);
+    scene.add(fillLight, keyLight, rimLight, glintLight);
+
+    const resizeRenderer = () => {
+      const width = mount.clientWidth;
+      const height = mount.clientHeight;
+
+      if (!width || !height) return;
+
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+
+    const resizeObserver = new ResizeObserver(resizeRenderer);
+    resizeObserver.observe(mount);
+    resizeRenderer();
+
+    const loader = new GLTFLoader();
+    loader.load(
+      SWORD_MODEL_URL,
+      (gltf) => {
+        if (isDisposed) return;
+
+        modelRoot = gltf.scene;
+        const box = new THREE.Box3().setFromObject(modelRoot);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const longestSide = Math.max(size.x, size.y, size.z) || 1;
+
+        modelRoot.position.sub(center);
+        modelRoot.scale.setScalar(5.7 / longestSide);
+
+        if (size.y >= size.x && size.y >= size.z) {
+          modelRoot.rotation.z = -Math.PI / 2;
+        } else if (size.z >= size.x && size.z >= size.y) {
+          modelRoot.rotation.y = Math.PI / 2;
+        }
+
+        modelRoot.traverse((object) => {
+          if (!object.isMesh) return;
+
+          object.frustumCulled = false;
+          const materials = Array.isArray(object.material)
+            ? object.material
+            : [object.material];
+
+          materials.forEach((material) => {
+            if (!material) return;
+            material.envMapIntensity = 1.3;
+          });
+        });
+
+        swordGroup.add(modelRoot);
+      },
+      undefined,
+      (error) => {
+        console.error('Failed to load sword model', error);
+      },
+    );
+
+    const animate = (time = 0) => {
+      const elapsed = time * 0.001;
+      const flourishProgress = Math.max(
+        0,
+        Math.min(1, (time - flourishStartRef.current) / 2600),
+      );
+      const flourish = flourishProgress < 1
+        ? Math.sin(flourishProgress * Math.PI)
+        : 0;
+
+      swordGroup.rotation.x = 0.2 + Math.sin(elapsed * 0.46) * 0.08;
+      swordGroup.rotation.y = -0.22 + Math.sin(elapsed * 0.34) * 0.13 + flourish * 0.18;
+      swordGroup.rotation.z = -0.18 + Math.sin(elapsed * 0.42) * 0.055 - flourish * 0.18;
+      swordGroup.position.x = Math.sin(elapsed * 0.28) * 0.06;
+      swordGroup.position.y = Math.sin(elapsed * 0.52) * 0.08 + flourish * 0.06;
+
+      glintLight.intensity = 1.9 + Math.sin(elapsed * 0.8) * 0.35 + flourish * 1.2;
+      glintLight.position.x = Math.cos(elapsed * 0.35) * 2.4;
+      glintLight.position.y = 0.3 + Math.sin(elapsed * 0.47) * 0.7;
+
+      renderer.render(scene, camera);
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      isDisposed = true;
+      cancelAnimationFrame(animationFrameId);
+      resizeObserver.disconnect();
+
+      scene.traverse((object) => {
+        if (!object.isMesh) return;
+
+        object.geometry?.dispose();
+        const materials = Array.isArray(object.material)
+          ? object.material
+          : [object.material];
+
+        materials.forEach((material) => {
+          if (!material) return;
+
+          Object.values(material).forEach((value) => {
+            if (value?.isTexture) value.dispose();
+          });
+          material.dispose();
+        });
+      });
+
+      renderer.dispose();
+      renderer.domElement.remove();
+    };
+  }, []);
+
+  return <div ref={mountRef} className={className} aria-hidden="true" />;
 }
 
 function DiveSection() {
@@ -223,11 +374,7 @@ function ResponsiveFreizeitSections() {
     <section className="responsiveFreizeitSections">
       <article className="responsiveFeature">
         <div className="responsiveVisual pfadiVisual">
-          <img
-            src="/flambergschwert.png"
-            alt="Schwert"
-            className="responsiveSword"
-          />
+          <SwordModel className="responsiveSwordModel" />
         </div>
         <div className="responsiveCopy">
           <h2 className={`responsiveTitle ${newRocker.className}`}>
@@ -605,123 +752,43 @@ export default function About() {
           height: 260px;
         }
 
-        .swordImageWrap {
+        .swordModelWrap {
           position: absolute;
           left: -300px;
-          top: 142px;
-          width: 575px;
-          min-height: 220px;
+          top: 104px;
+          width: 610px;
+          height: 250px;
           overflow: visible;
         }
 
-        .swordAnimationLayer {
+        .swordCanvasButton {
           position: relative;
           width: 100%;
-          transform-origin: 6% 86%;
-          transform: rotate(-15deg);
+          height: 100%;
           cursor: pointer;
-          animation: swordRotateIn 1.15s cubic-bezier(0.2, 0.9, 0.1, 1) forwards;
         }
 
-        .swordAnimationLayer:focus-visible {
+        .swordCanvasButton:focus-visible {
           outline: 2px solid rgba(255, 255, 255, 0.75);
           outline-offset: 10px;
         }
 
-        .swordImage {
+        .swordModel,
+        .responsiveSwordModel {
+          position: relative;
           width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
+
+        .swordModel {
+          filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.18));
+        }
+
+        .swordCanvas {
           display: block;
-          opacity: 1;
-          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18));
-          pointer-events: none;
-        }
-
-        .swordSpark {
-          position: absolute;
-          left: 96%;
-          top: 55%;
-          width: 9px;
-          height: 9px;
-          border-radius: 999px;
-          background: #ffffff;
-          box-shadow: 0 0 16px #ffffff, 0 0 34px rgba(255, 255, 255, 0.95);
-          opacity: 0;
-          pointer-events: none;
-          z-index: 5;
-        }
-
-        .swordSparkOne {
-          animation: swordSparkOne 0.42s ease-out 1.01s forwards;
-        }
-
-        .swordSparkTwo {
-          animation: swordSparkTwo 0.42s ease-out 1.03s forwards;
-        }
-
-        .swordSparkThree {
-          animation: swordSparkThree 0.42s ease-out 1.05s forwards;
-        }
-
-        @keyframes swordRotateIn {
-          0% {
-            transform: rotate(-17deg);
-          }
-
-          85% {
-            transform: rotate(-23deg);
-          }
-
-          100% {
-            transform: rotate(-17deg);
-          }
-        }
-
-        @keyframes swordSparkOne {
-          0% {
-            opacity: 0;
-            transform: translate(0, 0) scale(0.3);
-          }
-
-          20% {
-            opacity: 1;
-          }
-
-          100% {
-            opacity: 0;
-            transform: translate(64px, -46px) scale(0.12);
-          }
-        }
-
-        @keyframes swordSparkTwo {
-          0% {
-            opacity: 0;
-            transform: translate(0, 0) scale(0.3);
-          }
-
-          20% {
-            opacity: 1;
-          }
-
-          100% {
-            opacity: 0;
-            transform: translate(78px, 8px) scale(0.12);
-          }
-        }
-
-        @keyframes swordSparkThree {
-          0% {
-            opacity: 0;
-            transform: translate(0, 0) scale(0.3);
-          }
-
-          20% {
-            opacity: 1;
-          }
-
-          100% {
-            opacity: 0;
-            transform: translate(38px, 58px) scale(0.12);
-          }
+          width: 100%;
+          height: 100%;
         }
 
 
@@ -926,12 +993,10 @@ export default function About() {
           align-items: center;
         }
 
-        .responsiveSword {
+        .responsiveSwordModel {
           width: min(520px, 100%);
-          display: block;
-          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18));
-          transform: rotate(-17deg);
-          transform-origin: 6% 86%;
+          height: 180px;
+          filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.18));
         }
 
         .bikeVisual {
@@ -1039,8 +1104,9 @@ export default function About() {
             height: 150px;
           }
 
-          .responsiveSword {
+          .responsiveSwordModel {
             width: min(320px, 100%);
+            height: 150px;
           }
 
           .bikeVisual {
