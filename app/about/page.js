@@ -24,6 +24,32 @@ const newRocker = New_Rocker({
 
 const SWORD_MODEL_URL = '/about/models/longsword.glb';
 
+// Edit only this block to move or rotate the 3D sword.
+// position is a Three.js Vector3: x = left/right, y = up/down, z = depth.
+// angle is a Three.js Euler angle in radians: x/y = tilt, z = diagonal rotation.
+const SWORD_TRANSFORM = {
+  position: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+  angle: {
+    x: 0.2,
+    y: -0.18,
+    z: 0.48,
+  },
+};
+
+// Edit this only if the scroll animation feels too strong or too weak.
+const SWORD_SCROLL_REACTION = {
+  amount: 0.5,
+  xAngle: 0.75,
+  yAngle: 0.42,
+  zAngle: -0.55,
+  xPosition: 0,
+  yPosition: 0,
+};
+
 const FREIZEIT_COPY = {
   pageTitle: 'Freizeit',
   bike: {
@@ -32,7 +58,7 @@ const FREIZEIT_COPY = {
   },
   pfadi: {
     title: 'Pfadi',
-    text: 'Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau gemacht.',
+    text: 'Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig. Ich leite samstags eine Aktivität und leite Lager mit. Diesen Frühling habe ich den Aufbau(Kurs) gemacht.',
     shortText: 'Ich bin seit 10 Jahren in der Pfadi. Seit 4 Jahren bin ich als Leiter tätig.',
   },
   dive: {
@@ -82,8 +108,7 @@ function BikeScene({
   shadingfrontRef,
   bikeTitleRef,
   bikeTextRef,
-  swordAnimationKey,
-  onReplaySwordAnimation,
+  swordScrollProgressRef,
 }) {
   return (
     <section
@@ -141,38 +166,27 @@ function BikeScene({
             {FREIZEIT_COPY.bike.text}
           </p>
 
-          <PfadiSwordGroup
-            swordAnimationKey={swordAnimationKey}
-            onReplaySwordAnimation={onReplaySwordAnimation}
-          />
+          <PfadiSwordGroup swordScrollProgressRef={swordScrollProgressRef} />
         </div>
       </div>
     </section>
   );
 }
 
-function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
+function PfadiSwordGroup({ swordScrollProgressRef }) {
   return (
     <div className="swordGroup">
       <div className="swordModelWrap">
-        <div
-          className="swordCanvasButton"
-          onClick={onReplaySwordAnimation}
-          role="button"
-          tabIndex={0}
-          aria-label="Schwert-Animation erneut abspielen"
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onReplaySwordAnimation();
-            }
-          }}
+        <a
+          className="swordLink"
+          href="https://www.flamberg.ch/"
+          aria-label="Flamberg Website oeffnen"
         >
           <SwordModel
-            animationTrigger={swordAnimationKey}
             className="swordModel"
+            scrollProgressRef={swordScrollProgressRef}
           />
-        </div>
+        </a>
       </div>
 
       <div className="pfadiCopy">
@@ -187,13 +201,8 @@ function PfadiSwordGroup({ swordAnimationKey, onReplaySwordAnimation }) {
   );
 }
 
-function SwordModel({ animationTrigger = 0, className = '' }) {
+function SwordModel({ className = '', scrollProgressRef = null }) {
   const mountRef = useRef(null);
-  const flourishStartRef = useRef(0);
-
-  useEffect(() => {
-    flourishStartRef.current = performance.now();
-  }, [animationTrigger]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -202,6 +211,7 @@ function SwordModel({ animationTrigger = 0, className = '' }) {
     let animationFrameId;
     let modelRoot;
     let isDisposed = false;
+    let currentScrollProgress = scrollProgressRef?.current ?? 0;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
@@ -220,9 +230,14 @@ function SwordModel({ animationTrigger = 0, className = '' }) {
     mount.appendChild(renderer.domElement);
 
     const swordGroup = new THREE.Group();
+    swordGroup.position.set(
+      SWORD_TRANSFORM.position.x,
+      SWORD_TRANSFORM.position.y,
+      SWORD_TRANSFORM.position.z,
+    );
     scene.add(swordGroup);
 
-    const fillLight = new THREE.HemisphereLight(0xf4f0e9, 0x141414, 2.3);
+    const fillLight = new THREE.HemisphereLight(0xf4f0e9, 0x141414, 3.3);
     const keyLight = new THREE.DirectionalLight(0xfff3df, 3.2);
     keyLight.position.set(3.6, 5.4, 6.2);
     const rimLight = new THREE.DirectionalLight(0xaebed6, 2.4);
@@ -262,9 +277,11 @@ function SwordModel({ animationTrigger = 0, className = '' }) {
         modelRoot.scale.setScalar(5.7 / longestSide);
 
         if (size.y >= size.x && size.y >= size.z) {
-          modelRoot.rotation.z = -Math.PI / 2;
+          modelRoot.rotation.z = Math.PI / 2;
         } else if (size.z >= size.x && size.z >= size.y) {
-          modelRoot.rotation.y = Math.PI / 2;
+          modelRoot.rotation.y = -Math.PI / 2;
+        } else {
+          modelRoot.rotation.z = Math.PI;
         }
 
         modelRoot.traverse((object) => {
@@ -282,32 +299,55 @@ function SwordModel({ animationTrigger = 0, className = '' }) {
         });
 
         swordGroup.add(modelRoot);
+        mount.dataset.modelLoaded = 'true';
       },
       undefined,
       (error) => {
+        mount.dataset.modelError = 'true';
         console.error('Failed to load sword model', error);
       },
     );
 
-    const animate = (time = 0) => {
-      const elapsed = time * 0.001;
-      const flourishProgress = Math.max(
-        0,
-        Math.min(1, (time - flourishStartRef.current) / 2600),
+    const getElementScrollProgress = () => {
+      const rect = mount.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 1;
+      const centerY = rect.top + rect.height / 2;
+      const rawProgress = (viewportHeight * 0.88 - centerY) / (viewportHeight * 0.72);
+
+      return Math.max(0, Math.min(1, rawProgress));
+    };
+
+    const animate = () => {
+      const targetScrollProgress = scrollProgressRef
+        ? scrollProgressRef.current
+        : getElementScrollProgress();
+      currentScrollProgress += (targetScrollProgress - currentScrollProgress) * 0.1;
+
+      const scrollTurn = (
+        (currentScrollProgress - 0.5) * SWORD_SCROLL_REACTION.amount
       );
-      const flourish = flourishProgress < 1
-        ? Math.sin(flourishProgress * Math.PI)
-        : 0;
 
-      swordGroup.rotation.x = 0.2 + Math.sin(elapsed * 0.46) * 0.08;
-      swordGroup.rotation.y = -0.22 + Math.sin(elapsed * 0.34) * 0.13 + flourish * 0.18;
-      swordGroup.rotation.z = -0.18 + Math.sin(elapsed * 0.42) * 0.055 - flourish * 0.18;
-      swordGroup.position.x = Math.sin(elapsed * 0.28) * 0.06;
-      swordGroup.position.y = Math.sin(elapsed * 0.52) * 0.08 + flourish * 0.06;
+      swordGroup.rotation.x = (
+        SWORD_TRANSFORM.angle.x + scrollTurn * SWORD_SCROLL_REACTION.xAngle
+      );
+      swordGroup.rotation.y = (
+        SWORD_TRANSFORM.angle.y + scrollTurn * SWORD_SCROLL_REACTION.yAngle
+      );
+      swordGroup.rotation.z = (
+        SWORD_TRANSFORM.angle.z + scrollTurn * SWORD_SCROLL_REACTION.zAngle
+      );
+      swordGroup.position.x = (
+        SWORD_TRANSFORM.position.x
+        + scrollTurn * SWORD_SCROLL_REACTION.xPosition
+      );
+      swordGroup.position.y = (
+        SWORD_TRANSFORM.position.y
+        + scrollTurn * SWORD_SCROLL_REACTION.yPosition
+      );
 
-      glintLight.intensity = 1.9 + Math.sin(elapsed * 0.8) * 0.35 + flourish * 1.2;
-      glintLight.position.x = Math.cos(elapsed * 0.35) * 2.4;
-      glintLight.position.y = 0.3 + Math.sin(elapsed * 0.47) * 0.7;
+      glintLight.intensity = 1.9 + currentScrollProgress * 0.55;
+      glintLight.position.x = -1.2 + currentScrollProgress * 2.4;
+      glintLight.position.y = 0.15 + currentScrollProgress * 0.45;
 
       renderer.render(scene, camera);
       animationFrameId = requestAnimationFrame(animate);
@@ -341,7 +381,7 @@ function SwordModel({ animationTrigger = 0, className = '' }) {
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, []);
+  }, [scrollProgressRef]);
 
   return <div ref={mountRef} className={className} aria-hidden="true" />;
 }
@@ -446,6 +486,28 @@ function ResponsiveFreizeitSections() {
   );
 }
 
+function FreizeitFooter() {
+  return (
+    <footer className="footer">
+      <div className="container footerInner">
+        <div>
+          <p className="footerName">Dario Schlegel</p>
+          <p className="footerText">Portfolio und Freizeit</p>
+        </div>
+
+        <nav className="footerLinks" aria-label="Footer Navigation">
+          <Link className="footerLink" href="/">
+            Portfolio
+          </Link>
+          <Link className="footerLink" href="/about">
+            Freizeit
+          </Link>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
 export default function About() {
   const sceneRef = useRef(null);
   const bikegroupRef = useRef(null);
@@ -456,17 +518,12 @@ export default function About() {
   const shadingfrontRef = useRef(null);
   const bikeTitleRef = useRef(null);
   const bikeTextRef = useRef(null);
+  const swordScrollProgressRef = useRef(0);
 
   const [sceneHeight, setSceneHeight] = useState(1800);
-  const [swordAnimationKey, setSwordAnimationKey] = useState(0);
-
-  const replaySwordAnimation = () => {
-    setSwordAnimationKey((key) => key + 1);
-  };
 
   useEffect(() => {
     let animationFrameId;
-    let swordIntervalId;
 
     let targetProgress = 0;
     let currentProgress = 0;
@@ -477,25 +534,9 @@ export default function About() {
     const totalRotation = 1080;
     const smoothing = 0.08;
 
-    const updateSwordInterval = () => {
-      if (isMobileViewport) {
-        if (swordIntervalId) {
-          window.clearInterval(swordIntervalId);
-          swordIntervalId = undefined;
-        }
-
-        return;
-      }
-
-      if (!swordIntervalId) {
-        swordIntervalId = window.setInterval(replaySwordAnimation, 10000);
-      }
-    };
-
     const updateMeasurements = () => {
       const viewportHeight = window.innerHeight;
       isMobileViewport = window.innerWidth < 768;
-      updateSwordInterval();
       setSceneHeight(isMobileViewport ? 720 : viewportHeight + 900);
     };
 
@@ -506,6 +547,7 @@ export default function About() {
       if (isMobileViewport) {
         targetProgress = 0;
         currentProgress = 0;
+        swordScrollProgressRef.current = 0;
         return;
       }
 
@@ -524,6 +566,7 @@ export default function About() {
 
     const animate = () => {
       currentProgress += (targetProgress - currentProgress) * smoothing;
+      swordScrollProgressRef.current = currentProgress;
 
       const moveX = isMobileViewport
         ? 0
@@ -578,9 +621,6 @@ export default function About() {
       window.removeEventListener('resize', updateTargetProgress);
       window.removeEventListener('scroll', updateTargetProgress);
       cancelAnimationFrame(animationFrameId);
-      if (swordIntervalId) {
-        window.clearInterval(swordIntervalId);
-      }
     };
   }, []);
 
@@ -602,16 +642,15 @@ export default function About() {
           shadingfrontRef={shadingfrontRef}
           bikeTitleRef={bikeTitleRef}
           bikeTextRef={bikeTextRef}
-          swordAnimationKey={swordAnimationKey}
-          onReplaySwordAnimation={replaySwordAnimation}
+          swordScrollProgressRef={swordScrollProgressRef}
         />
 
         <DiveSection />
 
         <ResponsiveFreizeitSections />
-
-        <div className="spacer"></div>
       </main>
+
+      <FreizeitFooter />
 
       <style>{`
         :root {
@@ -726,7 +765,7 @@ export default function About() {
         }
 
         .section {
-          padding: 72px 0 40px;
+          padding: 32px 0 12px;
         }
 
         .kicker {
@@ -747,28 +786,28 @@ export default function About() {
         .swordGroup {
           position: absolute;
           left: -60px;
-          top: 28px;
+          top: 0;
           width: 1450px;
           height: 260px;
         }
 
         .swordModelWrap {
           position: absolute;
-          left: -300px;
-          top: 104px;
+          left: -380px;
+          top: 4px;
           width: 610px;
-          height: 250px;
+          height: 350px;
           overflow: visible;
         }
 
-        .swordCanvasButton {
-          position: relative;
+        .swordLink {
+          display: block;
           width: 100%;
           height: 100%;
           cursor: pointer;
         }
 
-        .swordCanvasButton:focus-visible {
+        .swordLink:focus-visible {
           outline: 2px solid rgba(255, 255, 255, 0.75);
           outline-offset: 10px;
         }
@@ -915,7 +954,7 @@ export default function About() {
           align-items: center;
           flex-wrap: wrap;
           gap: 50px;
-          padding: 50px 0 80px;
+          padding: 50px 0 36px;
         }
 
         .diveCopy {
@@ -1056,6 +1095,50 @@ export default function About() {
           border-radius: 40px;
         }
 
+        .footer {
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.018);
+          padding: 26px 0 32px;
+        }
+
+        .footerInner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+        }
+
+        .footerName {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #ededed;
+        }
+
+        .footerText {
+          margin: 6px 0 0;
+          font-size: 13px;
+          color: #777;
+        }
+
+        .footerLinks {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #a7a7a7;
+        }
+
+        .footerLink {
+          transition: color 0.2s ease;
+        }
+
+        .footerLink:hover {
+          color: #ffffff;
+        }
+
         @media (max-width: 767px) {
           html,
           body {
@@ -1075,7 +1158,7 @@ export default function About() {
           }
 
           .section {
-            padding: 48px 0 24px;
+            padding: 24px 0 24px;
           }
 
           .title {
@@ -1091,7 +1174,7 @@ export default function About() {
             display: flex;
             flex-direction: column;
             gap: 56px;
-            padding: 24px 0 72px;
+            padding: 24px 0 40px;
           }
 
           .responsiveFeature {
@@ -1171,9 +1254,15 @@ export default function About() {
           .diveResponsiveText {
             color: #8bbfd1;
           }
-        }
-        .spacer {
-          height: 1300px;
+
+          .footer {
+            padding: 24px 0 28px;
+          }
+
+          .footerInner {
+            align-items: flex-start;
+            flex-direction: column;
+          }
         }
       `}</style>
     </div>
