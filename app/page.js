@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const roadStops = [
@@ -28,10 +29,10 @@ const roadStops = [
   {
     align: 'right',
     eyebrow: 'Abzweigung rechts',
-    title: 'Ai-Teil',
-    text: 'Ein vorbereiteter Bereich fuer KI-Experimente, Prototypen und spaetere technische Erweiterungen.',
-    link: '/ai-teil',
-    linkLabel: 'Zum Ai-Teil',
+    title: 'Projekte',
+    text: 'Eine eigene Projektseite mit externer Website-Vorschau und Arbeiten, die spaeter weiter ausgebaut werden koennen.',
+    link: '/projekte',
+    linkLabel: 'Zu den Projekten',
   },
 ];
 
@@ -47,9 +48,9 @@ const projectCards = [
     meta: 'Animation / Story',
   },
   {
-    title: 'Ai-Teil Experiment',
-    text: 'Ein leerer technischer Raum, vorbereitet fuer spaetere KI-Inhalte und interaktive Tests.',
-    meta: 'Prototype / AI',
+    title: 'X-Archive Preview',
+    text: 'Eine externe Website-Vorschau, eingebettet in ein iPhone-Mockup und direkt mit dem Live-Projekt verlinkt.',
+    meta: 'Project / Preview',
   },
 ];
 
@@ -66,7 +67,7 @@ export default function Home() {
             <a href="#profile">Profil</a>
             <a href="#projects">Projekte</a>
             <Link href="/about">Freizeit</Link>
-            <Link href="/ai-teil">Ai-Teil</Link>
+            <Link href="/projekte">Projekte</Link>
           </nav>
         </div>
       </header>
@@ -121,7 +122,21 @@ export default function Home() {
             ))}
           </div>
         </section>
+
       </main>
+
+      <div className="stopSignWrap" aria-hidden="true">
+        <div className="stopSignMarker">
+          <Image
+            className="stopSignImage"
+            src="/Stop_sign.png"
+            alt=""
+            width={608}
+            height={608}
+          />
+          <div className="stopSignPole" />
+        </div>
+      </div>
 
       <footer className="roadFooter">
         <span>Dario Schlegel</span>
@@ -289,7 +304,7 @@ export default function Home() {
         .centerRoadLine {
           position: absolute;
           top: 0;
-          bottom: 0;
+          bottom: -470px;
           left: 50%;
           width: 18px;
           transform: translateX(-50%);
@@ -494,6 +509,41 @@ export default function Home() {
           padding: 90px 0 20px;
         }
 
+        .stopSignWrap {
+          position: relative;
+          z-index: 3;
+          width: min(1180px, calc(100% - 40px));
+          margin: 0 auto -170px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          padding: 40px 0 0;
+        }
+
+        .stopSignMarker {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+        }
+
+        .stopSignImage {
+          display: block;
+          width: 150px;
+          height: auto;
+          object-fit: contain;
+          filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.32));
+        }
+
+        .stopSignPole {
+          width: 10px;
+          height: 260px;
+          background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
+          box-shadow:
+            inset 2px 0 0 rgba(255, 255, 255, 0.22),
+            inset -2px 0 0 rgba(0, 0, 0, 0.18);
+        }
+
         .sectionIntro {
           grid-column: 1;
           justify-self: end;
@@ -549,6 +599,7 @@ export default function Home() {
           width: min(1180px, calc(100% - 40px));
           min-height: 90px;
           margin: 0 auto;
+          padding-left: 190px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -644,6 +695,7 @@ export default function Home() {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
+            padding-left: 174px;
           }
         }
 
@@ -679,6 +731,29 @@ export default function Home() {
           .stopCard,
           .projectCard {
             padding: 24px;
+          }
+
+          .stopSignWrap {
+            width: min(100% - 28px, 420px);
+            margin-bottom: -150px;
+            padding: 28px 0 0;
+          }
+
+          .stopSignImage {
+            width: 112px;
+          }
+
+          .stopSignPole {
+            width: 8px;
+            height: 210px;
+          }
+
+          .centerRoadLine {
+            bottom: -380px;
+          }
+
+          .roadFooter {
+            padding-left: 128px;
           }
         }
       `}</style>
