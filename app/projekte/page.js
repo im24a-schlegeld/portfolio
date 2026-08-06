@@ -11,8 +11,8 @@ export default function Projekte() {
           <p className="eyebrow">Projekte</p>
           <h1>X-Archive Preview</h1>
           <p>
-            Eine Vorschau des Live-Projekts im Handy-Rahmen. Tippe auf den
-            Screen, um die Website direkt zu öffnen.
+            Eine interaktive Vorschau des Live-Projekts im Handy-Rahmen. Hover,
+            Klicks und Scrollen laufen direkt innerhalb des Screens.
           </p>
           <Link className="backLink" href="/">
             Zurueck zur Startseite
@@ -21,7 +21,7 @@ export default function Projekte() {
 
         <div className="phoneStage" aria-label="Website Vorschau">
           <div className="phoneMockup">
-            <div className="phoneScreen" aria-hidden="true">
+            <div className="phoneScreen">
               <iframe
                 src={archiveUrl}
                 title="X-Archive Website Vorschau"
@@ -35,13 +35,6 @@ export default function Projekte() {
               width={362}
               height={730}
               priority
-            />
-            <a
-              className="screenLink"
-              href={archiveUrl}
-              aria-label="X-Archive live öffnen"
-              target="_blank"
-              rel="noreferrer"
             />
           </div>
         </div>
@@ -125,26 +118,24 @@ export default function Projekte() {
           position: relative;
           width: min(362px, 78vw);
           aspect-ratio: 362 / 730;
-          transform: rotate(-5deg);
+          transform: rotate(5deg);
           filter: drop-shadow(0 34px 56px rgba(0, 0, 0, 0.62));
         }
 
         .phoneScreen {
           position: absolute;
-          inset: 10.2% 5.7% 2.8%;
+          inset: 1.2% 5.7% 2.8%;
           z-index: 1;
           overflow: hidden;
-          border-radius: 34px;
+          border-radius: 45px;
           background: #050505;
         }
 
         .phoneScreen iframe {
-          width: 390px;
-          height: 844px;
+          width: 100%;
+          height: 100%;
+          display: block;
           border: 0;
-          transform: scale(0.84);
-          transform-origin: top left;
-          pointer-events: none;
           background: #050505;
         }
 
@@ -156,18 +147,6 @@ export default function Projekte() {
           height: 100%;
           object-fit: contain;
           pointer-events: none;
-        }
-
-        .screenLink {
-          position: absolute;
-          inset: 10.2% 5.7% 2.8%;
-          z-index: 3;
-          border-radius: 34px;
-        }
-
-        .screenLink:focus-visible {
-          outline: 3px solid #f2c94c;
-          outline-offset: 6px;
         }
 
         @media (max-width: 820px) {
