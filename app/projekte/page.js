@@ -36,13 +36,6 @@ export default function Projekte() {
               height={730}
               priority
             />
-            <a
-              className="phoneOpenLayer"
-              href={archiveUrl}
-              aria-label="X-Archive live oeffnen"
-              target="_blank"
-              rel="noreferrer"
-            />
           </div>
         </div>
       </section>
@@ -138,21 +131,21 @@ export default function Projekte() {
 
         .phoneScreen {
           position: absolute;
-          inset: 10.2% 5.7% 2.8%;
+          inset: 1.4% 5.7% 2.8%;
           z-index: 1;
           overflow: hidden;
-          border-radius: 34px;
+          border-radius: 40px;
           background: #050505;
         }
 
         .phoneScreen iframe {
-          width: 132%;
+          width: calc(132% + 30px);
           height: 132%;
           display: block;
           border: 0;
           transform: scale(0.78);
           transform-origin: top left;
-          pointer-events: none;
+          pointer-events: auto;
           background: #050505;
         }
 
@@ -164,19 +157,6 @@ export default function Projekte() {
           height: 100%;
           object-fit: contain;
           pointer-events: none;
-        }
-
-        .phoneOpenLayer {
-          position: absolute;
-          inset: 0;
-          z-index: 3;
-          border-radius: 58px;
-          cursor: pointer;
-        }
-
-        .phoneOpenLayer:focus-visible {
-          outline: 3px solid #f2c94c;
-          outline-offset: 8px;
         }
 
         @media (max-width: 820px) {
