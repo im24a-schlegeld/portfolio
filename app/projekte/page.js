@@ -140,11 +140,11 @@ export default function Projekte() {
         }
 
         .phoneScreen iframe {
-          width: calc(128.205% + 12px);
-          height: 132%;
+          width: calc(147.059% + 12px);
+          height: 147.059%;
           display: block;
           border: 0;
-          transform: scale(0.78);
+          transform: scale(0.68);
           transform-origin: top left;
           pointer-events: auto;
           background: #050505;
