@@ -36,6 +36,13 @@ export default function Projekte() {
               height={730}
               priority
             />
+            <a
+              className="phoneOpenLayer"
+              href={archiveUrl}
+              aria-label="X-Archive live oeffnen"
+              target="_blank"
+              rel="noreferrer"
+            />
           </div>
         </div>
       </section>
@@ -116,26 +123,52 @@ export default function Projekte() {
 
         .phoneMockup {
           position: relative;
-          width: min(362px, 78vw);
-          aspect-ratio: 362 / 730;
+          width: min(390px, 78vw);
+          aspect-ratio: 393 / 852;
           transform: rotate(5deg);
           filter: drop-shadow(0 34px 56px rgba(0, 0, 0, 0.62));
+          transition: transform 220ms ease, filter 220ms ease;
+        }
+
+        .phoneMockup:hover,
+        .phoneMockup:focus-within {
+          transform: rotate(5deg) translateY(-8px);
+          filter: drop-shadow(0 42px 66px rgba(0, 0, 0, 0.72));
         }
 
         .phoneScreen {
           position: absolute;
-          inset: 1.2% 5.7% 2.8%;
+          inset: 1.1% 5.4% 2.35%;
           z-index: 1;
           overflow: hidden;
-          border-radius: 45px;
+          border-radius: 52px;
           background: #050505;
         }
 
+        .phoneScreen::after {
+          content: '';
+          position: absolute;
+          top: 2.25%;
+          left: 50%;
+          z-index: 2;
+          width: 32%;
+          height: 4.2%;
+          transform: translateX(-50%);
+          border-radius: 999px;
+          pointer-events: none;
+          background: #000;
+          box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 1px 7px rgba(0, 0, 0, 0.72);
+        }
+
         .phoneScreen iframe {
-          width: 100%;
+          width: calc(100% + 22px);
           height: 100%;
           display: block;
           border: 0;
+          margin-right: -22px;
+          pointer-events: none;
           background: #050505;
         }
 
@@ -147,6 +180,19 @@ export default function Projekte() {
           height: 100%;
           object-fit: contain;
           pointer-events: none;
+        }
+
+        .phoneOpenLayer {
+          position: absolute;
+          inset: 0;
+          z-index: 3;
+          border-radius: 58px;
+          cursor: pointer;
+        }
+
+        .phoneOpenLayer:focus-visible {
+          outline: 3px solid #f2c94c;
+          outline-offset: 8px;
         }
 
         @media (max-width: 820px) {
