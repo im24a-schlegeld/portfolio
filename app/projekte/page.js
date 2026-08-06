@@ -132,10 +132,10 @@ export default function Projekte() {
 
         .phoneScreen {
           position: absolute;
-          inset: 1.4% 5.7% 2.8%;
+          inset: 3.9% 5.7% 0.65%;
           z-index: 1;
           overflow: hidden;
-          border-radius: 40px;
+          border-radius: 38px;
           background: #050505;
         }
 
@@ -144,7 +144,7 @@ export default function Projekte() {
           height: 147.059%;
           display: block;
           border: 0;
-          transform: scale(0.68);
+          transform: translateY(2.4%) scale(0.68);
           transform-origin: top left;
           pointer-events: auto;
           background: #050505;
