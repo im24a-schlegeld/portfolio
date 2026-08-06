@@ -42,8 +42,8 @@ export default function Projekte() {
 
       <style>{`
         .projectsPage {
-          min-height: 100vh;
-          overflow-x: clip;
+          min-height: 100svh;
+          overflow: hidden;
           color: #f6f1e7;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
           background:
@@ -54,13 +54,14 @@ export default function Projekte() {
 
         .projectsHero {
           width: min(1180px, calc(100% - 40px));
-          min-height: 100vh;
+          min-height: 100svh;
           margin: 0 auto;
           display: grid;
           grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
           align-items: center;
           gap: clamp(44px, 7vw, 110px);
-          padding: 72px 0;
+          padding: clamp(26px, 5vh, 56px) 0;
+          box-sizing: border-box;
         }
 
         .projectCopy {
@@ -139,7 +140,7 @@ export default function Projekte() {
         }
 
         .phoneScreen iframe {
-          width: 128.205%;
+          width: calc(128.205% + 12px);
           height: 132%;
           display: block;
           border: 0;
