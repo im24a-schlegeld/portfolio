@@ -139,7 +139,7 @@ export default function Projekte() {
         }
 
         .phoneScreen iframe {
-          width: calc(132% + 30px);
+          width: 128.205%;
           height: 132%;
           display: block;
           border: 0;
