@@ -1,7 +1,8 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const featuredProject = {
-  number: '01',
+  number: '02',
   title: 'Lyrics Separator',
   category: 'Web Application',
   subtitle: 'Webanwendung zur Verarbeitung von Audio und Lyrics',
@@ -37,36 +38,45 @@ const featuredProject = {
   ],
 };
 
-const otherProjects = [
-  {
-    number: '02',
-    title: 'Smash-A-Meerkat',
-    category: 'Browser Game',
-    subtitle: 'Backend-zentriertes Reaktionsspiel mit Echtzeit-Kommunikation',
-    description:
-      'Smash-A-Meerkat ist ein browserbasiertes Reaktionsspiel, das an "Whack-a-Mole" erinnert. Ziel war es, ein Spiel mit bewusst backend-zentrierter Architektur zu entwickeln. Die Spiellogik laeuft mit Java und Spring Boot im Backend, waehrend Frontend und Server ueber WebSockets in Echtzeit kommunizieren.',
-    technologies: ['Java', 'Spring Boot', 'WebSocket', 'JavaScript', 'HTML/CSS', 'Maven'],
-    githubUrl: 'https://github.com/im24a-schlegeld/SmashAMeerkat',
-    media: {
-      type: 'video',
-      src: '/smash-a-meerkat-preview.mp4',
-      label: 'Smash-A-Meerkat Gameplay Vorschau',
-    },
+const smashProject = {
+  number: '01',
+  title: 'Smash-A-Meerkat',
+  category: 'Browser Game',
+  subtitle: 'Backend-zentriertes Reaktionsspiel mit Echtzeit-Kommunikation',
+  description:
+    'Smash-A-Meerkat ist ein browserbasiertes Reaktionsspiel, das an "Whack-a-Mole" erinnert. Ziel war es, ein Spiel mit bewusst backend-zentrierter Architektur zu entwickeln. Die Spiellogik laeuft mit Java und Spring Boot im Backend, waehrend Frontend und Server ueber WebSockets in Echtzeit kommunizieren.',
+  technologies: ['Java', 'Spring Boot', 'WebSocket', 'JavaScript', 'HTML/CSS', 'Maven'],
+  githubUrl: 'https://github.com/im24a-schlegeld/SmashAMeerkat',
+  media: {
+    type: 'video',
+    src: '/smash-a-meerkat-preview.mp4',
+    label: 'Smash-A-Meerkat Gameplay Vorschau',
   },
+};
+
+const finalProject = {
+  number: '03',
+  title: 'X-Archive',
+  category: 'Mobile App Preview',
+  subtitle: 'Mobile-first Website-Vorschau als App-Projekt',
+  description:
+    'X-Archive bleibt als eigenstaendiges Webprojekt im Portfolio erhalten und wird bewusst in einer Smartphone-Ansicht gezeigt, damit der App-Charakter und die mobile Nutzung direkt erkennbar bleiben.',
+  technologies: ['Frontend', 'Mobile Preview', 'Deployment'],
+  liveUrl: 'https://x-archive-v1.vercel.app/',
+  media: {
+    type: 'phone',
+    src: 'https://x-archive-v1.vercel.app/',
+    label: 'X-Archive mobile Website Vorschau',
+  },
+};
+
+const firstProjects = [
+  smashProject,
+];
+
+const lastProjects = [
   {
-    number: '03',
-    title: 'X-Archive',
-    category: 'Website Preview',
-    subtitle: 'Externe Website-Vorschau als Portfolio-Projekt',
-    description:
-      'X-Archive bleibt als eigenstaendiges Webprojekt im Portfolio erhalten und schliesst den Projekte-Bereich als ruhige Live-Vorschau ab.',
-    technologies: ['Frontend', 'Preview', 'Deployment'],
-    liveUrl: 'https://x-archive-v1.vercel.app/',
-    media: {
-      type: 'iframe',
-      src: 'https://x-archive-v1.vercel.app/',
-      label: 'X-Archive Website Vorschau',
-    },
+    ...finalProject,
   },
 ];
 
@@ -78,6 +88,26 @@ function ProjectMedia({ project }) {
           <source src={project.media.src} type="video/mp4" />
           Dein Browser kann dieses Gameplay-Video nicht abspielen.
         </video>
+      </div>
+    );
+  }
+
+  if (project.media.type === 'phone') {
+    return (
+      <div className="phoneMedia" aria-label={project.media.label}>
+        <div className="phoneMockup">
+          <div className="phoneScreen">
+            <iframe src={project.media.src} title={project.media.label} loading="lazy" />
+          </div>
+          <Image
+            className="phoneFrame"
+            src="/iphone_rahmen_transparent.png"
+            alt=""
+            width={362}
+            height={730}
+            aria-hidden="true"
+          />
+        </div>
       </div>
     );
   }
@@ -150,6 +180,12 @@ export default function Projekte() {
         </p>
       </section>
 
+      <section className="projectStack firstProjectStack" aria-label="Erstes Projekt">
+        {firstProjects.map((project) => (
+          <ProjectShowcase project={project} key={project.title} />
+        ))}
+      </section>
+
       <section className="featuredProject" aria-labelledby="lyrics-title">
         <div className="projectPreview" aria-label="Lyrics Separator Live-Vorschau">
           <div className="browserFrame">
@@ -175,7 +211,7 @@ export default function Projekte() {
             <span>{featuredProject.category}</span>
           </div>
 
-          <p className="projectIndex">{featuredProject.number} - Featured Project</p>
+          <p className="projectIndex">{featuredProject.number} - Projekt</p>
           <h2 id="lyrics-title">{featuredProject.title}</h2>
           <p className="subtitle">{featuredProject.subtitle}</p>
           <p className="description">{featuredProject.description}</p>
@@ -224,8 +260,8 @@ export default function Projekte() {
         </div>
       </section>
 
-      <section className="projectStack" aria-label="Weitere Projekte">
-        {otherProjects.map((project) => (
+      <section className="projectStack lastProjectStack" aria-label="Letztes Projekt">
+        {lastProjects.map((project) => (
           <ProjectShowcase project={project} key={project.title} />
         ))}
       </section>
@@ -323,7 +359,7 @@ export default function Projekte() {
           grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.82fr);
           align-items: center;
           gap: clamp(34px, 6vw, 86px);
-          padding: clamp(34px, 6vw, 72px) 0 clamp(58px, 8vw, 104px);
+          padding: clamp(26px, 5vw, 58px) 0 clamp(58px, 8vw, 104px);
         }
 
         .projectPreview {
@@ -619,6 +655,14 @@ export default function Projekte() {
           padding: 0 0 clamp(72px, 10vw, 132px);
         }
 
+        .firstProjectStack {
+          padding-bottom: clamp(36px, 6vw, 72px);
+        }
+
+        .lastProjectStack {
+          padding-top: clamp(12px, 3vw, 28px);
+        }
+
         .projectShowcase {
           display: grid;
           grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.76fr);
@@ -636,15 +680,15 @@ export default function Projekte() {
           animation: projectReveal 680ms ease both;
         }
 
-        .projectShowcase:last-child {
+        .lastProjectStack .projectShowcase {
           grid-template-columns: minmax(320px, 0.76fr) minmax(0, 1.05fr);
         }
 
-        .projectShowcase:last-child .mediaFrame {
+        .lastProjectStack .projectShowcase .phoneMedia {
           order: 2;
         }
 
-        .projectShowcase:last-child .showcaseInfo {
+        .lastProjectStack .projectShowcase .showcaseInfo {
           order: 1;
         }
 
@@ -684,6 +728,8 @@ export default function Projekte() {
 
         .gameplayFrame {
           aspect-ratio: 16 / 9;
+          display: grid;
+          place-items: center;
         }
 
         .gameplayFrame video,
@@ -696,7 +742,66 @@ export default function Projekte() {
         }
 
         .gameplayFrame video {
-          object-fit: cover;
+          object-fit: contain;
+        }
+
+        .phoneMedia {
+          position: relative;
+          min-width: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: clamp(16px, 3vw, 28px);
+          border: 1px solid rgba(242, 201, 76, 0.2);
+          border-radius: 30px;
+          background:
+            radial-gradient(circle at 50% 18%, rgba(242, 201, 76, 0.12), transparent 17rem),
+            rgba(5, 5, 5, 0.72);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 24px 58px rgba(0, 0, 0, 0.34);
+          transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
+        }
+
+        .phoneMedia:hover,
+        .phoneMedia:focus-within {
+          transform: translateY(-4px);
+          border-color: rgba(242, 201, 76, 0.48);
+          filter: brightness(1.04);
+        }
+
+        .phoneMockup {
+          position: relative;
+          width: min(280px, 72vw);
+          aspect-ratio: 362 / 730;
+          filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.58));
+        }
+
+        .phoneScreen {
+          position: absolute;
+          inset: 3.9% 5.7% 0.65%;
+          z-index: 1;
+          overflow: hidden;
+          border-radius: 38px;
+          background: #050505;
+        }
+
+        .phoneScreen iframe {
+          width: 100%;
+          height: 100%;
+          display: block;
+          border: 0;
+          background: #050505;
+        }
+
+        .phoneFrame {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          pointer-events: none;
         }
 
         .websiteFrame {
@@ -793,7 +898,7 @@ export default function Projekte() {
         @media (max-width: 980px) {
           .featuredProject,
           .projectShowcase,
-          .projectShowcase:last-child {
+          .lastProjectStack .projectShowcase {
             grid-template-columns: 1fr;
           }
 
@@ -809,8 +914,8 @@ export default function Projekte() {
             grid-template-columns: 1fr;
           }
 
-          .projectShowcase:last-child .mediaFrame,
-          .projectShowcase:last-child .showcaseInfo {
+          .lastProjectStack .projectShowcase .phoneMedia,
+          .lastProjectStack .projectShowcase .showcaseInfo {
             order: initial;
           }
         }
@@ -831,7 +936,8 @@ export default function Projekte() {
           .projectInfo,
           .highlightCard,
           .projectShowcase,
-          .mediaFrame {
+          .mediaFrame,
+          .phoneMedia {
             border-radius: 20px;
           }
 
@@ -844,9 +950,16 @@ export default function Projekte() {
             aspect-ratio: 4 / 3;
           }
 
-          .gameplayFrame,
-          .websiteFrame {
+          .gameplayFrame {
             aspect-ratio: 4 / 3;
+          }
+
+          .phoneMockup {
+            width: min(250px, 72vw);
+          }
+
+          .phoneScreen {
+            border-radius: 30px;
           }
 
           .projectShowcase {
@@ -868,6 +981,7 @@ export default function Projekte() {
           .projectInfo,
           .projectShowcase,
           .mediaFrame,
+          .phoneMedia,
           .browserFrame,
           .highlightCard,
           .backLink,
