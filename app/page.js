@@ -48,6 +48,11 @@ const projectCards = [
     meta: 'Animation / Story',
   },
   {
+    title: 'Smash-A-Meerkat',
+    text: 'Ein browserbasiertes Reaktionsspiel mit Java/Spring-Boot-Backend und WebSocket-Kommunikation in Echtzeit.',
+    meta: 'Game / Backend',
+  },
+  {
     title: 'X-Archive Preview',
     text: 'Eine externe Website-Vorschau, eingebettet in ein iPhone-Mockup und direkt mit dem Live-Projekt verlinkt.',
     meta: 'Project / Preview',

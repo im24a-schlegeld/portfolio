@@ -37,6 +37,105 @@ const featuredProject = {
   ],
 };
 
+const otherProjects = [
+  {
+    number: '02',
+    title: 'Smash-A-Meerkat',
+    category: 'Browser Game',
+    subtitle: 'Backend-zentriertes Reaktionsspiel mit Echtzeit-Kommunikation',
+    description:
+      'Smash-A-Meerkat ist ein browserbasiertes Reaktionsspiel, das an "Whack-a-Mole" erinnert. Ziel war es, ein Spiel mit bewusst backend-zentrierter Architektur zu entwickeln. Die Spiellogik laeuft mit Java und Spring Boot im Backend, waehrend Frontend und Server ueber WebSockets in Echtzeit kommunizieren.',
+    technologies: ['Java', 'Spring Boot', 'WebSocket', 'JavaScript', 'HTML/CSS', 'Maven'],
+    githubUrl: 'https://github.com/im24a-schlegeld/SmashAMeerkat',
+    media: {
+      type: 'video',
+      src: '/smash-a-meerkat-preview.mp4',
+      label: 'Smash-A-Meerkat Gameplay Vorschau',
+    },
+  },
+  {
+    number: '03',
+    title: 'X-Archive',
+    category: 'Website Preview',
+    subtitle: 'Externe Website-Vorschau als Portfolio-Projekt',
+    description:
+      'X-Archive bleibt als eigenstaendiges Webprojekt im Portfolio erhalten und schliesst den Projekte-Bereich als ruhige Live-Vorschau ab.',
+    technologies: ['Frontend', 'Preview', 'Deployment'],
+    liveUrl: 'https://x-archive-v1.vercel.app/',
+    media: {
+      type: 'iframe',
+      src: 'https://x-archive-v1.vercel.app/',
+      label: 'X-Archive Website Vorschau',
+    },
+  },
+];
+
+function ProjectMedia({ project }) {
+  if (project.media.type === 'video') {
+    return (
+      <div className="mediaFrame gameplayFrame" aria-label={project.media.label}>
+        <video autoPlay muted loop playsInline preload="metadata">
+          <source src={project.media.src} type="video/mp4" />
+          Dein Browser kann dieses Gameplay-Video nicht abspielen.
+        </video>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mediaFrame websiteFrame" aria-label={project.media.label}>
+      <div className="miniBrowserTop" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <p>{project.media.src.replace('https://', '').replace('/', '')}</p>
+      </div>
+      <iframe src={project.media.src} title={project.media.label} loading="lazy" />
+    </div>
+  );
+}
+
+function ProjectShowcase({ project }) {
+  return (
+    <article className="projectShowcase" aria-labelledby={`${project.title}-title`}>
+      <ProjectMedia project={project} />
+      <div className="showcaseInfo">
+        <div className="projectMeta compactMeta">
+          <span>{project.number}</span>
+          <span>{project.category}</span>
+        </div>
+        <p className="projectIndex">{project.number} - Projekt</p>
+        <h2 id={`${project.title}-title`}>{project.title}</h2>
+        <p className="subtitle">{project.subtitle}</p>
+        <p className="description">{project.description}</p>
+
+        <div className="techList compactTech" aria-label={`${project.title} Tech Stack`}>
+          {project.technologies.map((technology) => (
+            <span key={technology}>{technology}</span>
+          ))}
+        </div>
+
+        {(project.liveUrl || project.githubUrl) && (
+          <div className="actions compactActions" aria-label={`${project.title} Projektaktionen`}>
+            {project.liveUrl && (
+              <a className="primaryAction" href={project.liveUrl} target="_blank" rel="noreferrer">
+                Live Demo <span aria-hidden="true">-&gt;</span>
+                <span className="srOnly"> in neuem Tab oeffnen</span>
+              </a>
+            )}
+            {project.githubUrl && (
+              <a className="secondaryAction" href={project.githubUrl} target="_blank" rel="noreferrer">
+                GitHub <span aria-hidden="true">-&gt;</span>
+                <span className="srOnly"> in neuem Tab oeffnen</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
 export default function Projekte() {
   return (
     <main className="projectsPage">
@@ -123,6 +222,12 @@ export default function Projekte() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="projectStack" aria-label="Weitere Projekte">
+        {otherProjects.map((project) => (
+          <ProjectShowcase project={project} key={project.title} />
+        ))}
       </section>
 
       <style>{`
@@ -469,7 +574,7 @@ export default function Projekte() {
         }
 
         .technicalHighlights {
-          padding: 0 0 clamp(72px, 10vw, 132px);
+          padding: 0 0 clamp(44px, 7vw, 84px);
         }
 
         .technicalHighlights h2 {
@@ -505,6 +610,163 @@ export default function Projekte() {
           border-color: rgba(242, 201, 76, 0.35);
         }
 
+        .projectStack {
+          position: relative;
+          width: min(1180px, calc(100% - 40px));
+          margin: 0 auto;
+          display: grid;
+          gap: clamp(26px, 5vw, 58px);
+          padding: 0 0 clamp(72px, 10vw, 132px);
+        }
+
+        .projectShowcase {
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.76fr);
+          align-items: center;
+          gap: clamp(24px, 5vw, 68px);
+          padding: clamp(18px, 3vw, 28px);
+          border: 1px solid rgba(245, 242, 233, 0.12);
+          border-radius: 32px;
+          background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
+            rgba(9, 9, 9, 0.72);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 24px 70px rgba(0, 0, 0, 0.32);
+          animation: projectReveal 680ms ease both;
+        }
+
+        .projectShowcase:last-child {
+          grid-template-columns: minmax(320px, 0.76fr) minmax(0, 1.05fr);
+        }
+
+        .projectShowcase:last-child .mediaFrame {
+          order: 2;
+        }
+
+        .projectShowcase:last-child .showcaseInfo {
+          order: 1;
+        }
+
+        .mediaFrame {
+          position: relative;
+          min-width: 0;
+          overflow: hidden;
+          border: 1px solid rgba(242, 201, 76, 0.24);
+          border-radius: 26px;
+          background:
+            linear-gradient(145deg, rgba(242, 201, 76, 0.12), transparent 32%),
+            #050505;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.11),
+            0 24px 58px rgba(0, 0, 0, 0.38);
+          transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
+        }
+
+        .mediaFrame::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            linear-gradient(90deg, transparent, rgba(242, 201, 76, 0.1), transparent),
+            radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.18), transparent 18rem);
+          opacity: 0.45;
+          mix-blend-mode: screen;
+        }
+
+        .mediaFrame:hover,
+        .mediaFrame:focus-within {
+          transform: translateY(-4px);
+          border-color: rgba(242, 201, 76, 0.52);
+          filter: brightness(1.05);
+        }
+
+        .gameplayFrame {
+          aspect-ratio: 16 / 9;
+        }
+
+        .gameplayFrame video,
+        .websiteFrame iframe {
+          width: 100%;
+          height: 100%;
+          display: block;
+          border: 0;
+          background: #050505;
+        }
+
+        .gameplayFrame video {
+          object-fit: cover;
+        }
+
+        .websiteFrame {
+          aspect-ratio: 16 / 10;
+          display: grid;
+          grid-template-rows: 42px minmax(0, 1fr);
+        }
+
+        .miniBrowserTop {
+          display: grid;
+          grid-template-columns: 10px 10px 10px minmax(0, 1fr);
+          align-items: center;
+          gap: 8px;
+          padding: 0 14px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(0, 0, 0, 0.52);
+        }
+
+        .miniBrowserTop span {
+          width: 9px;
+          height: 9px;
+          border-radius: 999px;
+          background: rgba(242, 201, 76, 0.82);
+        }
+
+        .miniBrowserTop span:nth-child(2) {
+          background: rgba(207, 199, 186, 0.54);
+        }
+
+        .miniBrowserTop span:nth-child(3) {
+          background: rgba(255, 255, 255, 0.32);
+        }
+
+        .miniBrowserTop p {
+          min-width: 0;
+          margin: 0 0 0 6px;
+          overflow: hidden;
+          color: rgba(247, 242, 232, 0.68);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          text-overflow: ellipsis;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        .showcaseInfo {
+          min-width: 0;
+        }
+
+        .compactMeta {
+          margin-bottom: clamp(20px, 3vw, 36px);
+        }
+
+        .showcaseInfo h2 {
+          margin: 0;
+          font-size: clamp(34px, 4.8vw, 68px);
+          line-height: 0.92;
+          letter-spacing: -0.065em;
+          text-transform: uppercase;
+        }
+
+        .compactTech {
+          margin-top: 24px;
+        }
+
+        .compactActions {
+          margin-top: 24px;
+        }
+
         .srOnly {
           position: absolute;
           width: 1px;
@@ -529,7 +791,9 @@ export default function Projekte() {
         }
 
         @media (max-width: 980px) {
-          .featuredProject {
+          .featuredProject,
+          .projectShowcase,
+          .projectShowcase:last-child {
             grid-template-columns: 1fr;
           }
 
@@ -544,12 +808,18 @@ export default function Projekte() {
           .highlightGrid {
             grid-template-columns: 1fr;
           }
+
+          .projectShowcase:last-child .mediaFrame,
+          .projectShowcase:last-child .showcaseInfo {
+            order: initial;
+          }
         }
 
         @media (max-width: 560px) {
           .projectsIntro,
           .featuredProject,
-          .technicalHighlights {
+          .technicalHighlights,
+          .projectStack {
             width: min(100% - 28px, 1180px);
           }
 
@@ -559,7 +829,9 @@ export default function Projekte() {
 
           .browserFrame,
           .projectInfo,
-          .highlightCard {
+          .highlightCard,
+          .projectShowcase,
+          .mediaFrame {
             border-radius: 20px;
           }
 
@@ -570,6 +842,15 @@ export default function Projekte() {
 
           .previewScreen {
             aspect-ratio: 4 / 3;
+          }
+
+          .gameplayFrame,
+          .websiteFrame {
+            aspect-ratio: 4 / 3;
+          }
+
+          .projectShowcase {
+            padding: 14px;
           }
 
           .actions a {
@@ -585,6 +866,8 @@ export default function Projekte() {
         @media (prefers-reduced-motion: reduce) {
           .projectPreview,
           .projectInfo,
+          .projectShowcase,
+          .mediaFrame,
           .browserFrame,
           .highlightCard,
           .backLink,
