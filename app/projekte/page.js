@@ -429,6 +429,7 @@ export default function Projekte() {
         }
 
         .previewScreen {
+          position: relative;
           aspect-ratio: 16 / 10;
           overflow: hidden;
           background: #050505;
@@ -436,13 +437,16 @@ export default function Projekte() {
         }
 
         .previewScreen iframe {
-          width: 1728px;
-          height: 1080px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 1440px;
+          height: 900px;
           display: block;
           border: 0;
           background: #050505;
-          transform: scale(calc(100cqw / 1728));
-          transform-origin: top left;
+          transform: translate(-50%, -50%) scale(calc((100cqw - 28px) / 1440px));
+          transform-origin: center;
         }
 
         .projectInfo {
@@ -775,7 +779,7 @@ export default function Projekte() {
 
         .phoneMockup {
           position: relative;
-          width: min(280px, 72vw);
+          width: min(238px, 68vw);
           aspect-ratio: 362 / 730;
           filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.58));
         }
@@ -791,13 +795,16 @@ export default function Projekte() {
         }
 
         .phoneScreen iframe {
-          width: 520px;
-          height: 1120px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 390px;
+          height: 844px;
           display: block;
           border: 0;
           background: #050505;
-          transform: scale(calc(100cqw / 520));
-          transform-origin: top left;
+          transform: translate(-50%, -50%) scale(calc(100cqw / 390px));
+          transform-origin: center;
         }
 
         .phoneFrame {
@@ -957,7 +964,7 @@ export default function Projekte() {
           }
 
           .phoneMockup {
-            width: min(250px, 72vw);
+            width: min(218px, 66vw);
           }
 
           .phoneScreen {
