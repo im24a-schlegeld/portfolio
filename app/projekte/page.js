@@ -432,14 +432,17 @@ export default function Projekte() {
           aspect-ratio: 16 / 10;
           overflow: hidden;
           background: #050505;
+          container-type: inline-size;
         }
 
         .previewScreen iframe {
-          width: 100%;
-          height: 100%;
+          width: 1440px;
+          height: 900px;
           display: block;
           border: 0;
           background: #050505;
+          transform: scale(calc(100cqw / 1440));
+          transform-origin: top left;
         }
 
         .projectInfo {
@@ -944,10 +947,6 @@ export default function Projekte() {
           .browserTop {
             min-height: 42px;
             padding: 0 12px;
-          }
-
-          .previewScreen {
-            aspect-ratio: 4 / 3;
           }
 
           .gameplayFrame {
