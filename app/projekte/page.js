@@ -436,12 +436,12 @@ export default function Projekte() {
         }
 
         .previewScreen iframe {
-          width: 1440px;
-          height: 900px;
+          width: 1728px;
+          height: 1080px;
           display: block;
           border: 0;
           background: #050505;
-          transform: scale(calc(100cqw / 1440));
+          transform: scale(calc(100cqw / 1728));
           transform-origin: top left;
         }
 
@@ -787,14 +787,17 @@ export default function Projekte() {
           overflow: hidden;
           border-radius: 38px;
           background: #050505;
+          container-type: inline-size;
         }
 
         .phoneScreen iframe {
-          width: 100%;
-          height: 100%;
+          width: 520px;
+          height: 1120px;
           display: block;
           border: 0;
           background: #050505;
+          transform: scale(calc(100cqw / 520));
+          transform-origin: top left;
         }
 
         .phoneFrame {
