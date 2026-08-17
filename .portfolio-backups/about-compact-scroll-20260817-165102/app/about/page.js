@@ -210,6 +210,7 @@ function BikeScene({
             </div>
           </div>
         </div>
+        <div className="bikeFastExit" aria-hidden="true" />
       </div>
     </section>
   );
@@ -480,165 +481,167 @@ export default function About() {
 
   useEffect(() => {
     let animationFrameId;
+
+    let targetProgress = 0;
+    let currentProgress = 0;
     let isMobileViewport = false;
+    let bikeIsActive = false;
     let travelDistance = 900;
-    let panelCut = 0;
-    let headerHeight = 70;
-    let bikeStartTop = 70;
-    let firstCutFastStartTop = 70;
-    let firstCutFastTravel = 1;
 
     const startOffsetX = -700;
     const endOffsetX = 475;
     const totalRotation = 1080;
+    const smoothing = 0.08;
 
-    const clamp01 = (value) => Math.max(0, Math.min(1, value));
-
-    const getHeaderHeight = () => (
-      document.querySelector('.header')?.getBoundingClientRect().height ?? 70
-    );
-
-    const setCutBoost = (panel, boost) => {
-      panel?.style.setProperty('--cut-boost', `${Math.max(0, boost)}px`);
-    };
-
-    const applyBikeProgress = (progress, isActive) => {
+    const applyProgress = (progress) => {
       const moveX = isMobileViewport
         ? 0
         : startOffsetX + progress * (endOffsetX - startOffsetX);
       const rotation = isMobileViewport ? 0 : progress * totalRotation;
 
       if (bikegroupRef.current) {
-        bikegroupRef.current.style.opacity = isActive ? '1' : '0';
-        bikegroupRef.current.style.transform = `translate3d(${moveX}px, 0, 0)`;
+        bikegroupRef.current.style.opacity = bikeIsActive ? '1' : '0';
+      }
+
+      if (nakedbikeRef.current) {
+        nakedbikeRef.current.style.transform = `translateX(${moveX}px)`;
       }
 
       if (backwheelRef.current) {
-        backwheelRef.current.style.transform = `rotate(${rotation}deg)`;
+        backwheelRef.current.style.transform = `translateX(${moveX}px) rotate(${rotation}deg)`;
       }
 
       if (frontwheelRef.current) {
-        frontwheelRef.current.style.transform = `rotate(${rotation}deg)`;
+        frontwheelRef.current.style.transform = `translateX(${moveX}px) rotate(${rotation}deg)`;
+      }
+
+      if (shadingbackRef.current) {
+        shadingbackRef.current.style.transform = `translateX(${moveX}px)`;
+      }
+
+      if (shadingfrontRef.current) {
+        shadingfrontRef.current.style.transform = `translateX(${moveX}px)`;
+      }
+
+      if (bikeTitleRef.current) {
+        bikeTitleRef.current.style.transform = `translateX(${moveX}px)`;
+      }
+
+      if (bikeTextRef.current) {
+        bikeTextRef.current.style.transform = `translateX(${moveX}px)`;
       }
     };
 
-    const clearLegacyChildTransforms = () => {
-      [
-        nakedbikeRef.current,
-        shadingbackRef.current,
-        shadingfrontRef.current,
-        bikeTitleRef.current,
-        bikeTextRef.current,
-      ].forEach((element) => {
-        if (element) element.style.transform = 'none';
-      });
-    };
+    const getHeaderHeight = () => (
+      document.querySelector('.header')?.getBoundingClientRect().height ?? 70
+    );
 
     const updateMeasurements = () => {
       const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-
-      isMobileViewport = viewportWidth < 768;
-      headerHeight = getHeaderHeight();
-      panelCut = viewportWidth * 0.0875;
+      isMobileViewport = window.innerWidth < 768;
       travelDistance = Math.max(860, viewportHeight * 0.92);
 
-      const stickyTop = Math.max(headerHeight, viewportHeight / 2 - 260);
-
-      // The first accelerated color sweep finishes exactly when the bike
-      // sticky layer reaches its resting position. At that point every visible
-      // pixel below the fixed header is dark, so the bike animation can start
-      // without a dead black gap before it.
-      bikeStartTop = stickyTop;
-      firstCutFastTravel = Math.max(1, (bikeStartTop - headerHeight) / 2);
-      firstCutFastStartTop = bikeStartTop + firstCutFastTravel;
-
-      // When bike progress reaches 1, the blue diagonal is exactly one cut
-      // height below the viewport. It therefore cannot appear before the bike
-      // animation has finished, but starts immediately on the next scroll.
+      const stickyTop = Math.max(getHeaderHeight(), viewportHeight / 2 - 260);
+      const stickyHeight = 520;
       setSceneHeight(
         isMobileViewport
           ? 720
-          : Math.round(
-            travelDistance + viewportHeight + panelCut - bikeStartTop,
-          ),
+          : Math.round(travelDistance + stickyTop + stickyHeight),
       );
 
-      clearLegacyChildTransforms();
+      if (isMobileViewport) {
+        bikeIsActive = false;
+        targetProgress = 0;
+        currentProgress = 0;
+        applyProgress(0);
+      }
     };
 
-    const updateFrame = () => {
-      animationFrameId = undefined;
-
-      const pfadiPanel = document.querySelector('.pfadiPanel');
-      const bikePanel = bikePanelRef.current;
+    const updateTargetProgress = () => {
       const scene = sceneRef.current;
-
-      if (isMobileViewport || !bikePanel || !scene) {
-        setCutBoost(pfadiPanel, 0);
-        setCutBoost(bikePanel, 0);
-        applyBikeProgress(0, false);
+      if (!scene || isMobileViewport) {
+        targetProgress = 0;
         return;
       }
 
-      const pfadiRect = pfadiPanel?.getBoundingClientRect();
-      const bikeRect = bikePanel.getBoundingClientRect();
-      const sceneRect = scene.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      const rect = scene.getBoundingClientRect();
+      const headerHeight = getHeaderHeight();
+      const fullyDark = rect.top <= headerHeight + 1;
 
-      // Beige -> dark: normal diagonal scroll first. Once the outgoing content
-      // is near the top, the edge gains two extra pixels per scroll pixel
-      // (3x visual speed) and finishes exactly at bikeStartTop.
-      const firstCutBoost = pfadiRect
-        ? Math.min(
-          firstCutFastTravel,
-          Math.max(0, firstCutFastStartTop - pfadiRect.bottom),
-        ) * 2
-        : 0;
-      setCutBoost(pfadiPanel, firstCutBoost);
+      if (!fullyDark) {
+        bikeIsActive = false;
+        targetProgress = 0;
+        return;
+      }
 
-      const fullDark = sceneRect.top <= bikeStartTop + 0.5;
-      const progress = fullDark
-        ? clamp01((bikeStartTop - sceneRect.top) / travelDistance)
-        : 0;
+      bikeIsActive = true;
+      const progress = (headerHeight - rect.top) / travelDistance;
+      targetProgress = Math.max(0, Math.min(1, progress));
+    };
 
-      applyBikeProgress(progress, fullDark);
+    const animate = () => {
+      currentProgress += (targetProgress - currentProgress) * smoothing;
+      applyProgress(currentProgress);
 
-      // Dark -> blue: completely locked until bike progress is finished.
-      // Afterwards the diagonal itself crosses the viewport at ~3x speed.
-      let secondCutBoost = 0;
-      if (progress >= 0.9999) {
+      if (Math.abs(targetProgress - currentProgress) > 0.0005) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        currentProgress = targetProgress;
+        applyProgress(currentProgress);
+        animationFrameId = undefined;
+      }
+    };
+
+    const requestBikeAnimation = () => {
+      if (animationFrameId || isMobileViewport) return;
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    const updateFastPanelCuts = () => {
+      const panels = [bikePanelRef.current, divePanelRef.current];
+
+      panels.forEach((panel) => {
+        if (!panel || isMobileViewport) {
+          panel?.style.setProperty('--cut-boost', '0px');
+          return;
+        }
+
+        const rect = panel.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        // The outgoing panel is deliberately long enough that its text/object
+        // has already left the viewport when the next panel reaches the bottom.
+        // From that exact moment on, the incoming color sheet moves two extra
+        // pixels for every real scroll pixel: 1x page scroll + 2x visual boost
+        // = an apparent 3x sweep across the viewport.
         const transitionTravel = Math.max(1, viewportHeight / 3);
         const localScroll = Math.max(
           0,
-          Math.min(
-            transitionTravel,
-            viewportHeight + panelCut - bikeRect.bottom,
-          ),
+          Math.min(transitionTravel, viewportHeight - rect.top),
         );
-        secondCutBoost = localScroll * 2;
-      }
-      setCutBoost(bikePanel, secondCutBoost);
-    };
+        const boost = localScroll * 2;
 
-    const requestUpdate = () => {
-      if (animationFrameId) return;
-      animationFrameId = requestAnimationFrame(updateFrame);
+        panel.style.setProperty('--cut-boost', `${boost}px`);
+      });
     };
 
     const handleScroll = () => {
-      requestUpdate();
+      if (isMobileViewport) return;
+      updateFastPanelCuts();
+      updateTargetProgress();
+      requestBikeAnimation();
     };
 
     const handleResize = () => {
       updateMeasurements();
-      requestUpdate();
-      requestAnimationFrame(requestUpdate);
+      updateFastPanelCuts();
+      updateTargetProgress();
+      requestBikeAnimation();
     };
 
     updateMeasurements();
-    requestUpdate();
-    requestAnimationFrame(requestUpdate);
+    updateFastPanelCuts();
+    applyProgress(0);
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -800,7 +803,7 @@ export default function About() {
 
         .pfadiPanel {
           z-index: 1;
-          min-height: calc(100vh + var(--panel-cut));
+          min-height: calc(100vh + 650px + var(--panel-cut));
           background: var(--freizeit-beige);
           color: var(--freizeit-beige-ink);
         }
@@ -811,29 +814,14 @@ export default function About() {
           color: var(--freizeit-light);
         }
 
-        .divePanel {
-          z-index: 3;
-          min-height: calc(100vh - 70px);
-          background: var(--freizeit-blue);
-          color: var(--freizeit-blue-ink);
-        }
-
-        /* The incoming color is drawn inside the outgoing panel. The bottom
-           of the wedge always touches the next solid panel, so there is no
-           horizontal seam between the diagonal and the following color. */
-        .pfadiPanel::after,
-        .bikePanel::after {
+        .bikePanel::before {
           content: '';
           position: absolute;
-          z-index: 2;
+          z-index: 0;
           left: 0;
-          bottom: -1px;
+          top: 0;
           width: 100%;
-          height: calc(var(--panel-cut) + var(--cut-boost, 0px) + 3px);
-          pointer-events: none;
-        }
-
-        .pfadiPanel::after {
+          height: calc(100vh + var(--panel-cut) + 8px);
           background: var(--freizeit-dark);
           clip-path: polygon(
             0 var(--panel-cut),
@@ -841,9 +829,26 @@ export default function About() {
             100% 100%,
             0 100%
           );
+          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          pointer-events: none;
+          will-change: transform;
         }
 
-        .bikePanel::after {
+        .divePanel {
+          z-index: 3;
+          min-height: 100vh;
+          background: var(--freizeit-blue);
+          color: var(--freizeit-blue-ink);
+        }
+
+        .divePanel::before {
+          content: '';
+          position: absolute;
+          z-index: 0;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: calc(100vh + var(--panel-cut) + 8px);
           background: var(--freizeit-blue);
           clip-path: polygon(
             0 0,
@@ -851,6 +856,9 @@ export default function About() {
             100% 100%,
             0 100%
           );
+          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          pointer-events: none;
+          will-change: transform;
         }
 
         .section {
@@ -882,9 +890,7 @@ export default function About() {
         }
 
         .pfadiPanelInner {
-          position: relative;
-          z-index: 1;
-          min-height: calc(100vh + var(--panel-cut));
+          min-height: calc(100vh + 650px + var(--panel-cut));
         }
 
         .pfadiStage {
@@ -926,37 +932,6 @@ export default function About() {
 
         .swordModel {
           filter: drop-shadow(0 10px 18px rgba(30, 22, 15, 0.17));
-        }
-
-        .swordModel::before,
-        .responsiveSwordModel::before {
-          content: '';
-          position: absolute;
-          z-index: 2;
-          top: 50%;
-          left: 50%;
-          width: 22px;
-          height: 22px;
-          margin: -11px 0 0 -11px;
-          border: 2px solid rgba(36, 29, 23, 0.2);
-          border-top-color: #241d17;
-          border-radius: 50%;
-          animation: swordLoaderSpin 0.7s linear infinite;
-          transition: opacity 0.18s ease;
-        }
-
-        .swordModel[data-model-loaded='true']::before,
-        .responsiveSwordModel[data-model-loaded='true']::before,
-        .swordModel[data-model-error='true']::before,
-        .responsiveSwordModel[data-model-error='true']::before {
-          opacity: 0;
-          animation: none;
-        }
-
-        @keyframes swordLoaderSpin {
-          to {
-            transform: rotate(360deg);
-          }
         }
 
         .swordCanvas {
@@ -1024,8 +999,7 @@ export default function About() {
           opacity: 0;
           left: 400px;
           top: -130px;
-          transition: opacity 0.18s ease;
-          will-change: transform, opacity;
+          transition: opacity 0.32s ease;
         }
 
         .nakedbike {
@@ -1033,6 +1007,7 @@ export default function About() {
           top: 120px;
           left: -142px;
           z-index: 3;
+          will-change: transform;
         }
 
         .backwheel {
@@ -1059,6 +1034,7 @@ export default function About() {
           left: -90px;
           z-index: 2;
           pointer-events: none;
+          will-change: transform;
         }
 
         .shadingfront {
@@ -1067,6 +1043,7 @@ export default function About() {
           left: 111px;
           z-index: 2;
           pointer-events: none;
+          will-change: transform;
         }
 
         .bikeTitle {
@@ -1080,6 +1057,7 @@ export default function About() {
           color: #ffffff;
           letter-spacing: 0.04em;
           text-transform: uppercase;
+          will-change: transform;
         }
 
         .bikeText {
@@ -1092,16 +1070,32 @@ export default function About() {
           font-size: 32px;
           font-weight: 400;
           color: #ffffff;
+          will-change: transform;
         }
-.divePanelInner {
+
+        .bikeFastExit {
+          /* Keep the dark panel long enough for the sticky bike/text to leave
+             the viewport completely before the blue sweep can begin. */
+          height: calc(100vh - 70px + var(--panel-cut));
+        }
+
+        .divePanelInner {
           position: relative;
           z-index: 1;
-          min-height: calc(100vh - 70px);
+          min-height: 100vh;
           display: flex;
           align-items: center;
         }
 
-        .diveSection { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: clamp(40px, 5vw, 72px); padding: 0; }
+        .diveSection {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 50px;
+          padding: max(90px, var(--panel-cut)) 0 70px;
+        }
 
         .diveSection .whalesharkVideo,
         .diveSection .diveCopy {

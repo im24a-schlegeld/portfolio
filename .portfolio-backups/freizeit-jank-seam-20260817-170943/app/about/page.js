@@ -210,6 +210,7 @@ function BikeScene({
             </div>
           </div>
         </div>
+        <div className="bikeFastExit" aria-hidden="true" />
       </div>
     </section>
   );
@@ -476,40 +477,60 @@ export default function About() {
   const bikeTitleRef = useRef(null);
   const bikeTextRef = useRef(null);
 
-  const [sceneHeight, setSceneHeight] = useState(1800);
+  const [sceneHeight, setSceneHeight] = useState(1400);
 
   useEffect(() => {
-    let animationFrameId;
+    let scrollFrameId;
+
+    let targetProgress = 0;
+    let currentProgress = 0;
     let isMobileViewport = false;
-    let travelDistance = 900;
-    let panelCut = 0;
+    let bikeIsActive = false;
+    let travelDistance = 700;
     let headerHeight = 70;
-    let bikeStartTop = 70;
-    let firstCutFastStartTop = 70;
-    let firstCutFastTravel = 1;
 
     const startOffsetX = -700;
-    const endOffsetX = 475;
-    const totalRotation = 1080;
+    const readingOffsetX = 260;
+    const endOffsetX = 1450;
+    const enterEnd = 0.27;
+    const exitStart = 0.7;
+    const halfRotation = 540;
 
     const clamp01 = (value) => Math.max(0, Math.min(1, value));
+    const mix = (from, to, amount) => from + (to - from) * amount;
 
-    const getHeaderHeight = () => (
-      document.querySelector('.header')?.getBoundingClientRect().height ?? 70
-    );
+    const getBikeMotion = (progress) => {
+      if (isMobileViewport) {
+        return { moveX: 0, rotation: 0 };
+      }
 
-    const setCutBoost = (panel, boost) => {
-      panel?.style.setProperty('--cut-boost', `${Math.max(0, boost)}px`);
+      if (progress <= enterEnd) {
+        const phase = clamp01(progress / enterEnd);
+        return {
+          moveX: mix(startOffsetX, readingOffsetX, phase),
+          rotation: phase * halfRotation,
+        };
+      }
+
+      if (progress < exitStart) {
+        return {
+          moveX: readingOffsetX,
+          rotation: halfRotation,
+        };
+      }
+
+      const phase = clamp01((progress - exitStart) / (1 - exitStart));
+      return {
+        moveX: mix(readingOffsetX, endOffsetX, phase),
+        rotation: halfRotation + phase * halfRotation,
+      };
     };
 
-    const applyBikeProgress = (progress, isActive) => {
-      const moveX = isMobileViewport
-        ? 0
-        : startOffsetX + progress * (endOffsetX - startOffsetX);
-      const rotation = isMobileViewport ? 0 : progress * totalRotation;
+    const applyProgress = (progress) => {
+      const { moveX, rotation } = getBikeMotion(progress);
 
       if (bikegroupRef.current) {
-        bikegroupRef.current.style.opacity = isActive ? '1' : '0';
+        bikegroupRef.current.style.opacity = bikeIsActive ? '1' : '0';
         bikegroupRef.current.style.transform = `translate3d(${moveX}px, 0, 0)`;
       }
 
@@ -522,123 +543,113 @@ export default function About() {
       }
     };
 
-    const clearLegacyChildTransforms = () => {
-      [
-        nakedbikeRef.current,
-        shadingbackRef.current,
-        shadingfrontRef.current,
-        bikeTitleRef.current,
-        bikeTextRef.current,
-      ].forEach((element) => {
-        if (element) element.style.transform = 'none';
-      });
-    };
+    const getHeaderHeight = () => (
+      document.querySelector('.header')?.getBoundingClientRect().height ?? 70
+    );
 
     const updateMeasurements = () => {
       const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-
-      isMobileViewport = viewportWidth < 768;
+      isMobileViewport = window.innerWidth < 768;
       headerHeight = getHeaderHeight();
-      panelCut = viewportWidth * 0.0875;
-      travelDistance = Math.max(860, viewportHeight * 0.92);
+      // One compact sticky sequence: enter, read, exit. Keeping the complete
+      // movement inside roughly 150vh avoids dead scroll while preserving the
+      // existing composition and scroll-driven feel.
+      travelDistance = Math.max(620, viewportHeight * 0.7);
 
       const stickyTop = Math.max(headerHeight, viewportHeight / 2 - 260);
-
-      // The first accelerated color sweep finishes exactly when the bike
-      // sticky layer reaches its resting position. At that point every visible
-      // pixel below the fixed header is dark, so the bike animation can start
-      // without a dead black gap before it.
-      bikeStartTop = stickyTop;
-      firstCutFastTravel = Math.max(1, (bikeStartTop - headerHeight) / 2);
-      firstCutFastStartTop = bikeStartTop + firstCutFastTravel;
-
-      // When bike progress reaches 1, the blue diagonal is exactly one cut
-      // height below the viewport. It therefore cannot appear before the bike
-      // animation has finished, but starts immediately on the next scroll.
+      const stickyHeight = 520;
       setSceneHeight(
         isMobileViewport
           ? 720
-          : Math.round(
-            travelDistance + viewportHeight + panelCut - bikeStartTop,
-          ),
+          : Math.round(travelDistance + stickyTop + stickyHeight),
       );
 
-      clearLegacyChildTransforms();
+      if (isMobileViewport) {
+        bikeIsActive = false;
+        targetProgress = 0;
+        currentProgress = 0;
+        applyProgress(0);
+      }
     };
 
-    const updateFrame = () => {
-      animationFrameId = undefined;
-
-      const pfadiPanel = document.querySelector('.pfadiPanel');
-      const bikePanel = bikePanelRef.current;
+    const updateTargetProgress = () => {
       const scene = sceneRef.current;
-
-      if (isMobileViewport || !bikePanel || !scene) {
-        setCutBoost(pfadiPanel, 0);
-        setCutBoost(bikePanel, 0);
-        applyBikeProgress(0, false);
+      if (!scene || isMobileViewport) {
+        targetProgress = 0;
         return;
       }
 
-      const pfadiRect = pfadiPanel?.getBoundingClientRect();
-      const bikeRect = bikePanel.getBoundingClientRect();
-      const sceneRect = scene.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      const rect = scene.getBoundingClientRect();
+      const fullyDark = rect.top <= headerHeight + 1;
 
-      // Beige -> dark: normal diagonal scroll first. Once the outgoing content
-      // is near the top, the edge gains two extra pixels per scroll pixel
-      // (3x visual speed) and finishes exactly at bikeStartTop.
-      const firstCutBoost = pfadiRect
-        ? Math.min(
-          firstCutFastTravel,
-          Math.max(0, firstCutFastStartTop - pfadiRect.bottom),
-        ) * 2
-        : 0;
-      setCutBoost(pfadiPanel, firstCutBoost);
+      if (!fullyDark) {
+        bikeIsActive = false;
+        targetProgress = 0;
+        return;
+      }
 
-      const fullDark = sceneRect.top <= bikeStartTop + 0.5;
-      const progress = fullDark
-        ? clamp01((bikeStartTop - sceneRect.top) / travelDistance)
-        : 0;
+      bikeIsActive = true;
+      const progress = (headerHeight - rect.top) / travelDistance;
+      targetProgress = Math.max(0, Math.min(1, progress));
+    };
 
-      applyBikeProgress(progress, fullDark);
+    const renderScrollState = () => {
+      scrollFrameId = undefined;
+      updateFastPanelCuts();
+      updateTargetProgress();
+      currentProgress = targetProgress;
+      applyProgress(currentProgress);
+    };
 
-      // Dark -> blue: completely locked until bike progress is finished.
-      // Afterwards the diagonal itself crosses the viewport at ~3x speed.
-      let secondCutBoost = 0;
-      if (progress >= 0.9999) {
+    const requestScrollRender = () => {
+      if (scrollFrameId || isMobileViewport) return;
+      scrollFrameId = requestAnimationFrame(renderScrollState);
+    };
+
+    const updateFastPanelCuts = () => {
+      const panels = [bikePanelRef.current, divePanelRef.current];
+
+      panels.forEach((panel) => {
+        if (!panel || isMobileViewport) {
+          panel?.style.setProperty('--cut-boost', '0px');
+          return;
+        }
+
+        const rect = panel.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        // The outgoing panel is deliberately long enough that its text/object
+        // has already left the viewport when the next panel reaches the bottom.
+        // From that exact moment on, the incoming color sheet moves two extra
+        // pixels for every real scroll pixel: 1x page scroll + 2x visual boost
+        // = an apparent 3x sweep across the viewport.
         const transitionTravel = Math.max(1, viewportHeight / 3);
         const localScroll = Math.max(
           0,
-          Math.min(
-            transitionTravel,
-            viewportHeight + panelCut - bikeRect.bottom,
-          ),
+          Math.min(transitionTravel, viewportHeight - rect.top),
         );
-        secondCutBoost = localScroll * 2;
-      }
-      setCutBoost(bikePanel, secondCutBoost);
-    };
+        const boost = localScroll * 2;
 
-    const requestUpdate = () => {
-      if (animationFrameId) return;
-      animationFrameId = requestAnimationFrame(updateFrame);
+        panel.style.setProperty('--cut-boost', `${boost}px`);
+      });
     };
 
     const handleScroll = () => {
-      requestUpdate();
+      if (isMobileViewport) return;
+      requestScrollRender();
     };
 
     const handleResize = () => {
       updateMeasurements();
-      requestUpdate();
-      requestAnimationFrame(requestUpdate);
+      if (isMobileViewport) return;
+      requestScrollRender();
     };
 
     updateMeasurements();
-    requestUpdate();
-    requestAnimationFrame(requestUpdate);
+    updateFastPanelCuts();
+    updateTargetProgress();
+    currentProgress = targetProgress;
+    applyProgress(currentProgress);
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -646,7 +657,7 @@ export default function About() {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (scrollFrameId) cancelAnimationFrame(scrollFrameId);
     };
   }, []);
 
@@ -800,7 +811,7 @@ export default function About() {
 
         .pfadiPanel {
           z-index: 1;
-          min-height: calc(100vh + var(--panel-cut));
+          min-height: calc(145vh + var(--panel-cut));
           background: var(--freizeit-beige);
           color: var(--freizeit-beige-ink);
         }
@@ -811,29 +822,14 @@ export default function About() {
           color: var(--freizeit-light);
         }
 
-        .divePanel {
-          z-index: 3;
-          min-height: calc(100vh - 70px);
-          background: var(--freizeit-blue);
-          color: var(--freizeit-blue-ink);
-        }
-
-        /* The incoming color is drawn inside the outgoing panel. The bottom
-           of the wedge always touches the next solid panel, so there is no
-           horizontal seam between the diagonal and the following color. */
-        .pfadiPanel::after,
-        .bikePanel::after {
+        .bikePanel::before {
           content: '';
           position: absolute;
-          z-index: 2;
+          z-index: 0;
           left: 0;
-          bottom: -1px;
+          top: 0;
           width: 100%;
-          height: calc(var(--panel-cut) + var(--cut-boost, 0px) + 3px);
-          pointer-events: none;
-        }
-
-        .pfadiPanel::after {
+          height: calc(100vh + var(--panel-cut) + 8px);
           background: var(--freizeit-dark);
           clip-path: polygon(
             0 var(--panel-cut),
@@ -841,9 +837,26 @@ export default function About() {
             100% 100%,
             0 100%
           );
+          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          pointer-events: none;
+          will-change: transform;
         }
 
-        .bikePanel::after {
+        .divePanel {
+          z-index: 3;
+          min-height: 95vh;
+          background: var(--freizeit-blue);
+          color: var(--freizeit-blue-ink);
+        }
+
+        .divePanel::before {
+          content: '';
+          position: absolute;
+          z-index: 0;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: calc(100vh + var(--panel-cut) + 8px);
           background: var(--freizeit-blue);
           clip-path: polygon(
             0 0,
@@ -851,6 +864,9 @@ export default function About() {
             100% 100%,
             0 100%
           );
+          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          pointer-events: none;
+          will-change: transform;
         }
 
         .section {
@@ -882,9 +898,7 @@ export default function About() {
         }
 
         .pfadiPanelInner {
-          position: relative;
-          z-index: 1;
-          min-height: calc(100vh + var(--panel-cut));
+          min-height: calc(145vh + var(--panel-cut));
         }
 
         .pfadiStage {
@@ -926,37 +940,6 @@ export default function About() {
 
         .swordModel {
           filter: drop-shadow(0 10px 18px rgba(30, 22, 15, 0.17));
-        }
-
-        .swordModel::before,
-        .responsiveSwordModel::before {
-          content: '';
-          position: absolute;
-          z-index: 2;
-          top: 50%;
-          left: 50%;
-          width: 22px;
-          height: 22px;
-          margin: -11px 0 0 -11px;
-          border: 2px solid rgba(36, 29, 23, 0.2);
-          border-top-color: #241d17;
-          border-radius: 50%;
-          animation: swordLoaderSpin 0.7s linear infinite;
-          transition: opacity 0.18s ease;
-        }
-
-        .swordModel[data-model-loaded='true']::before,
-        .responsiveSwordModel[data-model-loaded='true']::before,
-        .swordModel[data-model-error='true']::before,
-        .responsiveSwordModel[data-model-error='true']::before {
-          opacity: 0;
-          animation: none;
-        }
-
-        @keyframes swordLoaderSpin {
-          to {
-            transform: rotate(360deg);
-          }
         }
 
         .swordCanvas {
@@ -1024,8 +1007,9 @@ export default function About() {
           opacity: 0;
           left: 400px;
           top: -130px;
-          transition: opacity 0.18s ease;
+          transition: opacity 0.12s linear;
           will-change: transform, opacity;
+          transform: translate3d(-700px, 0, 0);
         }
 
         .nakedbike {
@@ -1093,15 +1077,30 @@ export default function About() {
           font-weight: 400;
           color: #ffffff;
         }
-.divePanelInner {
+
+        .bikeFastExit {
+          /* The bike and copy now leave together inside the shared progress,
+             so only a short buffer is needed before the blue 3x color sweep. */
+          height: calc(18vh + var(--panel-cut));
+        }
+
+        .divePanelInner {
           position: relative;
           z-index: 1;
-          min-height: calc(100vh - 70px);
+          min-height: 95vh;
           display: flex;
           align-items: center;
         }
 
-        .diveSection { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: clamp(40px, 5vw, 72px); padding: 0; }
+        .diveSection {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 50px;
+          padding: max(90px, var(--panel-cut)) 0 70px;
+        }
 
         .diveSection .whalesharkVideo,
         .diveSection .diveCopy {

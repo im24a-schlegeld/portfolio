@@ -813,7 +813,7 @@ export default function About() {
 
         .divePanel {
           z-index: 3;
-          min-height: calc(100vh - 70px);
+          min-height: 100vh;
           background: var(--freizeit-blue);
           color: var(--freizeit-blue-ink);
         }
@@ -1096,12 +1096,20 @@ export default function About() {
 .divePanelInner {
           position: relative;
           z-index: 1;
-          min-height: calc(100vh - 70px);
+          min-height: 100vh;
           display: flex;
           align-items: center;
         }
 
-        .diveSection { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: clamp(40px, 5vw, 72px); padding: 0; }
+        .diveSection {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 50px;
+          padding: max(90px, var(--panel-cut)) 0 70px;
+        }
 
         .diveSection .whalesharkVideo,
         .diveSection .diveCopy {
