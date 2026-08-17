@@ -1,86 +1,30 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ProjectEmbed from './ProjectEmbed';
+import { navigationItems, projects } from '../../data/portfolio';
 
-const featuredProject = {
-  number: '02',
-  title: 'Lyrics Separator',
-  category: 'Web Application',
-  subtitle: 'Webanwendung zur Verarbeitung von Audio und Lyrics',
-  description:
-    'Lyrics Separator verarbeitet Audiodateien zusammen mit Songtexten und erstellt daraus einzelne, abspielbare Audio-Clips passend zu den jeweiligen Lyrics-Abschnitten.',
-  implementation:
-    'Entwicklung einer interaktiven Benutzeroberflaeche fuer Audio-Import, Lyrics-Verarbeitung, Clip-Vorschau und Export. Zusaetzlich wurde eine API-basierte Backend-Architektur fuer Audio- und Lyrics-Verarbeitung umgesetzt.',
-  liveUrl: 'https://lyricsseperator-xi.vercel.app/',
-  githubUrl: 'https://github.com/im24a-schlegeld/lyricsseperator',
-  technologies: [
-    'React',
-    'Vite',
-    'JavaScript',
-    'Web Audio',
-    'Python',
-    'FastAPI',
-    'REST API',
-    'ffmpeg',
-  ],
-  highlights: [
-    {
-      title: 'Audio Processing',
-      text: 'Audio wird verarbeitet und anhand der Lyrics-Timings in einzelne Clips aufgeteilt.',
-    },
-    {
-      title: 'API Architecture',
-      text: 'Frontend und optionale FastAPI-Backend-Architektur kommunizieren ueber REST-Endpunkte.',
-    },
-    {
-      title: 'Export',
-      text: 'Erstellte Audioabschnitte koennen gesammelt verarbeitet und exportiert werden.',
-    },
-  ],
+export const metadata = {
+  title: 'Projekte',
+  description: 'Software- und Webprojekte von Dario Schlegel mit Live-Demos, technischen Details und verwendeten Technologien.',
 };
 
-const smashProject = {
-  number: '01',
-  title: 'Smash-A-Meerkat',
-  category: 'Browser Game',
-  subtitle: 'Backend-zentriertes Reaktionsspiel mit Echtzeit-Kommunikation',
-  description:
-    'Smash-A-Meerkat ist ein browserbasiertes Reaktionsspiel, das an "Whack-a-Mole" erinnert. Ziel war es, ein Spiel mit bewusst backend-zentrierter Architektur zu entwickeln. Die Spiellogik laeuft mit Java und Spring Boot im Backend, waehrend Frontend und Server ueber WebSockets in Echtzeit kommunizieren.',
-  technologies: ['Java', 'Spring Boot', 'WebSocket', 'JavaScript', 'HTML/CSS', 'Maven'],
-  githubUrl: 'https://github.com/im24a-schlegeld/SmashAMeerkat',
-  media: {
-    type: 'video',
-    src: '/smash-a-meerkat-preview.mp4',
-    label: 'Smash-A-Meerkat Gameplay Vorschau',
-  },
-};
+const smashProject = projects.find((project) => project.id === 'smash-a-meerkat');
+const featuredProject = projects.find((project) => project.id === 'lyrics-separator');
+const finalProject = projects.find((project) => project.id === 'x-archive');
 
-const finalProject = {
-  number: '03',
-  title: 'X-Archive',
-  category: 'Mobile App Preview',
-  subtitle: 'Mobile-first Website-Vorschau als App-Projekt',
-  description:
-    'X-Archive bleibt als eigenstaendiges Webprojekt im Portfolio erhalten und wird bewusst in einer Smartphone-Ansicht gezeigt, damit der App-Charakter und die mobile Nutzung direkt erkennbar bleiben.',
-  technologies: ['Frontend', 'Mobile Preview', 'Deployment'],
-  liveUrl: 'https://x-archive-v1.vercel.app/',
-  media: {
-    type: 'phone',
-    src: 'https://x-archive-v1.vercel.app/',
-    label: 'X-Archive mobile Website Vorschau',
-  },
-};
-
-const firstProjects = [
-  smashProject,
-];
-
-const lastProjects = [
-  {
-    ...finalProject,
-  },
-];
+const firstProjects = [smashProject].filter(Boolean);
+const lastProjects = [finalProject].filter(Boolean);
 
 function ProjectMedia({ project }) {
+  if (!project.media) {
+    return (
+      <div className="mediaFrame mediaPlaceholder" aria-label={`${project.title} ohne Vorschau`}>
+        <strong>{project.title}</strong>
+        <span>Für dieses Projekt ist aktuell keine eingebettete Vorschau hinterlegt.</span>
+      </div>
+    );
+  }
+
   if (project.media.type === 'video') {
     return (
       <div className="mediaFrame gameplayFrame" aria-label={project.media.label}>
@@ -92,12 +36,12 @@ function ProjectMedia({ project }) {
     );
   }
 
-  if (project.media.type === 'phone') {
+  if (project.media.type === 'phone' && project.media.src) {
     return (
       <div className="phoneMedia" aria-label={project.media.label}>
         <div className="phoneMockup">
           <div className="phoneScreen">
-            <iframe src={project.media.src} title={project.media.label} loading="lazy" />
+            <ProjectEmbed src={project.media.src} title={project.media.label} />
           </div>
           <Image
             className="phoneFrame"
@@ -112,22 +56,103 @@ function ProjectMedia({ project }) {
     );
   }
 
-  return (
-    <div className="mediaFrame websiteFrame" aria-label={project.media.label}>
-      <div className="miniBrowserTop" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <p>{project.media.src.replace('https://', '').replace('/', '')}</p>
+  if (project.media.type === 'website' && project.media.src) {
+    return (
+      <div className="mediaFrame websiteFrame" aria-label={project.media.label}>
+        <div className="miniBrowserTop" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <p>{project.media.src.replace('https://', '').replace('/', '')}</p>
+        </div>
+        <div className="websiteScreen">
+          <ProjectEmbed src={project.media.src} title={project.media.label} />
+        </div>
       </div>
-      <iframe src={project.media.src} title={project.media.label} loading="lazy" />
+    );
+  }
+
+  return (
+    <div className="mediaFrame mediaPlaceholder" aria-label={`${project.title} ohne Vorschau`}>
+      <strong>{project.title}</strong>
+      <span>Die Vorschau ist nicht verfügbar. Direkte Projektlinks bleiben nutzbar.</span>
     </div>
+  );
+}
+
+function ProjectFacts({ project }) {
+  return (
+    <dl className="projectFacts" aria-label={`${project.title} Projektdaten`}>
+      <div>
+        <dt>Rolle</dt>
+        <dd>{project.role}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd>{project.status}</dd>
+      </div>
+      <div>
+        <dt>Portfolio-Stand</dt>
+        <dd>{project.portfolioYear}</dd>
+      </div>
+    </dl>
+  );
+}
+
+function ProjectActions({ project, detailsHref }) {
+  if (!project.liveUrl && !project.githubUrl && !detailsHref) {
+    return null;
+  }
+
+  return (
+    <div className="actions compactActions" aria-label={`${project.title} Projektaktionen`}>
+      {project.liveUrl && (
+        <a className="primaryAction" href={project.liveUrl} target="_blank" rel="noreferrer">
+          Live Demo <span aria-hidden="true">-&gt;</span>
+          <span className="srOnly"> in neuem Tab öffnen</span>
+        </a>
+      )}
+      {project.githubUrl && (
+        <a className="secondaryAction" href={project.githubUrl} target="_blank" rel="noreferrer">
+          GitHub <span aria-hidden="true">-&gt;</span>
+          <span className="srOnly"> in neuem Tab öffnen</span>
+        </a>
+      )}
+      {detailsHref && (
+        <a className="ghostAction" href={detailsHref}>
+          Details
+        </a>
+      )}
+    </div>
+  );
+}
+
+function ProjectCaseStudy({ project }) {
+  return (
+    <section className="caseStudy" aria-label={`${project.title} Herausforderung, Lösung und Ergebnis`}>
+      <article>
+        <span>Herausforderung</span>
+        <p>{project.challenge}</p>
+      </article>
+      <article>
+        <span>Lösung</span>
+        <p>{project.solution}</p>
+      </article>
+      <article>
+        <span>Ergebnis</span>
+        <p>{project.result}</p>
+      </article>
+    </section>
   );
 }
 
 function ProjectShowcase({ project }) {
   return (
-    <article className="projectShowcase" aria-labelledby={`${project.title}-title`}>
+    <article
+      id={project.id}
+      className="projectShowcase"
+      aria-labelledby={`${project.id}-title`}
+    >
       <ProjectMedia project={project} />
       <div className="showcaseInfo">
         <div className="projectMeta compactMeta">
@@ -135,9 +160,11 @@ function ProjectShowcase({ project }) {
           <span>{project.category}</span>
         </div>
         <p className="projectIndex">{project.number} - Projekt</p>
-        <h2 id={`${project.title}-title`}>{project.title}</h2>
+        <h2 id={`${project.id}-title`}>{project.title}</h2>
         <p className="subtitle">{project.subtitle}</p>
         <p className="description">{project.description}</p>
+
+        <ProjectFacts project={project} />
 
         <div className="techList compactTech" aria-label={`${project.title} Tech Stack`}>
           {project.technologies.map((technology) => (
@@ -145,22 +172,14 @@ function ProjectShowcase({ project }) {
           ))}
         </div>
 
-        {(project.liveUrl || project.githubUrl) && (
-          <div className="actions compactActions" aria-label={`${project.title} Projektaktionen`}>
-            {project.liveUrl && (
-              <a className="primaryAction" href={project.liveUrl} target="_blank" rel="noreferrer">
-                Live Demo <span aria-hidden="true">-&gt;</span>
-                <span className="srOnly"> in neuem Tab oeffnen</span>
-              </a>
-            )}
-            {project.githubUrl && (
-              <a className="secondaryAction" href={project.githubUrl} target="_blank" rel="noreferrer">
-                GitHub <span aria-hidden="true">-&gt;</span>
-                <span className="srOnly"> in neuem Tab oeffnen</span>
-              </a>
-            )}
-          </div>
-        )}
+        <ProjectActions project={project} />
+
+        <section className="implementation" aria-label={`${project.title} Umsetzung`}>
+          <h3>Meine Umsetzung</h3>
+          <p>{project.implementation}</p>
+        </section>
+
+        <ProjectCaseStudy project={project} />
       </div>
     </article>
   );
@@ -170,9 +189,17 @@ export default function Projekte() {
   return (
     <main className="projectsPage">
       <section className="projectsIntro" aria-labelledby="projects-title">
-        <Link className="backLink" href="/">
-          Zurueck zur Startseite
-        </Link>
+        <nav className="projectsNav" aria-label="Hauptnavigation">
+          {navigationItems.map((item) => (
+            <Link
+              href={item.href}
+              key={item.key}
+              aria-current={item.key === 'projects' ? 'page' : undefined}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
         <p className="eyebrow">Portfolio</p>
         <h1 id="projects-title">Projekte</h1>
         <p className="introText">
@@ -186,21 +213,27 @@ export default function Projekte() {
         ))}
       </section>
 
-      <section className="featuredProject" aria-labelledby="lyrics-title">
+      <section id={featuredProject.id} className="featuredProject" aria-labelledby="lyrics-title">
         <div className="projectPreview" aria-label="Lyrics Separator Live-Vorschau">
           <div className="browserFrame">
             <div className="browserTop" aria-hidden="true">
               <span />
               <span />
               <span />
-              <p>lyricsseperator-xi.vercel.app</p>
+              <p>{featuredProject.liveUrl?.replace('https://', '').replace('/', '')}</p>
             </div>
             <div className="previewScreen">
-              <iframe
-                src={featuredProject.liveUrl}
-                title="Lyrics Separator Live Demo Vorschau"
-                loading="lazy"
-              />
+              {featuredProject.liveUrl ? (
+                <ProjectEmbed
+                  src={featuredProject.liveUrl}
+                  title="Lyrics Separator Live Demo Vorschau"
+                />
+              ) : (
+                <div className="embedFallback">
+                  <strong>{featuredProject.title}</strong>
+                  <span>Keine Live-Vorschau hinterlegt.</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -216,19 +249,7 @@ export default function Projekte() {
           <p className="subtitle">{featuredProject.subtitle}</p>
           <p className="description">{featuredProject.description}</p>
 
-          <div className="actions" aria-label="Projektaktionen">
-            <a className="primaryAction" href={featuredProject.liveUrl} target="_blank" rel="noreferrer">
-              Live Demo <span aria-hidden="true">-&gt;</span>
-              <span className="srOnly"> in neuem Tab oeffnen</span>
-            </a>
-            <a className="secondaryAction" href={featuredProject.githubUrl} target="_blank" rel="noreferrer">
-              GitHub <span aria-hidden="true">-&gt;</span>
-              <span className="srOnly"> in neuem Tab oeffnen</span>
-            </a>
-            <a className="ghostAction" href="#lyrics-separator-details">
-              Details
-            </a>
-          </div>
+          <ProjectFacts project={featuredProject} />
 
           <div className="techList" aria-label="Tech Stack">
             {featuredProject.technologies.map((technology) => (
@@ -236,10 +257,14 @@ export default function Projekte() {
             ))}
           </div>
 
+          <ProjectActions project={featuredProject} detailsHref="#lyrics-separator-details" />
+
           <section className="implementation" aria-labelledby="implementation-title">
             <h3 id="implementation-title">Meine Umsetzung</h3>
             <p>{featuredProject.implementation}</p>
           </section>
+
+          <ProjectCaseStudy project={featuredProject} />
         </article>
       </section>
 
@@ -303,29 +328,38 @@ export default function Projekte() {
           padding: clamp(34px, 7vw, 84px) 0 clamp(28px, 4vw, 56px);
         }
 
-        .backLink {
+        .projectsNav {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-bottom: clamp(32px, 5vw, 70px);
+        }
+
+        .projectsNav a {
           min-height: 42px;
           display: inline-flex;
           align-items: center;
-          margin-bottom: clamp(32px, 5vw, 70px);
           padding: 0 18px;
-          border: 1px solid rgba(242, 201, 76, 0.38);
+          border: 1px solid rgba(242, 201, 76, 0.24);
           border-radius: 999px;
-          color: #f2c94c;
+          color: #cfc7ba;
           background: rgba(0, 0, 0, 0.2);
           font-size: 12px;
           font-weight: 900;
           letter-spacing: 0.14em;
           text-decoration: none;
           text-transform: uppercase;
-          transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+          transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
         }
 
-        .backLink:hover,
-        .backLink:focus-visible {
+        .projectsNav a:hover,
+        .projectsNav a:focus-visible,
+        .projectsNav a[aria-current='page'] {
+          color: #f2c94c;
           transform: translateY(-2px);
           border-color: #f2c94c;
           background: rgba(242, 201, 76, 0.1);
+          outline: none;
         }
 
         .eyebrow {
@@ -447,6 +481,67 @@ export default function Projekte() {
           background: #050505;
           transform: translate(-50%, -50%) scale(calc((100cqw - 28px) / 1440px));
           transform-origin: center;
+        }
+
+        .embedFallback {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 20px;
+          color: #f7f2e8;
+          text-align: center;
+          background: radial-gradient(circle at 50% 30%, rgba(242, 201, 76, 0.12), transparent 60%), #050505;
+          transition: opacity 180ms ease;
+        }
+
+        .embedFallback.isHidden {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .embedFallback strong {
+          font-size: clamp(15px, 2vw, 22px);
+          text-transform: uppercase;
+        }
+
+        .embedFallback span {
+          color: #aaa395;
+          font-size: 12px;
+        }
+
+        .embedFallback a,
+        .embedOpenLink {
+          color: #f2c94c;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          text-transform: uppercase;
+        }
+
+        .embedFrame {
+          opacity: 0;
+          transition: opacity 180ms ease;
+        }
+
+        .embedFrame.isLoaded {
+          opacity: 1;
+        }
+
+        .embedOpenLink {
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          z-index: 4;
+          padding: 7px 9px;
+          border: 1px solid rgba(242, 201, 76, 0.32);
+          border-radius: 999px;
+          background: rgba(0, 0, 0, 0.78);
         }
 
         .projectInfo {
@@ -595,6 +690,66 @@ export default function Projekte() {
           letter-spacing: 0.08em;
         }
 
+        .projectFacts {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          margin: 26px 0 0;
+        }
+
+        .projectFacts div {
+          display: grid;
+          grid-template-columns: minmax(110px, 0.55fr) minmax(0, 1.45fr);
+          gap: 16px;
+          padding: 12px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .projectFacts dt {
+          color: rgba(247, 242, 232, 0.48);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .projectFacts dd {
+          margin: 0;
+          color: #f7f2e8;
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.45;
+        }
+
+        .caseStudy {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          margin-top: 24px;
+        }
+
+        .caseStudy article {
+          padding: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.025);
+        }
+
+        .caseStudy span {
+          color: #f2c94c;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
+
+        .caseStudy p {
+          margin: 8px 0 0;
+          color: #cfc7ba;
+          font-size: 14px;
+          line-height: 1.55;
+        }
+
         .implementation {
           margin-top: 32px;
           padding-top: 28px;
@@ -670,6 +825,11 @@ export default function Projekte() {
           padding-top: clamp(12px, 3vw, 28px);
         }
 
+        .projectShowcase,
+        .featuredProject {
+          scroll-margin-top: 24px;
+        }
+
         .projectShowcase {
           display: grid;
           grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.76fr);
@@ -739,6 +899,29 @@ export default function Projekte() {
           place-items: center;
         }
 
+        .mediaPlaceholder {
+          min-height: 300px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 24px;
+          text-align: center;
+        }
+
+        .mediaPlaceholder strong {
+          color: #f7f2e8;
+          font-size: 24px;
+          text-transform: uppercase;
+        }
+
+        .mediaPlaceholder span {
+          max-width: 420px;
+          color: #aaa395;
+          line-height: 1.5;
+        }
+
         .gameplayFrame video,
         .websiteFrame iframe {
           width: 100%;
@@ -746,6 +929,18 @@ export default function Projekte() {
           display: block;
           border: 0;
           background: #050505;
+        }
+
+        .websiteScreen {
+          position: relative;
+          min-height: 0;
+          overflow: hidden;
+          background: #050505;
+        }
+
+        .websiteScreen iframe {
+          position: absolute;
+          inset: 0;
         }
 
         .gameplayFrame video {
@@ -945,6 +1140,17 @@ export default function Projekte() {
             padding-top: 26px;
           }
 
+          .projectsNav {
+            gap: 7px;
+            margin-bottom: 34px;
+          }
+
+          .projectsNav a {
+            min-height: 36px;
+            padding: 0 12px;
+            font-size: 10px;
+          }
+
           .browserFrame,
           .projectInfo,
           .highlightCard,
@@ -996,7 +1202,10 @@ export default function Projekte() {
           .backLink,
           .primaryAction,
           .secondaryAction,
-          .ghostAction {
+          .ghostAction,
+          .projectsNav a,
+          .embedFallback,
+          .embedFrame {
             animation: none;
             transition: none;
           }

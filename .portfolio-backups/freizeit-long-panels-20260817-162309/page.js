@@ -606,21 +606,18 @@ export default function About() {
           return;
         }
 
+        const cut = window.innerWidth * 0.0875;
         const rect = panel.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        // The outgoing panel is deliberately long enough that its text/object
-        // has already left the viewport when the next panel reaches the bottom.
-        // From that exact moment on, the incoming color sheet moves two extra
-        // pixels for every real scroll pixel: 1x page scroll + 2x visual boost
-        // = an apparent 3x sweep across the viewport.
-        const transitionTravel = Math.max(1, viewportHeight / 3);
+        const transitionStart = window.innerHeight + cut;
+        const transitionTravel = Math.max(1, cut);
         const localScroll = Math.max(
           0,
-          Math.min(transitionTravel, viewportHeight - rect.top),
+          Math.min(transitionTravel, transitionStart - rect.top),
         );
-        const boost = localScroll * 2;
 
+        // The page itself still scrolls normally. Only the color edge advances
+        // two extra pixels per scroll pixel, so the diagonal reads as ~3x speed.
+        const boost = localScroll * 2;
         panel.style.setProperty('--cut-boost', `${boost}px`);
       });
     };
@@ -803,7 +800,7 @@ export default function About() {
 
         .pfadiPanel {
           z-index: 1;
-          min-height: calc(100vh + 650px + var(--panel-cut));
+          min-height: calc(100vh + var(--panel-cut));
           background: var(--freizeit-beige);
           color: var(--freizeit-beige-ink);
         }
@@ -817,21 +814,19 @@ export default function About() {
         .bikePanel::before {
           content: '';
           position: absolute;
-          z-index: 0;
           left: 0;
-          top: 0;
+          bottom: calc(100% - 3px);
           width: 100%;
-          height: calc(100vh + var(--panel-cut) + 8px);
+          height: calc(var(--panel-cut) * 3 + 6px);
           background: var(--freizeit-dark);
           clip-path: polygon(
-            0 var(--panel-cut),
-            100% 0,
+            0 calc(100% - var(--cut-boost, 0px)),
+            100% calc(100% - var(--cut-boost, 0px) - var(--panel-cut)),
             100% 100%,
             0 100%
           );
-          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
           pointer-events: none;
-          will-change: transform;
+          will-change: clip-path;
         }
 
         .divePanel {
@@ -844,21 +839,19 @@ export default function About() {
         .divePanel::before {
           content: '';
           position: absolute;
-          z-index: 0;
           left: 0;
-          top: 0;
+          bottom: calc(100% - 3px);
           width: 100%;
-          height: calc(100vh + var(--panel-cut) + 8px);
+          height: calc(var(--panel-cut) * 3 + 6px);
           background: var(--freizeit-blue);
           clip-path: polygon(
-            0 0,
-            100% var(--panel-cut),
+            0 calc(100% - var(--cut-boost, 0px) - var(--panel-cut)),
+            100% calc(100% - var(--cut-boost, 0px)),
             100% 100%,
             0 100%
           );
-          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
           pointer-events: none;
-          will-change: transform;
+          will-change: clip-path;
         }
 
         .section {
@@ -890,7 +883,7 @@ export default function About() {
         }
 
         .pfadiPanelInner {
-          min-height: calc(100vh + 650px + var(--panel-cut));
+          min-height: calc(100vh + var(--panel-cut));
         }
 
         .pfadiStage {
@@ -978,7 +971,6 @@ export default function About() {
 
         .bikePanelInner {
           position: relative;
-          z-index: 1;
         }
 
         .bikeScene {
@@ -1074,14 +1066,10 @@ export default function About() {
         }
 
         .bikeFastExit {
-          /* Keep the dark panel long enough for the sticky bike/text to leave
-             the viewport completely before the blue sweep can begin. */
-          height: calc(100vh - 70px + var(--panel-cut));
+          height: calc(var(--panel-cut) + clamp(40px, 5vh, 70px));
         }
 
         .divePanelInner {
-          position: relative;
-          z-index: 1;
           min-height: 100vh;
           display: flex;
           align-items: center;

@@ -1,12 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { navigationItems, portfolioContact, projects, siteFeatures } from '../data/portfolio';
+
+export const metadata = {
+  title: 'Portfolio',
+  description: 'Portfolio von Dario Schlegel mit Projekten aus Informatik, Frontend, Interface Design und persönlichen Arbeiten.',
+};
 
 const roadStops = [
   {
     align: 'left',
     eyebrow: 'Startpunkt',
     title: 'Dario Schlegel',
-    text: 'Portfolio fuer Informatik, Interface Design, Frontend und Motion. Die Seite fuehrt wie eine Strasse durch Projekte, Experimente und persoenliche Bereiche.',
+    text: 'Portfolio für Informatik, Interface Design, Frontend und Motion. Die Seite führt wie eine Strasse durch Projekte, Experimente und persönliche Bereiche.',
     link: '#projects',
     linkLabel: 'Route ansehen',
   },
@@ -14,7 +20,7 @@ const roadStops = [
     align: 'right',
     eyebrow: 'Profil',
     title: 'Interface & Code',
-    text: 'Klare Layouts, saubere Komponenten und Animationen, die Orientierung geben. Der Fokus liegt auf digitalen Oberflaechen mit Struktur und eigener visueller Sprache.',
+    text: 'Klare Layouts, saubere Komponenten und Animationen, die Orientierung geben. Der Fokus liegt auf digitalen Oberflächen mit Struktur und eigener visueller Sprache.',
     link: '#profile',
     linkLabel: 'Profil lesen',
   },
@@ -22,7 +28,7 @@ const roadStops = [
     align: 'left',
     eyebrow: 'Abzweigung links',
     title: 'Freizeit',
-    text: 'Motorrad, Tauchen und Pfadi haben eine eigene Seite mit persoenlichen Animationen und visuellen Details.',
+    text: 'Motorrad, Tauchen und Pfadi haben eine eigene Seite mit persönlichen Animationen und visuellen Details.',
     link: '/about',
     linkLabel: 'Zur Freizeit',
   },
@@ -30,32 +36,9 @@ const roadStops = [
     align: 'right',
     eyebrow: 'Abzweigung rechts',
     title: 'Projekte',
-    text: 'Eine eigene Projektseite mit externer Website-Vorschau und Arbeiten, die spaeter weiter ausgebaut werden koennen.',
+    text: 'Eine eigene Projektseite mit externer Website-Vorschau und Arbeiten, die später weiter ausgebaut werden können.',
     link: '/projekte',
     linkLabel: 'Zu den Projekten',
-  },
-];
-
-const projectCards = [
-  {
-    title: 'Portfolio Road System',
-    text: 'Eine Startseite als asphaltierte Route: Header-Kreuzung, Mittelstreifen und Inhalte als Wegpunkte links und rechts der Strasse.',
-    meta: 'Design / Frontend',
-  },
-  {
-    title: 'Freizeit Animationen',
-    text: 'Eine eigene Seite mit Motorrad-Bewegung, Pfadi-Schwert und Walhai-Video als persoenliche visuelle Kapitel.',
-    meta: 'Animation / Story',
-  },
-  {
-    title: 'Smash-A-Meerkat',
-    text: 'Ein browserbasiertes Reaktionsspiel mit Java/Spring-Boot-Backend und WebSocket-Kommunikation in Echtzeit.',
-    meta: 'Game / Backend',
-  },
-  {
-    title: 'X-Archive Preview',
-    text: 'Eine externe Website-Vorschau, eingebettet in ein iPhone-Mockup und direkt mit dem Live-Projekt verlinkt.',
-    meta: 'Project / Preview',
   },
 ];
 
@@ -69,10 +52,15 @@ export default function Home() {
           </Link>
 
           <nav className="nav" aria-label="Hauptnavigation">
-            <a href="#profile">Profil</a>
-            <a href="#projects">Projekte</a>
-            <Link href="/about">Freizeit</Link>
-            <Link href="/projekte">Projekte</Link>
+            {navigationItems.map((item) => (
+              <Link
+                href={item.href}
+                key={item.key}
+                aria-current={item.key === 'home' ? 'page' : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </header>
@@ -86,7 +74,7 @@ export default function Home() {
             <h1>Choose the route.</h1>
             <p>
               Eine Portfolio-Startseite wie eine dunkle Landstrasse: links und
-              rechts liegen die Stationen, in der Mitte fuehrt die Linie weiter.
+              rechts liegen die Stationen, in der Mitte führt die Linie weiter.
             </p>
           </div>
         </section>
@@ -118,13 +106,56 @@ export default function Home() {
           </div>
 
           <div className="projectGrid">
-            {projectCards.map((project) => (
-              <article className="projectCard" key={project.title}>
-                <span>{project.meta}</span>
+            {projects.map((project) => (
+              <Link
+                className="projectCard projectCardLink"
+                href={`/projekte#${project.id}`}
+                key={project.id}
+              >
+                <span>{project.homeMeta}</span>
                 <h3>{project.title}</h3>
-                <p>{project.text}</p>
+                <p>{project.homeText}</p>
+                <strong className="projectCardCta">Projekt ansehen -&gt;</strong>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="siteFeaturesSection" aria-labelledby="site-features-title">
+          <div className="siteFeaturesIntro">
+            <p className="roadLabel">Über diese Website</p>
+            <h2 id="site-features-title">Portfolio-System</h2>
+            <p>Diese Elemente gehören zur Portfolio-Website selbst und sind bewusst von den Softwareprojekten getrennt.</p>
+          </div>
+          <div className="siteFeatureGrid">
+            {siteFeatures.map((feature) => (
+              <article className="projectCard" key={feature.title}>
+                <span>{feature.meta}</span>
+                <h3>{feature.title}</h3>
+                <p>{feature.text}</p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section id="contact" className="contactSection" aria-labelledby="contact-title">
+          <div className="contactCard">
+            <p className="roadLabel">Kontakt</p>
+            <h2 id="contact-title">Kontakt aufnehmen</h2>
+            <p>Für Fragen zu Projekten, Zusammenarbeit oder Code erreichst du mich direkt über diese Wege.</p>
+            <div className="contactActions">
+              <a className="roadButton" href={`mailto:${portfolioContact.email}`}>
+                E-Mail
+              </a>
+              <a className="contactLink" href={portfolioContact.githubUrl} target="_blank" rel="noreferrer">
+                GitHub -&gt;
+              </a>
+            </div>
+            {portfolioContact.emailIsPlaceholder && (
+              <p className="placeholderNotice">
+                E-Mail-Platzhalter: {portfolioContact.email} - vor Veröffentlichung durch deine echte Adresse ersetzen.
+              </p>
+            )}
           </div>
         </section>
 
@@ -598,6 +629,103 @@ export default function Home() {
           line-height: 1.55;
         }
 
+        .projectCardLink {
+          display: block;
+          transition: transform 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+        }
+
+        .projectCardLink:hover,
+        .projectCardLink:focus-visible {
+          transform: translateY(-3px);
+          border-color: rgba(242, 201, 76, 0.5);
+          filter: brightness(1.05);
+          outline: none;
+        }
+
+        .projectCardCta {
+          display: inline-block;
+          margin-top: 20px;
+          color: var(--paint);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .siteFeaturesSection,
+        .contactSection {
+          position: relative;
+          padding: 90px 0 20px;
+        }
+
+        .siteFeaturesIntro,
+        .contactCard {
+          max-width: 780px;
+          margin: 0 auto;
+        }
+
+        .siteFeaturesIntro {
+          text-align: center;
+        }
+
+        .siteFeaturesIntro h2,
+        .contactCard h2 {
+          margin: 0;
+          font-size: clamp(38px, 6vw, 72px);
+          line-height: 0.95;
+          letter-spacing: -0.05em;
+          text-transform: uppercase;
+        }
+
+        .siteFeaturesIntro > p:last-child,
+        .contactCard > p {
+          color: #c7c0b3;
+          font-size: 17px;
+          line-height: 1.6;
+        }
+
+        .siteFeatureGrid {
+          width: min(920px, 100%);
+          margin: 34px auto 0;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+        }
+
+        .contactCard {
+          padding: clamp(28px, 5vw, 48px);
+          border: 1px solid rgba(245, 242, 233, 0.13);
+          border-radius: 28px;
+          background: rgba(10, 10, 10, 0.84);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+        }
+
+        .contactActions {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-top: 24px;
+        }
+
+        .contactActions .roadButton {
+          margin-top: 0;
+        }
+
+        .contactLink {
+          color: var(--paint);
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .placeholderNotice {
+          margin-top: 18px !important;
+          color: #8d8678 !important;
+          font-size: 12px !important;
+        }
+
         .roadFooter {
           position: relative;
           z-index: 1;
@@ -696,6 +824,15 @@ export default function Home() {
             margin-left: 82px;
           }
 
+          .siteFeaturesSection,
+          .contactSection {
+            padding-left: 82px;
+          }
+
+          .siteFeatureGrid {
+            grid-template-columns: 1fr;
+          }
+
           .roadFooter {
             flex-direction: column;
             align-items: flex-start;
@@ -724,7 +861,9 @@ export default function Home() {
 
           .routeStop,
           .sectionIntro,
-          .projectGrid {
+          .projectGrid,
+          .siteFeaturesSection,
+          .contactSection {
             margin-left: 0;
             padding-left: 70px;
           }

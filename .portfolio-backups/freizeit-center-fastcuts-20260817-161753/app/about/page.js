@@ -138,7 +138,6 @@ function PfadiSection() {
 }
 
 function BikeScene({
-  panelRef,
   sceneRef,
   sceneHeight,
   bikegroupRef,
@@ -151,7 +150,7 @@ function BikeScene({
   bikeTextRef,
 }) {
   return (
-    <section ref={panelRef} className="freizeitPanel bikePanel">
+    <section className="freizeitPanel bikePanel">
       <div className="container bikePanelInner">
         <div
           ref={sceneRef}
@@ -216,7 +215,7 @@ function BikeScene({
   );
 }
 
-function DiveSection({ panelRef }) {
+function DiveSection() {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -255,7 +254,7 @@ function DiveSection({ panelRef }) {
   }, []);
 
   return (
-    <section ref={panelRef} className="freizeitPanel divePanel">
+    <section className="freizeitPanel divePanel">
       <div className="container divePanelInner">
         <div
           ref={sectionRef}
@@ -465,8 +464,6 @@ function FreizeitFooter() {
 }
 
 export default function About() {
-  const bikePanelRef = useRef(null);
-  const divePanelRef = useRef(null);
   const sceneRef = useRef(null);
   const bikegroupRef = useRef(null);
   const nakedbikeRef = useRef(null);
@@ -597,50 +594,19 @@ export default function About() {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    const updateFastPanelCuts = () => {
-      const panels = [bikePanelRef.current, divePanelRef.current];
-
-      panels.forEach((panel) => {
-        if (!panel || isMobileViewport) {
-          panel?.style.setProperty('--cut-boost', '0px');
-          return;
-        }
-
-        const rect = panel.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        // The outgoing panel is deliberately long enough that its text/object
-        // has already left the viewport when the next panel reaches the bottom.
-        // From that exact moment on, the incoming color sheet moves two extra
-        // pixels for every real scroll pixel: 1x page scroll + 2x visual boost
-        // = an apparent 3x sweep across the viewport.
-        const transitionTravel = Math.max(1, viewportHeight / 3);
-        const localScroll = Math.max(
-          0,
-          Math.min(transitionTravel, viewportHeight - rect.top),
-        );
-        const boost = localScroll * 2;
-
-        panel.style.setProperty('--cut-boost', `${boost}px`);
-      });
-    };
-
     const handleScroll = () => {
       if (isMobileViewport) return;
-      updateFastPanelCuts();
       updateTargetProgress();
       requestBikeAnimation();
     };
 
     const handleResize = () => {
       updateMeasurements();
-      updateFastPanelCuts();
       updateTargetProgress();
       requestBikeAnimation();
     };
 
     updateMeasurements();
-    updateFastPanelCuts();
     applyProgress(0);
 
     window.addEventListener('resize', handleResize);
@@ -662,7 +628,6 @@ export default function About() {
           <PfadiSection />
 
           <BikeScene
-            panelRef={bikePanelRef}
             sceneRef={sceneRef}
             sceneHeight={sceneHeight}
             bikegroupRef={bikegroupRef}
@@ -675,7 +640,7 @@ export default function About() {
             bikeTextRef={bikeTextRef}
           />
 
-          <DiveSection panelRef={divePanelRef} />
+          <DiveSection />
         </div>
 
         <ResponsiveFreizeitSections />
@@ -803,7 +768,7 @@ export default function About() {
 
         .pfadiPanel {
           z-index: 1;
-          min-height: calc(100vh + 650px + var(--panel-cut));
+          min-height: calc(100vh + var(--panel-cut));
           background: var(--freizeit-beige);
           color: var(--freizeit-beige-ink);
         }
@@ -817,21 +782,13 @@ export default function About() {
         .bikePanel::before {
           content: '';
           position: absolute;
-          z-index: 0;
+          top: calc(-1 * var(--panel-cut));
           left: 0;
-          top: 0;
           width: 100%;
-          height: calc(100vh + var(--panel-cut) + 8px);
+          height: var(--panel-cut);
           background: var(--freizeit-dark);
-          clip-path: polygon(
-            0 var(--panel-cut),
-            100% 0,
-            100% 100%,
-            0 100%
-          );
-          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          clip-path: polygon(0 100%, 100% 0, 100% 100%);
           pointer-events: none;
-          will-change: transform;
         }
 
         .divePanel {
@@ -844,21 +801,13 @@ export default function About() {
         .divePanel::before {
           content: '';
           position: absolute;
-          z-index: 0;
+          top: calc(-1 * var(--panel-cut));
           left: 0;
-          top: 0;
           width: 100%;
-          height: calc(100vh + var(--panel-cut) + 8px);
+          height: var(--panel-cut);
           background: var(--freizeit-blue);
-          clip-path: polygon(
-            0 0,
-            100% var(--panel-cut),
-            100% 100%,
-            0 100%
-          );
-          transform: translateY(calc(-1 * var(--cut-boost, 0px)));
+          clip-path: polygon(0 0, 0 100%, 100% 100%);
           pointer-events: none;
-          will-change: transform;
         }
 
         .section {
@@ -890,7 +839,7 @@ export default function About() {
         }
 
         .pfadiPanelInner {
-          min-height: calc(100vh + 650px + var(--panel-cut));
+          min-height: calc(100vh + var(--panel-cut));
         }
 
         .pfadiStage {
@@ -978,7 +927,6 @@ export default function About() {
 
         .bikePanelInner {
           position: relative;
-          z-index: 1;
         }
 
         .bikeScene {
@@ -998,7 +946,6 @@ export default function About() {
           height: 520px;
           opacity: 0;
           left: 400px;
-          top: -130px;
           transition: opacity 0.32s ease;
         }
 
@@ -1074,14 +1021,10 @@ export default function About() {
         }
 
         .bikeFastExit {
-          /* Keep the dark panel long enough for the sticky bike/text to leave
-             the viewport completely before the blue sweep can begin. */
-          height: calc(100vh - 70px + var(--panel-cut));
+          height: calc(var(--panel-cut) + clamp(40px, 5vh, 70px));
         }
 
         .divePanelInner {
-          position: relative;
-          z-index: 1;
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -1292,10 +1235,10 @@ export default function About() {
           .responsiveBikePanel::before {
             content: '';
             position: absolute;
-            top: calc(-1 * var(--panel-cut) - 3px);
+            top: calc(-1 * var(--panel-cut));
             left: 0;
             width: 100%;
-            height: calc(var(--panel-cut) + 6px);
+            height: var(--panel-cut);
             background: var(--freizeit-dark);
             clip-path: polygon(0 100%, 100% 0, 100% 100%);
           }
@@ -1309,10 +1252,10 @@ export default function About() {
           .responsiveDivePanel::before {
             content: '';
             position: absolute;
-            top: calc(-1 * var(--panel-cut) - 3px);
+            top: calc(-1 * var(--panel-cut));
             left: 0;
             width: 100%;
-            height: calc(var(--panel-cut) + 6px);
+            height: var(--panel-cut);
             background: var(--freizeit-blue);
             clip-path: polygon(0 0, 0 100%, 100% 100%);
           }
