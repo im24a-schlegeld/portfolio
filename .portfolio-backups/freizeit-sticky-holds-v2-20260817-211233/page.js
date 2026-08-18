@@ -73,40 +73,28 @@ function PageIntro() {
   );
 }
 
-function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) {
+function DesktopDiveContent({ videoMotionRef, copyMotionRef }) {
   const sectionRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const video = videoElementRef.current;
+    const video = videoRef.current;
     if (!section || !video) return undefined;
 
-    const compactLayout = window.innerWidth < 1180;
-
-    if (compactLayout) {
-      video.preload = 'auto';
-      video.poster = '/responsive/whaleshark-poster.jpg';
-      video.load();
-    }
-
     if (!('IntersectionObserver' in window)) {
-      if (compactLayout) void video.play().catch(() => {});
       return undefined;
     }
 
-    const playThreshold = compactLayout ? 0.08 : 0.45;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= playThreshold) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
           void video.play().catch(() => {});
         } else {
           video.pause();
         }
       },
-      compactLayout
-        ? { threshold: [0, 0.08, 0.18, 0.45], rootMargin: '100px 0px' }
-        : { threshold: [0, 0.2, 0.45, 0.75] },
+      { threshold: [0, 0.2, 0.45, 0.75] },
     );
 
     observer.observe(section);
@@ -114,14 +102,14 @@ function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) 
       observer.disconnect();
       video.pause();
     };
-  }, [videoElementRef]);
+  }, []);
 
   return (
     <div ref={sectionRef} className="desktopDiveContent">
       <div className="container desktopDiveInner">
         <div ref={videoMotionRef} className="diveVideoMotion">
           <video
-            ref={videoElementRef}
+            ref={videoRef}
             className="whalesharkVideo"
             muted
             loop
@@ -147,7 +135,6 @@ function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) 
 function DesktopFreizeitStory({
   storyRef,
   storyHeight,
-  swordScrollProgressRef,
   beigeContentRef,
   introMotionRef,
   swordMotionRef,
@@ -156,7 +143,6 @@ function DesktopFreizeitStory({
   blueSheetRef,
   diveVideoMotionRef,
   diveCopyMotionRef,
-  diveVideoElementRef,
   bikegroupRef,
   backwheelRef,
   frontwheelRef,
@@ -186,8 +172,7 @@ function DesktopFreizeitStory({
                   >
                     <SwordModel
                       className="swordModel"
-                      scrollProgressRef={swordScrollProgressRef}
-                      mediaQuery="all"
+                      mediaQuery="(min-width: 768px)"
                     />
                   </a>
                 </div>
@@ -213,8 +198,6 @@ function DesktopFreizeitStory({
           <div className="bikegroup" ref={bikegroupRef}>
             <img
               src="/cbnaked1.png"
-              srcSet="/responsive/cbnaked1.png 1200w, /cbnaked1.png 3000w"
-              sizes="(max-width: 1179px) 400px, 3000px"
               alt="Motorrad"
               className="nakedbike"
               width="400"
@@ -222,8 +205,6 @@ function DesktopFreizeitStory({
             <img
               ref={backwheelRef}
               src="/cbbackwheel.png"
-              srcSet="/responsive/cbbackwheel.png 320w, /cbbackwheel.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt="Hinterrad"
               className="backwheel"
               width="93"
@@ -231,24 +212,18 @@ function DesktopFreizeitStory({
             <img
               ref={frontwheelRef}
               src="/cbfrontwheel2.png"
-              srcSet="/responsive/cbfrontwheel2.png 320w, /cbfrontwheel2.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt="Vorderrad"
               className="frontwheel"
               width="93"
             />
             <img
               src="/wheelshading1.png"
-              srcSet="/responsive/wheelshading1.png 320w, /wheelshading1.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt=""
               className="shadingback"
               width="93"
             />
             <img
               src="/wheelshading2.png"
-              srcSet="/responsive/wheelshading2.png 320w, /wheelshading2.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt=""
               className="shadingfront"
               width="93"
@@ -266,10 +241,162 @@ function DesktopFreizeitStory({
           <DesktopDiveContent
             videoMotionRef={diveVideoMotionRef}
             copyMotionRef={diveCopyMotionRef}
-            videoElementRef={diveVideoElementRef}
           />
         </div>
       </div>
+    </section>
+  );
+}
+
+function ResponsiveFreizeitSections() {
+  const firstFeatureRef = useRef(null);
+  const diveFeatureRef = useRef(null);
+  const videoRef = useRef(null);
+  const [firstVisible, setFirstVisible] = useState(false);
+  const [diveVisible, setDiveVisible] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!('IntersectionObserver' in window)) {
+      const frame = requestAnimationFrame(() => {
+        setFirstVisible(true);
+        setDiveVisible(true);
+        if (video) void video.play().catch(() => {});
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === firstFeatureRef.current && entry.isIntersecting) {
+            setFirstVisible(true);
+            observer.unobserve(entry.target);
+          }
+
+          if (entry.target === diveFeatureRef.current) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.24) {
+              setDiveVisible(true);
+              if (video) void video.play().catch(() => {});
+            } else if (video) {
+              video.pause();
+            }
+          }
+        });
+      },
+      { threshold: [0, 0.16, 0.24, 0.5], rootMargin: '0px 0px -5% 0px' },
+    );
+
+    if (firstFeatureRef.current) observer.observe(firstFeatureRef.current);
+    if (diveFeatureRef.current) observer.observe(diveFeatureRef.current);
+
+    return () => {
+      observer.disconnect();
+      if (video) video.pause();
+    };
+  }, []);
+
+  return (
+    <section className="responsiveFreizeitSections">
+      <article className="responsivePanel responsivePfadiPanel">
+        <div className="container responsivePanelInner">
+          <PageIntro />
+          <div
+            ref={firstFeatureRef}
+            className={`responsiveFeature responsiveFirstFeature ${firstVisible ? 'isVisible' : ''}`}
+          >
+            <div className="responsiveVisual pfadiVisual">
+              <SwordModel
+                className="responsiveSwordModel"
+                mediaQuery="(max-width: 767px)"
+              />
+            </div>
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle ${newRocker.className}`}>
+                {FREIZEIT_COPY.pfadi.title}
+              </h2>
+              <p className={`responsiveText ${newRocker.className}`}>
+                {FREIZEIT_COPY.pfadi.shortText}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article className="responsivePanel responsiveBikePanel">
+        <div className="container responsivePanelInner">
+          <div className="responsiveFeature">
+            <div className="responsiveVisual bikeVisual">
+              <img
+                src="/cbnaked1.png"
+                alt="Motorrad"
+                className="responsiveBikeFrame"
+              />
+              <img
+                src="/cbbackwheel.png"
+                alt=""
+                className="responsiveBikeWheel responsiveBackWheel"
+              />
+              <img
+                src="/cbfrontwheel2.png"
+                alt=""
+                className="responsiveBikeWheel responsiveFrontWheel"
+              />
+              <img
+                src="/wheelshading1.png"
+                alt=""
+                className="responsiveBikeShading responsiveBackShading"
+              />
+              <img
+                src="/wheelshading2.png"
+                alt=""
+                className="responsiveBikeShading responsiveFrontShading"
+              />
+            </div>
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle bikeResponsiveTitle ${racingSansOne.className}`}>
+                {FREIZEIT_COPY.bike.title}
+              </h2>
+              <p className={`responsiveText bikeResponsiveText ${racingSansOne.className}`}>
+                {FREIZEIT_COPY.bike.text}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article className="responsivePanel responsiveDivePanel">
+        <div className="container responsivePanelInner">
+          <div
+            ref={diveFeatureRef}
+            className={`responsiveFeature responsiveDiveFeature ${diveVisible ? 'isVisible' : ''}`}
+          >
+            <video
+              ref={videoRef}
+              className="responsiveWhaleshark"
+              muted
+              loop
+              playsInline
+              preload="none"
+            >
+              <source
+                src="/whaleshark.mp4"
+                type="video/mp4"
+                media="(max-width: 767px)"
+              />
+            </video>
+            <div className="responsiveCopy">
+              <h2 className={`responsiveTitle diveResponsiveTitle ${wavy.className}`}>
+                {FREIZEIT_COPY.dive.title}
+              </h2>
+              <p className={`responsiveText diveResponsiveText ${wavy.className}`}>
+                {FREIZEIT_COPY.dive.text}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
     </section>
   );
 }
@@ -298,7 +425,6 @@ function FreizeitFooter() {
 
 export default function About() {
   const storyRef = useRef(null);
-  const swordScrollProgressRef = useRef(0);
   const beigeContentRef = useRef(null);
   const introMotionRef = useRef(null);
   const swordMotionRef = useRef(null);
@@ -307,7 +433,6 @@ export default function About() {
   const blueSheetRef = useRef(null);
   const diveVideoMotionRef = useRef(null);
   const diveCopyMotionRef = useRef(null);
-  const diveVideoElementRef = useRef(null);
   const bikegroupRef = useRef(null);
   const backwheelRef = useRef(null);
   const frontwheelRef = useRef(null);
@@ -316,6 +441,7 @@ export default function About() {
 
   useEffect(() => {
     let frameId;
+    let isMobileViewport = false;
     let metrics = null;
 
     const clamp01 = (value) => Math.max(0, Math.min(1, value));
@@ -326,7 +452,7 @@ export default function About() {
 
     const renderStory = () => {
       frameId = undefined;
-      if (!metrics || !storyRef.current) return;
+      if (isMobileViewport || !metrics || !storyRef.current) return;
 
       const rect = storyRef.current.getBoundingClientRect();
       const localScroll = Math.max(
@@ -334,14 +460,7 @@ export default function About() {
         Math.min(metrics.totalScroll, metrics.headerHeight - rect.top),
       );
 
-      // Pfadi gets a real hold: the sticky viewport stays visually still while
-      // the user scrolls. Only the sword's own 3D scroll reaction continues.
-      const pfadiHoldProgress = clamp01(localScroll / metrics.pfadiHold);
-      swordScrollProgressRef.current = pfadiHoldProgress;
-
-      const beigeProgress = clamp01(
-        (localScroll - metrics.pfadiHold) / metrics.colorTransition,
-      );
+      const beigeProgress = clamp01(localScroll / metrics.colorTransition);
       const colorTravel = metrics.stageHeight + metrics.cutHeight;
       const darkY = metrics.stageHeight - beigeProgress * colorTravel;
 
@@ -375,15 +494,13 @@ export default function About() {
         pfadiCopyMotionRef.current.style.transform = `translate3d(0, ${pfadiY}px, 0)`;
       }
 
-      const bikeStart = metrics.pfadiHold + metrics.colorTransition;
+      const bikeStart = metrics.colorTransition;
       const bikeProgress = clamp01(
         (localScroll - bikeStart) / metrics.bikeTravel,
       );
       const bikeActive = localScroll >= bikeStart;
 
-      // Once the bike reaches the centered stop, keep the whole black scene
-      // still for the same scroll distance as the final blue hold.
-      const blueStart = bikeStart + metrics.bikeTravel + metrics.bikeHold;
+      const blueStart = bikeStart + metrics.bikeTravel;
       const blueProgress = clamp01(
         (localScroll - blueStart) / metrics.colorTransition,
       );
@@ -397,14 +514,9 @@ export default function About() {
       // not the oversized scene group, in the horizontal center of the screen.
       // When the bike has stopped there, the blue transition begins and the
       // bike scene actively travels upward above the incoming blue field.
-      const bikeCenterX = metrics.compactLayout ? 0 : 546;
-      const bikeStartX = metrics.compactLayout
-        ? -(window.innerWidth / 2 + 250 * metrics.bikeScale + 24)
-        : -700;
-      const bikeX = bikeStartX + bikeProgress * (bikeCenterX - bikeStartX);
-      const bikeExitY = metrics.compactLayout
-        ? -blueProgress * (metrics.stageHeight + 340 * metrics.bikeScale)
-        : -150 - blueProgress * (metrics.stageHeight + 280);
+      const bikeCenterX = 546;
+      const bikeX = -700 + bikeProgress * (bikeCenterX + 700);
+      const bikeExitY = -60 - blueProgress * (metrics.stageHeight + 280);
       const wheelRotation = bikeProgress * 1080;
 
       if (bikegroupRef.current) {
@@ -435,78 +547,40 @@ export default function About() {
       if (diveCopyMotionRef.current) {
         diveCopyMotionRef.current.style.transform = `translate3d(${diveCopyX}px, ${diveCopyY}px, 0)`;
       }
-
     };
 
     const requestRender = () => {
-      if (frameId) return;
+      if (frameId || isMobileViewport) return;
       frameId = requestAnimationFrame(renderStory);
     };
 
     const measure = () => {
-      const compactLayout = window.innerWidth < 1180;
+      isMobileViewport = window.innerWidth < 768;
+
+      if (isMobileViewport) {
+        metrics = null;
+        return;
+      }
+
       const headerHeight = getHeaderHeight();
-      const stageHeight = compactLayout
-        ? Math.max(1, window.innerHeight - headerHeight)
-        : Math.max(460, window.innerHeight - headerHeight);
+      const stageHeight = Math.max(460, window.innerHeight - headerHeight);
       const cutHeight = window.innerWidth * Math.tan((5 * Math.PI) / 180);
-      const compactBikeMinScale = stageHeight < 480 ? 0.34 : 0.56;
-      const bikeScale = compactLayout
-        ? Math.max(compactBikeMinScale, Math.min(0.88, (window.innerWidth - 28) / 500, (stageHeight - 24) / 680))
-        : 1;
-
-      // Desktop positioning remains CSS-driven. Compact layouts receive only
-      // responsive sizing variables; desktop values are left untouched.
-      if (storyRef.current) {
-        if (compactLayout) {
-          storyRef.current.style.setProperty('--story-stage-height', `${stageHeight}px`);
-          storyRef.current.style.setProperty('--bike-responsive-scale', `${bikeScale}`);
-        } else {
-          storyRef.current.style.removeProperty('--story-stage-height');
-          storyRef.current.style.removeProperty('--bike-responsive-scale');
-        }
-      }
-
-      if (swordMotionRef.current) {
-        swordMotionRef.current.style.top = '';
-      }
 
       // One third of a viewport of real scroll moves a color edge through
       // roughly one full viewport: the requested apparent 3x color sweep.
       const colorTransition = Math.max(220, stageHeight / 3);
-
-      // "Hold" means real scroll distance where the sticky scene itself does
-      // not move. Tauchen stays at the requested half-length. Motorrad gets
-      // exactly the same hold. Pfadi gets the same hold too, but its sword
-      // continues reacting to scroll during that stationary phase.
-      const blueHold = Math.max(210, stageHeight * 0.275);
-      const bikeHold = blueHold;
-      const pfadiHold = blueHold;
-
-      // Restore the original bike travel duration so the animation itself is
-      // not sped up by the new stationary holds.
-      const bikeTravel = Math.max(820, stageHeight * 0.95);
-      const totalScroll = (
-        pfadiHold
-        + colorTransition
-        + bikeTravel
-        + bikeHold
-        + colorTransition
-        + blueHold
-      );
+      const sceneHold = Math.max(210, stageHeight * 0.275);
+      const bikeTravel = sceneHold; const blueHold = sceneHold;
+      const totalScroll = colorTransition + bikeTravel + colorTransition + blueHold;
 
       metrics = {
         headerHeight,
         stageHeight,
         cutHeight,
         colorTransition,
-        pfadiHold,
         bikeTravel,
-        bikeHold,
         blueHold,
         totalScroll,
-        compactLayout,
-        bikeScale,
       };
 
       setStoryHeight(Math.ceil(stageHeight + totalScroll));
@@ -536,7 +610,6 @@ export default function About() {
           <DesktopFreizeitStory
             storyRef={storyRef}
             storyHeight={storyHeight}
-            swordScrollProgressRef={swordScrollProgressRef}
             beigeContentRef={beigeContentRef}
             introMotionRef={introMotionRef}
             swordMotionRef={swordMotionRef}
@@ -545,13 +618,13 @@ export default function About() {
             blueSheetRef={blueSheetRef}
             diveVideoMotionRef={diveVideoMotionRef}
             diveCopyMotionRef={diveCopyMotionRef}
-            diveVideoElementRef={diveVideoElementRef}
             bikegroupRef={bikegroupRef}
             backwheelRef={backwheelRef}
             frontwheelRef={frontwheelRef}
           />
         </div>
 
+        <ResponsiveFreizeitSections />
       </main>
 
       <FreizeitFooter />
@@ -815,7 +888,8 @@ export default function About() {
           outline-offset: 10px;
         }
 
-        .swordModel {
+        .swordModel,
+        .responsiveSwordModel {
           position: relative;
           width: 100%;
           height: 100%;
@@ -849,7 +923,9 @@ export default function About() {
         }
 
         .swordModel[data-model-loaded='true'] .swordLoadingIndicator,
-        .swordModel[data-model-error='true'] .swordLoadingIndicator {
+        .swordModel[data-model-error='true'] .swordLoadingIndicator,
+        .responsiveSwordModel[data-model-loaded='true'] .swordLoadingIndicator,
+        .responsiveSwordModel[data-model-error='true'] .swordLoadingIndicator {
           display: none;
         }
 
@@ -1103,194 +1179,20 @@ export default function About() {
           }
         }
 
-        @media (min-width: 1180px) {
-          /* Desktop-only centering. Horizontal positions and animation timing
-             stay exactly as before; only the static vertical anchors change. */
-          .pfadiStage {
-            position: absolute;
-            inset: 0;
-            min-height: 0;
-          }
-
-          .swordMotion,
-          .pfadiCopyMotion {
-            top: 50%;
-            translate: 0 -50%;
-          }
-        }
-
-        @media (max-width: 1179px) {
-          .storyViewport {
-            top: 70px;
-            height: calc(100vh - 70px);
-            contain: layout paint;
-          }
-
-          /* Keep the moving color fields much taller than the viewport on
-             compact layouts. Their only visible edge is the 5deg top cut, so
-             a finite lower edge can never flash through as a horizontal bar. */
-          .storyColorSheet {
-            height: calc(200% + var(--panel-cut) + var(--panel-cut) + 8px);
-          }
-
-          .storyBeigeInner {
-            padding-left: clamp(20px, 5vw, 56px);
-            padding-right: clamp(20px, 5vw, 56px);
-          }
-
-          .storyIntroMotion {
-            position: absolute;
-            z-index: 3;
-            top: clamp(16px, 2.6vh, 28px);
-            left: clamp(20px, 5vw, 56px);
-            right: clamp(20px, 5vw, 56px);
-          }
-
-          .section {
-            padding: 0;
-          }
-
-          .pfadiStage {
-            position: absolute;
-            inset: 0;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(12px, 2vh, 22px);
-            padding: clamp(80px, 11vh, 108px) 0 clamp(16px, 2.5vh, 28px);
-          }
-
-          .pfadiCopyMotion {
-            position: relative;
-            order: 1;
-            flex: 0 0 auto;
-            left: auto;
-            top: auto;
-            width: min(720px, 100%);
-          }
-
+        @media (max-width: 980px) and (min-width: 768px) {
           .pfadiCopy {
-            width: 100%;
-          }
-
-          .pfadiTitle {
-            margin-bottom: 8px;
-            font-size: clamp(16px, 2vw, 21px);
+            left: 48%;
+            width: 48%;
           }
 
           .pfadiText {
             width: 100%;
-            max-width: none;
-            font-size: clamp(16px, 2.35vw, 23px);
-            line-height: 1.26;
+            font-size: 25px;
           }
 
-          .swordMotion {
-            position: relative;
-            order: 2;
-            flex: 0 0 auto;
-            left: auto;
-            top: auto;
-            width: min(680px, 100%);
-            height: clamp(170px, 28vh, 290px);
-          }
-
-          .bikegroup {
-            left: 50%;
-            top: 50%;
-            width: 500px;
-            height: 680px;
-            margin-left: -250px;
-            margin-top: -340px;
-            scale: var(--bike-responsive-scale, 0.88);
-            transform-origin: center center;
-          }
-
-          .bikeTitle {
-            left: 0;
-            top: 38px;
-            width: 500px;
-            text-align: center;
-            font-size: 21px;
-          }
-
-          .bikeText {
-            left: 0;
-            top: 78px;
-            width: 500px;
-            text-align: center;
-            font-size: 26px;
-            line-height: 1.24;
-          }
-
-          .nakedbike {
-            top: 250px;
-            left: 50px;
-          }
-
-          .backwheel,
-          .shadingback {
-            top: 540px;
-            left: 102px;
-          }
-
-          .frontwheel,
-          .shadingfront {
-            top: 543px;
-            left: 303px;
-          }
-
-          /* The blue sheet is intentionally oversized on compact screens.
-             Anchor its content to exactly one visible stage so the text/video
-             center remains independent from the sheet's safety extension. */
-          .desktopDiveContent {
-            top: var(--panel-cut);
-            height: var(--story-stage-height, calc(100vh - 70px));
-          }
-
-          .desktopDiveInner {
-            width: 100%;
-            max-width: 820px;
-            height: 100%;
-            padding: clamp(18px, 3vh, 34px) clamp(20px, 5vw, 52px);
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(14px, 2vh, 24px);
-          }
-
-          .diveCopy {
-            order: 1;
-            flex: 0 0 auto;
-            width: min(700px, 100%);
-            max-width: 700px;
-          }
-
-          .diveVideoMotion {
-            order: 2;
-            flex: 0 0 auto;
-            width: min(620px, 100%);
-          }
-
-          .whalesharkVideo {
-            width: 100%;
-            max-height: 34vh;
-            object-fit: cover;
-            border-radius: 28px;
-          }
-
-          .diveTitle {
-            margin-bottom: 8px;
-            font-size: clamp(16px, 2vw, 21px);
-          }
-
-          .diveText {
-            width: 100%;
-            max-width: none;
-            font-size: clamp(16px, 2.3vw, 23px);
-            line-height: 1.26;
+          .swordModelWrap {
+            left: -90px;
+            width: 54%;
           }
         }
 
@@ -1329,88 +1231,210 @@ export default function About() {
             font-size: 11px;
           }
 
-          .storyViewport {
-            top: 64px;
-            height: calc(100vh - 64px);
+          .desktopFreizeit {
+            display: none;
           }
 
-          .storyIntroMotion {
-            top: 12px;
-            left: clamp(16px, 5vw, 24px);
-            right: clamp(16px, 5vw, 24px);
+          .responsiveFreizeitSections {
+            display: block;
           }
 
-          .kicker {
-            margin-bottom: 5px;
-            font-size: 9px;
+          .responsivePanel {
+            min-height: 100vh;
+          }
+
+          .responsivePfadiPanel {
+            z-index: 1;
+            min-height: calc(100vh + var(--panel-cut));
+            background: var(--freizeit-beige);
+            color: var(--freizeit-beige-ink);
+          }
+
+          .responsiveBikePanel {
+            z-index: 2;
+            background: var(--freizeit-dark);
+            color: #ffffff;
+          }
+
+          .responsiveBikePanel::before {
+            content: '';
+            position: absolute;
+            top: calc(-1 * var(--panel-cut) - 3px);
+            left: 0;
+            width: 100%;
+            height: calc(var(--panel-cut) + 6px);
+            background: var(--freizeit-dark);
+            clip-path: polygon(0 100%, 100% 0, 100% 100%);
+          }
+
+          .responsiveDivePanel {
+            z-index: 3;
+            background: var(--freizeit-blue);
+            color: var(--freizeit-blue-ink);
+          }
+
+          .responsiveDivePanel::before {
+            content: '';
+            position: absolute;
+            top: calc(-1 * var(--panel-cut) - 3px);
+            left: 0;
+            width: 100%;
+            height: calc(var(--panel-cut) + 6px);
+            background: var(--freizeit-blue);
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+          }
+
+          .responsivePanelInner {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding-top: 24px;
+            padding-bottom: 48px;
+          }
+
+          .responsivePfadiPanel .responsivePanelInner {
+            min-height: calc(100vh + var(--panel-cut));
+          }
+
+          .section {
+            padding: 8px 0 18px;
+            opacity: 1;
+            transform: none;
           }
 
           .title {
-            font-size: clamp(23px, 7.5vw, 30px);
+            font-size: 32px;
           }
 
-          .pfadiStage {
-            gap: clamp(10px, 1.8vh, 16px);
-            padding: clamp(72px, 11vh, 92px) 0 14px;
+          .responsiveFeature {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
           }
 
-          .pfadiCopyMotion {
+          .responsiveFirstFeature,
+          .responsiveDiveFeature {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .responsiveFirstFeature.isVisible,
+          .responsiveDiveFeature.isVisible {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .responsiveVisual,
+          .responsiveCopy {
+            position: relative;
             width: 100%;
           }
 
-          .pfadiTitle {
-            margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+          .responsiveTitle {
+            margin: 0 0 12px;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
           }
 
-          .pfadiText {
-            font-size: clamp(14px, 4vw, 17px);
-            line-height: 1.23;
+          .responsiveText {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.45;
           }
 
-          .swordMotion {
-            width: 100%;
-            height: clamp(150px, 26vh, 220px);
+          .pfadiVisual {
+            height: 150px;
+            display: flex;
+            align-items: center;
           }
 
-          .bikeTitle {
-            font-size: 20px;
+          .responsiveSwordModel {
+            width: min(320px, 100%);
+            height: 150px;
+            filter: drop-shadow(0 8px 15px rgba(30, 22, 15, 0.16));
           }
 
-          .bikeText {
-            font-size: 25px;
+          .bikeVisual {
+            height: 290px;
+            max-width: 320px;
+            margin: 12vh auto 0;
           }
 
-          .desktopDiveContent {
-            height: var(--story-stage-height, calc(100vh - 64px));
+          .responsiveBikeFrame {
+            position: absolute;
+            width: 280px;
+            height: auto;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) translateX(-37px);
+            z-index: 3;
           }
 
-          .desktopDiveInner {
-            padding: 14px clamp(16px, 5vw, 24px);
-            gap: clamp(10px, 1.8vh, 16px);
+          .responsiveBikeWheel {
+            position: absolute;
+            width: 65px;
+            height: auto;
+            z-index: 1;
           }
 
-          .diveCopy {
-            width: 100%;
+          .responsiveBackWheel {
+            top: 203px;
+            left: calc(50% - 141px);
           }
 
-          .diveTitle {
-            margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+          .responsiveFrontWheel {
+            top: 205px;
+            left: 50%;
           }
 
-          .diveText {
-            font-size: clamp(14px, 3.9vw, 17px);
-            line-height: 1.22;
+          .responsiveBikeShading {
+            position: absolute;
+            width: 65px;
+            height: auto;
+            z-index: 2;
+            pointer-events: none;
           }
 
-          .diveVideoMotion {
-            width: min(100%, 520px);
+          .responsiveBackShading {
+            top: 203px;
+            left: calc(50% - 141px);
           }
 
-          .whalesharkVideo {
-            max-height: 31vh;
-            border-radius: 18px;
+          .responsiveFrontShading {
+            top: 205px;
+            left: 50%;
+          }
+
+          .responsiveBikePanel .responsiveCopy {
+            padding-bottom: 15vh;
+          }
+
+          .bikeResponsiveTitle,
+          .bikeResponsiveText {
+            color: #ffffff;
+          }
+
+          .responsiveDivePanel .responsivePanelInner {
+            display: flex;
+            align-items: center;
+          }
+
+          .responsiveWhaleshark {
+            width: min(500px, 100%);
+            display: block;
+            border-radius: 32px;
+          }
+
+          .diveResponsiveTitle,
+          .diveResponsiveText {
+            color: var(--freizeit-blue-ink);
           }
 
           .footer {
@@ -1420,96 +1444,6 @@ export default function About() {
           .footerInner {
             align-items: flex-start;
             flex-direction: column;
-          }
-        }
-
-        @media (min-width: 768px) and (max-width: 1179px) and (max-height: 680px) {
-          .storyIntroMotion {
-            top: 8px;
-          }
-
-          .kicker {
-            display: none;
-          }
-
-          .title {
-            font-size: 22px;
-          }
-
-          .pfadiStage {
-            gap: 8px;
-            padding-top: 42px;
-            padding-bottom: 8px;
-          }
-
-          .pfadiTitle,
-          .diveTitle {
-            font-size: 14px;
-          }
-
-          .pfadiText,
-          .diveText {
-            font-size: 14px;
-            line-height: 1.18;
-          }
-
-          .swordMotion {
-            height: clamp(112px, 31vh, 140px);
-          }
-
-          .desktopDiveInner {
-            padding-top: 8px;
-            padding-bottom: 8px;
-            gap: 8px;
-          }
-
-          .whalesharkVideo {
-            max-height: 27vh;
-          }
-        }
-
-        @media (max-width: 767px) and (max-height: 680px) {
-          .storyIntroMotion {
-            top: 8px;
-          }
-
-          .kicker {
-            display: none;
-          }
-
-          .title {
-            font-size: 22px;
-          }
-
-          .pfadiStage {
-            gap: 8px;
-            padding-top: 48px;
-            padding-bottom: 8px;
-          }
-
-          .pfadiTitle,
-          .diveTitle {
-            font-size: 13px;
-          }
-
-          .pfadiText,
-          .diveText {
-            font-size: 13px;
-            line-height: 1.18;
-          }
-
-          .swordMotion {
-            height: clamp(128px, 23vh, 158px);
-          }
-
-          .desktopDiveInner {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            gap: 8px;
-          }
-
-          .whalesharkVideo {
-            max-height: 28vh;
           }
         }
       `}</style>

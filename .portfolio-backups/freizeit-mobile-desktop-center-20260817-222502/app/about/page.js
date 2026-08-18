@@ -404,7 +404,7 @@ export default function About() {
       const bikeX = bikeStartX + bikeProgress * (bikeCenterX - bikeStartX);
       const bikeExitY = metrics.compactLayout
         ? -blueProgress * (metrics.stageHeight + 340 * metrics.bikeScale)
-        : -150 - blueProgress * (metrics.stageHeight + 280);
+        : -60 - blueProgress * (metrics.stageHeight + 280);
       const wheelRotation = bikeProgress * 1080;
 
       if (bikegroupRef.current) {
@@ -450,9 +450,8 @@ export default function About() {
         ? Math.max(1, window.innerHeight - headerHeight)
         : Math.max(460, window.innerHeight - headerHeight);
       const cutHeight = window.innerWidth * Math.tan((5 * Math.PI) / 180);
-      const compactBikeMinScale = stageHeight < 480 ? 0.34 : 0.56;
       const bikeScale = compactLayout
-        ? Math.max(compactBikeMinScale, Math.min(0.88, (window.innerWidth - 28) / 500, (stageHeight - 24) / 680))
+        ? Math.max(0.56, Math.min(0.88, (window.innerWidth - 28) / 500, (stageHeight - 24) / 680))
         : 1;
 
       // Desktop positioning remains CSS-driven. Compact layouts receive only
@@ -1103,22 +1102,6 @@ export default function About() {
           }
         }
 
-        @media (min-width: 1180px) {
-          /* Desktop-only centering. Horizontal positions and animation timing
-             stay exactly as before; only the static vertical anchors change. */
-          .pfadiStage {
-            position: absolute;
-            inset: 0;
-            min-height: 0;
-          }
-
-          .swordMotion,
-          .pfadiCopyMotion {
-            top: 50%;
-            translate: 0 -50%;
-          }
-        }
-
         @media (max-width: 1179px) {
           .storyViewport {
             top: 70px;
@@ -1420,51 +1403,6 @@ export default function About() {
           .footerInner {
             align-items: flex-start;
             flex-direction: column;
-          }
-        }
-
-        @media (min-width: 768px) and (max-width: 1179px) and (max-height: 680px) {
-          .storyIntroMotion {
-            top: 8px;
-          }
-
-          .kicker {
-            display: none;
-          }
-
-          .title {
-            font-size: 22px;
-          }
-
-          .pfadiStage {
-            gap: 8px;
-            padding-top: 42px;
-            padding-bottom: 8px;
-          }
-
-          .pfadiTitle,
-          .diveTitle {
-            font-size: 14px;
-          }
-
-          .pfadiText,
-          .diveText {
-            font-size: 14px;
-            line-height: 1.18;
-          }
-
-          .swordMotion {
-            height: clamp(112px, 31vh, 140px);
-          }
-
-          .desktopDiveInner {
-            padding-top: 8px;
-            padding-bottom: 8px;
-            gap: 8px;
-          }
-
-          .whalesharkVideo {
-            max-height: 27vh;
           }
         }
 

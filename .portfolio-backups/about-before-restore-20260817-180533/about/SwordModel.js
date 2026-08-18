@@ -64,7 +64,6 @@ export default function SwordModel({
       let animationFrameId;
       let modelRoot;
       let isDisposed = false;
-      let isInViewport = false;
       let currentScrollProgress = scrollProgressRef?.current ?? 0;
 
       const scene = new THREE.Scene();
@@ -78,12 +77,7 @@ export default function SwordModel({
       });
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.setClearColor(0x000000, 0);
-      const syncPixelRatio = () => {
-        const compactLayout = window.innerWidth < 1180;
-        const maxPixelRatio = compactLayout ? 1.25 : 2;
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
-      };
-      syncPixelRatio();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.domElement.className = 'swordCanvas';
       renderer.domElement.setAttribute('aria-hidden', 'true');
       mount.appendChild(renderer.domElement);
@@ -106,7 +100,6 @@ export default function SwordModel({
       scene.add(fillLight, keyLight, rimLight, glintLight);
 
       const resizeRenderer = () => {
-        syncPixelRatio();
         const width = mount.clientWidth;
         const height = mount.clientHeight;
 
@@ -179,8 +172,7 @@ export default function SwordModel({
       };
 
       const animate = () => {
-        animationFrameId = undefined;
-        if (isDisposed || document.hidden || !isInViewport) return;
+        if (isDisposed) return;
 
         const targetScrollProgress = scrollProgressRef
           ? scrollProgressRef.current
@@ -217,45 +209,27 @@ export default function SwordModel({
         animationFrameId = requestAnimationFrame(animate);
       };
 
-      const startRendering = () => {
-        if (
-          animationFrameId
-          || isDisposed
-          || document.hidden
-          || !isInViewport
-        ) return;
-
-        animationFrameId = requestAnimationFrame(animate);
-      };
-
-      const stopRendering = () => {
-        if (!animationFrameId) return;
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = undefined;
-      };
-
-      const visibilityObserver = new IntersectionObserver(
-        ([entry]) => {
-          isInViewport = entry.isIntersecting;
-          if (isInViewport) startRendering();
-          else stopRendering();
-        },
-        { rootMargin: '120px 0px', threshold: 0 },
-      );
-      visibilityObserver.observe(mount);
-
       const handleVisibilityChange = () => {
-        if (document.hidden) stopRendering();
-        else startRendering();
+        if (document.hidden) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = undefined;
+          return;
+        }
+
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(animate);
+        }
       };
 
+      if (!document.hidden) {
+        animate();
+      }
       document.addEventListener('visibilitychange', handleVisibilityChange);
 
       activeCleanup = () => {
         isDisposed = true;
         cancelAnimationFrame(animationFrameId);
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-        visibilityObserver.disconnect();
         resizeObserver.disconnect();
 
         scene.traverse((object) => {
@@ -297,9 +271,5 @@ export default function SwordModel({
     };
   }, [mediaQuery, scrollProgressRef]);
 
-  return (
-    <div ref={mountRef} className={className} aria-hidden="true">
-      <span className="swordLoadingIndicator" />
-    </div>
-  );
+  return <div ref={mountRef} className={className} aria-hidden="true" />;
 }

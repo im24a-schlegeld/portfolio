@@ -78,12 +78,7 @@ export default function SwordModel({
       });
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.setClearColor(0x000000, 0);
-      const syncPixelRatio = () => {
-        const compactLayout = window.innerWidth < 1180;
-        const maxPixelRatio = compactLayout ? 1.25 : 2;
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
-      };
-      syncPixelRatio();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.domElement.className = 'swordCanvas';
       renderer.domElement.setAttribute('aria-hidden', 'true');
       mount.appendChild(renderer.domElement);
@@ -106,7 +101,6 @@ export default function SwordModel({
       scene.add(fillLight, keyLight, rimLight, glintLight);
 
       const resizeRenderer = () => {
-        syncPixelRatio();
         const width = mount.clientWidth;
         const height = mount.clientHeight;
 

@@ -73,40 +73,28 @@ function PageIntro() {
   );
 }
 
-function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) {
+function DesktopDiveContent({ videoMotionRef, copyMotionRef }) {
   const sectionRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const video = videoElementRef.current;
+    const video = videoRef.current;
     if (!section || !video) return undefined;
 
-    const compactLayout = window.innerWidth < 1180;
-
-    if (compactLayout) {
-      video.preload = 'auto';
-      video.poster = '/responsive/whaleshark-poster.jpg';
-      video.load();
-    }
-
     if (!('IntersectionObserver' in window)) {
-      if (compactLayout) void video.play().catch(() => {});
       return undefined;
     }
 
-    const playThreshold = compactLayout ? 0.08 : 0.45;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= playThreshold) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
           void video.play().catch(() => {});
         } else {
           video.pause();
         }
       },
-      compactLayout
-        ? { threshold: [0, 0.08, 0.18, 0.45], rootMargin: '100px 0px' }
-        : { threshold: [0, 0.2, 0.45, 0.75] },
+      { threshold: [0, 0.2, 0.45, 0.75] },
     );
 
     observer.observe(section);
@@ -114,14 +102,14 @@ function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) 
       observer.disconnect();
       video.pause();
     };
-  }, [videoElementRef]);
+  }, []);
 
   return (
     <div ref={sectionRef} className="desktopDiveContent">
       <div className="container desktopDiveInner">
         <div ref={videoMotionRef} className="diveVideoMotion">
           <video
-            ref={videoElementRef}
+            ref={videoRef}
             className="whalesharkVideo"
             muted
             loop
@@ -156,7 +144,6 @@ function DesktopFreizeitStory({
   blueSheetRef,
   diveVideoMotionRef,
   diveCopyMotionRef,
-  diveVideoElementRef,
   bikegroupRef,
   backwheelRef,
   frontwheelRef,
@@ -213,8 +200,6 @@ function DesktopFreizeitStory({
           <div className="bikegroup" ref={bikegroupRef}>
             <img
               src="/cbnaked1.png"
-              srcSet="/responsive/cbnaked1.png 1200w, /cbnaked1.png 3000w"
-              sizes="(max-width: 1179px) 400px, 3000px"
               alt="Motorrad"
               className="nakedbike"
               width="400"
@@ -222,8 +207,6 @@ function DesktopFreizeitStory({
             <img
               ref={backwheelRef}
               src="/cbbackwheel.png"
-              srcSet="/responsive/cbbackwheel.png 320w, /cbbackwheel.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt="Hinterrad"
               className="backwheel"
               width="93"
@@ -231,24 +214,18 @@ function DesktopFreizeitStory({
             <img
               ref={frontwheelRef}
               src="/cbfrontwheel2.png"
-              srcSet="/responsive/cbfrontwheel2.png 320w, /cbfrontwheel2.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt="Vorderrad"
               className="frontwheel"
               width="93"
             />
             <img
               src="/wheelshading1.png"
-              srcSet="/responsive/wheelshading1.png 320w, /wheelshading1.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt=""
               className="shadingback"
               width="93"
             />
             <img
               src="/wheelshading2.png"
-              srcSet="/responsive/wheelshading2.png 320w, /wheelshading2.png 1024w"
-              sizes="(max-width: 1179px) 93px, 1024px"
               alt=""
               className="shadingfront"
               width="93"
@@ -266,7 +243,6 @@ function DesktopFreizeitStory({
           <DesktopDiveContent
             videoMotionRef={diveVideoMotionRef}
             copyMotionRef={diveCopyMotionRef}
-            videoElementRef={diveVideoElementRef}
           />
         </div>
       </div>
@@ -307,7 +283,6 @@ export default function About() {
   const blueSheetRef = useRef(null);
   const diveVideoMotionRef = useRef(null);
   const diveCopyMotionRef = useRef(null);
-  const diveVideoElementRef = useRef(null);
   const bikegroupRef = useRef(null);
   const backwheelRef = useRef(null);
   const frontwheelRef = useRef(null);
@@ -399,12 +374,10 @@ export default function About() {
       // bike scene actively travels upward above the incoming blue field.
       const bikeCenterX = metrics.compactLayout ? 0 : 546;
       const bikeStartX = metrics.compactLayout
-        ? -(window.innerWidth / 2 + 250 * metrics.bikeScale + 24)
+        ? -(window.innerWidth + 520)
         : -700;
       const bikeX = bikeStartX + bikeProgress * (bikeCenterX - bikeStartX);
-      const bikeExitY = metrics.compactLayout
-        ? -blueProgress * (metrics.stageHeight + 340 * metrics.bikeScale)
-        : -150 - blueProgress * (metrics.stageHeight + 280);
+      const bikeExitY = -60 - blueProgress * (metrics.stageHeight + 280);
       const wheelRotation = bikeProgress * 1080;
 
       if (bikegroupRef.current) {
@@ -435,7 +408,6 @@ export default function About() {
       if (diveCopyMotionRef.current) {
         diveCopyMotionRef.current.style.transform = `translate3d(${diveCopyX}px, ${diveCopyY}px, 0)`;
       }
-
     };
 
     const requestRender = () => {
@@ -446,27 +418,15 @@ export default function About() {
     const measure = () => {
       const compactLayout = window.innerWidth < 1180;
       const headerHeight = getHeaderHeight();
-      const stageHeight = compactLayout
-        ? Math.max(1, window.innerHeight - headerHeight)
-        : Math.max(460, window.innerHeight - headerHeight);
+      const stageHeight = Math.max(
+        compactLayout ? 520 : 460,
+        window.innerHeight - headerHeight,
+      );
       const cutHeight = window.innerWidth * Math.tan((5 * Math.PI) / 180);
-      const compactBikeMinScale = stageHeight < 480 ? 0.34 : 0.56;
-      const bikeScale = compactLayout
-        ? Math.max(compactBikeMinScale, Math.min(0.88, (window.innerWidth - 28) / 500, (stageHeight - 24) / 680))
-        : 1;
 
-      // Desktop positioning remains CSS-driven. Compact layouts receive only
-      // responsive sizing variables; desktop values are left untouched.
-      if (storyRef.current) {
-        if (compactLayout) {
-          storyRef.current.style.setProperty('--story-stage-height', `${stageHeight}px`);
-          storyRef.current.style.setProperty('--bike-responsive-scale', `${bikeScale}`);
-        } else {
-          storyRef.current.style.removeProperty('--story-stage-height');
-          storyRef.current.style.removeProperty('--bike-responsive-scale');
-        }
-      }
-
+      // Desktop positioning remains CSS-driven. On narrower screens the same
+      // story is stacked and centered by responsive CSS instead of a second,
+      // simplified mobile implementation.
       if (swordMotionRef.current) {
         swordMotionRef.current.style.top = '';
       }
@@ -506,7 +466,6 @@ export default function About() {
         blueHold,
         totalScroll,
         compactLayout,
-        bikeScale,
       };
 
       setStoryHeight(Math.ceil(stageHeight + totalScroll));
@@ -545,7 +504,6 @@ export default function About() {
             blueSheetRef={blueSheetRef}
             diveVideoMotionRef={diveVideoMotionRef}
             diveCopyMotionRef={diveCopyMotionRef}
-            diveVideoElementRef={diveVideoElementRef}
             bikegroupRef={bikegroupRef}
             backwheelRef={backwheelRef}
             frontwheelRef={frontwheelRef}
@@ -1103,34 +1061,10 @@ export default function About() {
           }
         }
 
-        @media (min-width: 1180px) {
-          /* Desktop-only centering. Horizontal positions and animation timing
-             stay exactly as before; only the static vertical anchors change. */
-          .pfadiStage {
-            position: absolute;
-            inset: 0;
-            min-height: 0;
-          }
-
-          .swordMotion,
-          .pfadiCopyMotion {
-            top: 50%;
-            translate: 0 -50%;
-          }
-        }
-
         @media (max-width: 1179px) {
           .storyViewport {
             top: 70px;
             height: calc(100vh - 70px);
-            contain: layout paint;
-          }
-
-          /* Keep the moving color fields much taller than the viewport on
-             compact layouts. Their only visible edge is the 5deg top cut, so
-             a finite lower edge can never flash through as a horizontal bar. */
-          .storyColorSheet {
-            height: calc(200% + var(--panel-cut) + var(--panel-cut) + 8px);
           }
 
           .storyBeigeInner {
@@ -1141,7 +1075,7 @@ export default function About() {
           .storyIntroMotion {
             position: absolute;
             z-index: 3;
-            top: clamp(16px, 2.6vh, 28px);
+            top: clamp(18px, 3vh, 32px);
             left: clamp(20px, 5vw, 56px);
             right: clamp(20px, 5vw, 56px);
           }
@@ -1158,17 +1092,16 @@ export default function About() {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: clamp(12px, 2vh, 22px);
-            padding: clamp(80px, 11vh, 108px) 0 clamp(16px, 2.5vh, 28px);
+            gap: clamp(14px, 2.5vh, 26px);
+            padding: clamp(88px, 12vh, 120px) 0 24px;
           }
 
           .pfadiCopyMotion {
             position: relative;
             order: 1;
-            flex: 0 0 auto;
             left: auto;
             top: auto;
-            width: min(720px, 100%);
+            width: min(760px, 100%);
           }
 
           .pfadiCopy {
@@ -1176,25 +1109,23 @@ export default function About() {
           }
 
           .pfadiTitle {
-            margin-bottom: 8px;
-            font-size: clamp(16px, 2vw, 21px);
+            font-size: clamp(17px, 2.4vw, 22px);
           }
 
           .pfadiText {
             width: 100%;
             max-width: none;
-            font-size: clamp(16px, 2.35vw, 23px);
-            line-height: 1.26;
+            font-size: clamp(18px, 3vw, 26px);
+            line-height: 1.32;
           }
 
           .swordMotion {
             position: relative;
             order: 2;
-            flex: 0 0 auto;
             left: auto;
             top: auto;
-            width: min(680px, 100%);
-            height: clamp(170px, 28vh, 290px);
+            width: min(720px, 100%);
+            height: clamp(190px, 32vh, 320px);
           }
 
           .bikegroup {
@@ -1204,7 +1135,7 @@ export default function About() {
             height: 680px;
             margin-left: -250px;
             margin-top: -340px;
-            scale: var(--bike-responsive-scale, 0.88);
+            scale: 0.88;
             transform-origin: center center;
           }
 
@@ -1242,23 +1173,20 @@ export default function About() {
             left: 303px;
           }
 
-          /* The blue sheet is intentionally oversized on compact screens.
-             Anchor its content to exactly one visible stage so the text/video
-             center remains independent from the sheet's safety extension. */
           .desktopDiveContent {
             top: var(--panel-cut);
-            height: var(--story-stage-height, calc(100vh - 70px));
+            height: calc(100% - var(--panel-cut) - var(--panel-cut) - 4px);
           }
 
           .desktopDiveInner {
             width: 100%;
             max-width: 820px;
             height: 100%;
-            padding: clamp(18px, 3vh, 34px) clamp(20px, 5vw, 52px);
+            padding: clamp(22px, 4vh, 42px) clamp(20px, 5vw, 52px);
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: clamp(14px, 2vh, 24px);
+            gap: clamp(16px, 2.5vh, 28px);
           }
 
           .diveCopy {
@@ -1276,21 +1204,20 @@ export default function About() {
 
           .whalesharkVideo {
             width: 100%;
-            max-height: 34vh;
+            max-height: 36vh;
             object-fit: cover;
             border-radius: 28px;
           }
 
           .diveTitle {
-            margin-bottom: 8px;
-            font-size: clamp(16px, 2vw, 21px);
+            font-size: clamp(17px, 2.4vw, 22px);
           }
 
           .diveText {
             width: 100%;
             max-width: none;
-            font-size: clamp(16px, 2.3vw, 23px);
-            line-height: 1.26;
+            font-size: clamp(18px, 2.8vw, 25px);
+            line-height: 1.3;
           }
         }
 
@@ -1335,23 +1262,22 @@ export default function About() {
           }
 
           .storyIntroMotion {
-            top: 12px;
-            left: clamp(16px, 5vw, 24px);
-            right: clamp(16px, 5vw, 24px);
+            top: 16px;
           }
 
           .kicker {
-            margin-bottom: 5px;
-            font-size: 9px;
+            font-size: 10px;
+            margin-bottom: 6px;
           }
 
           .title {
-            font-size: clamp(23px, 7.5vw, 30px);
+            font-size: clamp(25px, 8vw, 32px);
           }
 
           .pfadiStage {
-            gap: clamp(10px, 1.8vh, 16px);
-            padding: clamp(72px, 11vh, 92px) 0 14px;
+            gap: clamp(12px, 2vh, 20px);
+            padding-top: clamp(82px, 12vh, 102px);
+            padding-bottom: 18px;
           }
 
           .pfadiCopyMotion {
@@ -1359,18 +1285,22 @@ export default function About() {
           }
 
           .pfadiTitle {
-            margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+            margin-bottom: 8px;
+            font-size: clamp(15px, 4.2vw, 18px);
           }
 
           .pfadiText {
-            font-size: clamp(14px, 4vw, 17px);
-            line-height: 1.23;
+            font-size: clamp(16px, 4.35vw, 19px);
+            line-height: 1.28;
           }
 
           .swordMotion {
             width: 100%;
-            height: clamp(150px, 26vh, 220px);
+            height: clamp(180px, 29vh, 245px);
+          }
+
+          .bikegroup {
+            scale: 0.72;
           }
 
           .bikeTitle {
@@ -1381,13 +1311,9 @@ export default function About() {
             font-size: 25px;
           }
 
-          .desktopDiveContent {
-            height: var(--story-stage-height, calc(100vh - 64px));
-          }
-
           .desktopDiveInner {
-            padding: 14px clamp(16px, 5vw, 24px);
-            gap: clamp(10px, 1.8vh, 16px);
+            padding: 18px clamp(18px, 5vw, 28px);
+            gap: 16px;
           }
 
           .diveCopy {
@@ -1395,13 +1321,13 @@ export default function About() {
           }
 
           .diveTitle {
-            margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+            margin-bottom: 8px;
+            font-size: clamp(15px, 4.2vw, 18px);
           }
 
           .diveText {
-            font-size: clamp(14px, 3.9vw, 17px);
-            line-height: 1.22;
+            font-size: clamp(16px, 4.3vw, 19px);
+            line-height: 1.25;
           }
 
           .diveVideoMotion {
@@ -1409,8 +1335,8 @@ export default function About() {
           }
 
           .whalesharkVideo {
-            max-height: 31vh;
-            border-radius: 18px;
+            max-height: 32vh;
+            border-radius: 22px;
           }
 
           .footer {
@@ -1420,96 +1346,6 @@ export default function About() {
           .footerInner {
             align-items: flex-start;
             flex-direction: column;
-          }
-        }
-
-        @media (min-width: 768px) and (max-width: 1179px) and (max-height: 680px) {
-          .storyIntroMotion {
-            top: 8px;
-          }
-
-          .kicker {
-            display: none;
-          }
-
-          .title {
-            font-size: 22px;
-          }
-
-          .pfadiStage {
-            gap: 8px;
-            padding-top: 42px;
-            padding-bottom: 8px;
-          }
-
-          .pfadiTitle,
-          .diveTitle {
-            font-size: 14px;
-          }
-
-          .pfadiText,
-          .diveText {
-            font-size: 14px;
-            line-height: 1.18;
-          }
-
-          .swordMotion {
-            height: clamp(112px, 31vh, 140px);
-          }
-
-          .desktopDiveInner {
-            padding-top: 8px;
-            padding-bottom: 8px;
-            gap: 8px;
-          }
-
-          .whalesharkVideo {
-            max-height: 27vh;
-          }
-        }
-
-        @media (max-width: 767px) and (max-height: 680px) {
-          .storyIntroMotion {
-            top: 8px;
-          }
-
-          .kicker {
-            display: none;
-          }
-
-          .title {
-            font-size: 22px;
-          }
-
-          .pfadiStage {
-            gap: 8px;
-            padding-top: 48px;
-            padding-bottom: 8px;
-          }
-
-          .pfadiTitle,
-          .diveTitle {
-            font-size: 13px;
-          }
-
-          .pfadiText,
-          .diveText {
-            font-size: 13px;
-            line-height: 1.18;
-          }
-
-          .swordMotion {
-            height: clamp(128px, 23vh, 158px);
-          }
-
-          .desktopDiveInner {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            gap: 8px;
-          }
-
-          .whalesharkVideo {
-            max-height: 28vh;
           }
         }
       `}</style>
