@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal portfolio website for Dario Schlegel. It presents software projects alongside a more experimental, visual profile section built around a road-style navigation concept.
 
-First, run the development server:
+## Live
+
+https://portfolio-eight-tau-usv97cdepc.vercel.app
+
+## Projects
+
+- **Smash A Meerkat** – browser reaction game with a Java/Spring Boot backend and WebSocket updates.
+- **Lyrics Separator** – audio and lyrics workflow with clip preview and export.
+- **X-Archive** – mobile-first web project shown in a phone preview.
+
+## Tech Stack
+
+- Next.js
+- React
+- Tailwind CSS
+- Three.js
+- Vercel
+
+## Features
+
+- Responsive road-style navigation and project overview
+- Project pages with video and external website previews
+- Fallback links for embedded previews
+- Animated leisure section with video, responsive images and a dynamically loaded Three.js sword model
+
+## Local Development
 
 ```bash
+git clone https://github.com/im24a-schlegeld/portfolio.git
+cd portfolio
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- `app/` contains the App Router pages and UI.
+- `app/projekte/` renders project details and previews.
+- `app/about/` contains the animated leisure section.
+- `data/portfolio.js` contains navigation, project and contact data.
+- `public/` contains images, videos and the 3D model.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Three.js code is imported only on the client, so the initial server-rendered page does not require the renderer or GLTF loader.
