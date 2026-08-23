@@ -1,21 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { navigationItems } from '../../data/portfolio';
 import styles from './SiteHeader.module.css';
 
-export default function SiteHeader({ activeKey, roadStripes = false }) {
-  const [direction, setDirection] = useState(activeKey === 'about' ? 'right' : 'left');
+export default function SiteHeader({ activeKey, roadStripes = false, roadTexture = false }) {
+  const [direction, setDirection] = useState('left');
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const storedDirection = window.sessionStorage.getItem('site-header-direction');
+    if (storedDirection === 'left' || storedDirection === 'right') {
+      headerRef.current?.setAttribute('data-direction', storedDirection);
+    }
+  }, []);
 
   const handleNavigation = (key) => {
-    const nextDirection = key === 'about' ? 'right' : 'left';
+    const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
+    const nextIndex = navigationItems.findIndex((item) => item.key === key);
+    const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
+    window.sessionStorage.setItem('site-header-direction', nextDirection);
     setDirection(nextDirection);
   };
 
   return (
     <header
-      className={`${styles.siteHeader} ${roadStripes ? styles.siteHeaderRoad : ''}`}
+      ref={headerRef}
+      className={`${styles.siteHeader} ${roadStripes ? styles.siteHeaderRoad : ''} ${roadTexture ? styles.siteHeaderRoadTexture : ''}`}
       data-site-header="true"
       data-direction={direction}
       data-road-stripes={roadStripes ? 'true' : undefined}

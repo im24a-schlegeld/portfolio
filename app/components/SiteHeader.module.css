@@ -10,6 +10,10 @@
 
 .siteHeaderRoad {
   border-bottom-color: transparent;
+  background: #090a0b;
+}
+
+.siteHeaderRoadTexture {
   background: transparent;
 }
 
@@ -70,7 +74,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0 13px;
-  border: 1px solid transparent;
+  border: 0;
   color: rgba(245, 242, 233, 0.62);
   font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
   font-size: 12px;
@@ -78,16 +82,24 @@
   letter-spacing: 0.1em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+  transition: color 180ms ease;
 }
 
 .siteNavLink:hover,
 .siteNavLink:focus-visible,
 .siteNavLink[aria-current='page'] {
-  border-color: rgba(242, 201, 76, 0.55);
   color: #f2c94c;
-  background: rgba(242, 201, 76, 0.08);
   outline: none;
+}
+
+.siteNavLink[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  right: 13px;
+  bottom: 2px;
+  left: 13px;
+  height: 2px;
+  background: #f2c94c;
 }
 
 @keyframes roadHeaderStripes {

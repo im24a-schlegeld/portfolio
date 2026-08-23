@@ -40,20 +40,21 @@ const FREIZEIT_COPY = {
 };
 
 function FreizeitHeader() {
-  return <SiteHeader activeKey="about" />;
+  return <SiteHeader activeKey="about" roadStripes />;
 }
 
 function PageIntro() {
   return (
     <div className="section">
       <p className="kicker">Persönliche Interessen</p>
-      <h1 className="title">{FREIZEIT_COPY.pageTitle}</h1>
+      <h1 className={`title ${racingSansOne.className}`}>{FREIZEIT_COPY.pageTitle}</h1>
     </div>
   );
 }
 
 function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) {
   const sectionRef = useRef(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -99,6 +100,10 @@ function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) 
     <div ref={sectionRef} className="desktopDiveContent">
       <div className="container desktopDiveInner">
         <div ref={videoMotionRef} className="diveVideoMotion">
+          <span
+            className={`videoLoadingIndicator ${videoReady ? 'isReady' : ''}`}
+            aria-label="Video wird geladen"
+          />
           <video
             ref={videoElementRef}
             className="whalesharkVideo"
@@ -106,6 +111,8 @@ function DesktopDiveContent({ videoMotionRef, copyMotionRef, videoElementRef }) 
             loop
             playsInline
             preload="none"
+            onCanPlay={() => setVideoReady(true)}
+            onError={() => setVideoReady(false)}
           >
             <source src="/whaleshark.mp4" type="video/mp4" />
           </video>
@@ -538,9 +545,9 @@ export default function About() {
       <style>{`
         .page {
           --site-header-height: 70px;
-          --freizeit-beige: #f2c94c;
+          --freizeit-beige: #d7ac39;
           --freizeit-dark: #0c0d0f;
-          --freizeit-blue: #f2c94c;
+          --freizeit-blue: #d7ac39;
           --freizeit-beige-ink: #21190d;
           --freizeit-light: #f7f7f4;
           --freizeit-blue-ink: #21190d;
@@ -921,6 +928,35 @@ export default function About() {
         .whalesharkVideo {
           width: 100%;
           display: block;
+          border-radius: 28px;
+          object-fit: cover;
+        }
+
+        .diveVideoMotion {
+          position: relative;
+          overflow: hidden;
+          border-radius: 28px;
+          background: var(--freizeit-blue);
+        }
+
+        .videoLoadingIndicator {
+          position: absolute;
+          z-index: 2;
+          left: 50%;
+          top: 50%;
+          width: 24px;
+          height: 24px;
+          margin: -12px 0 0 -12px;
+          border: 2px solid rgba(36, 29, 23, 0.2);
+          border-top-color: rgba(36, 29, 23, 0.78);
+          border-radius: 50%;
+          animation: swordLoadingSpin 0.75s linear infinite;
+          transition: opacity 180ms ease;
+        }
+
+        .videoLoadingIndicator.isReady {
+          opacity: 0;
+          pointer-events: none;
         }
 
         .diveTitle {
@@ -1202,6 +1238,11 @@ export default function About() {
             width: 100%;
             max-height: 34vh;
             object-fit: cover;
+            border-radius: 22px;
+          }
+
+          .diveVideoMotion {
+            border-radius: 22px;
           }
 
           .diveTitle {
@@ -1314,6 +1355,11 @@ export default function About() {
 
           .whalesharkVideo {
             max-height: 31vh;
+            border-radius: 18px;
+          }
+
+          .diveVideoMotion {
+            border-radius: 18px;
           }
 
           .footer {

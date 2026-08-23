@@ -229,7 +229,7 @@ function ProjectShowcase({ project }) {
 export default function Projekte() {
   return (
     <main className="projectsPage">
-      <SiteHeader activeKey="projects" />
+      <SiteHeader activeKey="projects" roadStripes />
       <section className="projectsIntro" aria-labelledby="projects-title">
         <p className="eyebrow">Portfolio</p>
         <h1 id="projects-title">Projekte</h1>
@@ -329,8 +329,6 @@ export default function Projekte() {
           color: #f7f2e8;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
           background:
-            radial-gradient(circle at 72% 8%, rgba(242, 201, 76, 0.13), transparent 24rem),
-            radial-gradient(circle at 7% 34%, rgba(255, 255, 255, 0.055), transparent 18rem),
             linear-gradient(135deg, #070707 0%, #151411 48%, #050505 100%);
         }
 
@@ -344,7 +342,7 @@ export default function Projekte() {
             linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
           background-size: 96px 96px;
-          mask-image: radial-gradient(circle at 50% 20%, black, transparent 72%);
+          mask-image: none;
         }
 
         .projectsIntro,
@@ -404,9 +402,7 @@ export default function Projekte() {
         .browserFrame {
           overflow: hidden;
           border: 1px solid rgba(242, 201, 76, 0.25);
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.14), transparent 22%),
-            rgba(8, 8, 8, 0.9);
+          background: rgba(8, 8, 8, 0.9);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.12),
             0 32px 80px rgba(0, 0, 0, 0.42);
@@ -493,7 +489,7 @@ export default function Projekte() {
           padding: 20px;
           color: #f7f2e8;
           text-align: center;
-          background: radial-gradient(circle at 50% 30%, rgba(242, 201, 76, 0.12), transparent 60%), #050505;
+          background: #050505;
           transition: opacity 180ms ease;
         }
 
@@ -545,9 +541,7 @@ export default function Projekte() {
           min-width: 0;
           padding: clamp(24px, 4vw, 42px);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-            rgba(10, 10, 10, 0.74);
+          background: rgba(10, 10, 10, 0.78);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
           animation: projectReveal 680ms 120ms ease both;
         }
@@ -788,9 +782,7 @@ export default function Projekte() {
           min-height: 190px;
           padding: 24px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.07), transparent 38%),
-            rgba(9, 9, 9, 0.72);
+          background: rgba(9, 9, 9, 0.72);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
           transition: transform 180ms ease, border-color 180ms ease;
         }
@@ -829,9 +821,7 @@ export default function Projekte() {
           gap: clamp(24px, 5vw, 68px);
           padding: clamp(18px, 3vw, 28px);
           border: 1px solid rgba(245, 242, 233, 0.12);
-          background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
-            rgba(9, 9, 9, 0.72);
+          background: rgba(9, 9, 9, 0.78);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.08),
             0 24px 70px rgba(0, 0, 0, 0.32);
@@ -855,9 +845,7 @@ export default function Projekte() {
           min-width: 0;
           overflow: hidden;
           border: 1px solid rgba(242, 201, 76, 0.24);
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.12), transparent 32%),
-            #050505;
+          background: #050505;
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.11),
             0 24px 58px rgba(0, 0, 0, 0.38);
@@ -869,18 +857,14 @@ export default function Projekte() {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background:
-            linear-gradient(90deg, transparent, rgba(242, 201, 76, 0.1), transparent),
-            radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.18), transparent 18rem);
-          opacity: 0.45;
-          mix-blend-mode: screen;
+          background: none;
+          opacity: 0;
         }
 
         .mediaFrame:hover,
         .mediaFrame:focus-within {
           transform: translateY(-4px);
           border-color: rgba(242, 201, 76, 0.52);
-          filter: brightness(1.05);
         }
 
         .gameplayFrame {
@@ -945,9 +929,7 @@ export default function Projekte() {
           align-items: center;
           padding: clamp(16px, 3vw, 28px);
           border: 1px solid rgba(242, 201, 76, 0.2);
-          background:
-            radial-gradient(circle at 50% 18%, rgba(242, 201, 76, 0.12), transparent 17rem),
-            rgba(5, 5, 5, 0.72);
+          background: rgba(5, 5, 5, 0.72);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.08),
             0 24px 58px rgba(0, 0, 0, 0.34);
@@ -958,7 +940,6 @@ export default function Projekte() {
         .phoneMedia:focus-within {
           transform: translateY(-4px);
           border-color: rgba(242, 201, 76, 0.48);
-          filter: brightness(1.04);
         }
 
         .phoneMockup {
@@ -982,7 +963,8 @@ export default function Projekte() {
 
         .phoneScreen {
           position: absolute;
-          inset: 3.9% 5.7% 0.65%;
+          /* Let the live preview run behind the frame, including the camera island. */
+          inset: 0 5.7% 0.65%;
           z-index: 1;
           overflow: hidden;
           border-radius: 38px;

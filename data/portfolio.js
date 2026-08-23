@@ -8,7 +8,7 @@ export const navigationItems = [
   { key: 'home', label: 'Start', href: '/' },
   { key: 'projects', label: 'Projekte', href: '/projekte' },
   { key: 'about', label: 'Freizeit', href: '/about' },
-  { key: 'contact', label: 'Kontakt', href: '/#contact' },
+  { key: 'contact', label: 'Kontakt', href: '/kontakt' },
 ];
 
 export const projects = [

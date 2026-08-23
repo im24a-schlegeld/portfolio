@@ -46,7 +46,7 @@ const roadStops = [
 export default function Home() {
   return (
     <div className="roadMain">
-      <SiteHeader activeKey="home" roadStripes />
+      <SiteHeader activeKey="home" roadStripes roadTexture />
 
       <main className="roadMap">
         <div className="centerRoadLine" aria-hidden="true" />
