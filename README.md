@@ -22,20 +22,4 @@ Neben den Projekten gibt es eine eigene Freizeit-Seite.
 - Three.js
 - Vercel
 
-## Lokal starten
-
-```bash
-git clone https://github.com/im24a-schlegeld/portfolio.git
-cd portfolio
-npm install
-npm run dev
-```
-
-Prüfen mit:
-
-```bash
-npm run lint
-npm run build
-```
-
 Die Seiten liegen hauptsächlich unter `app/`. Bilder, Videos und andere statische Dateien liegen unter `public/`.
