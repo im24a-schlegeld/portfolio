@@ -1,9 +1,3 @@
-export const portfolioContact = {
-  email: 'dario.schlegel@example.com',
-  emailIsPlaceholder: true,
-  githubUrl: 'https://github.com/im24a-schlegeld',
-};
-
 export const navigationItems = [
   { key: 'home', label: 'Start', href: '/' },
   { key: 'projects', label: 'Projekte', href: '/projekte' },

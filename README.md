@@ -36,6 +36,13 @@ npm install
 npm run dev
 ```
 
+Run the production checks with:
+
+```bash
+npm run lint
+npm run build
+```
+
 ## Structure
 
 - `app/` contains the App Router pages and UI.
@@ -44,6 +51,6 @@ npm run dev
 - `data/portfolio.js` contains navigation, project and contact data.
 - `public/` contains images, videos and the 3D model.
 
-## Notes
+## Engineering Notes
 
-The Three.js code is imported only on the client, so the initial server-rendered page does not require the renderer or GLTF loader.
+Three.js is imported only on the client, so the initial server-rendered page does not require the renderer or GLTF loader. Embedded external project previews are lazy-loaded and retain a direct fallback link when an iframe cannot be displayed. The application is deployed on Vercel.

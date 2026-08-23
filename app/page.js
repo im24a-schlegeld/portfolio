@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { navigationItems, portfolioContact, projects, siteFeatures } from '../data/portfolio';
+import { navigationItems, projects, siteFeatures } from '../data/portfolio';
 
 export const metadata = {
   title: 'Portfolio',
@@ -142,20 +142,12 @@ export default function Home() {
           <div className="contactCard">
             <p className="roadLabel">Kontakt</p>
             <h2 id="contact-title">Kontakt aufnehmen</h2>
-            <p>Für Fragen zu Projekten, Zusammenarbeit oder Code erreichst du mich direkt über diese Wege.</p>
+            <p>Weitere Projekte und den aktuellen Code findest du auf GitHub.</p>
             <div className="contactActions">
-              <a className="roadButton" href={`mailto:${portfolioContact.email}`}>
-                E-Mail
-              </a>
-              <a className="contactLink" href={portfolioContact.githubUrl} target="_blank" rel="noreferrer">
+              <a className="roadButton" href="https://github.com/im24a-schlegeld" target="_blank" rel="noreferrer">
                 GitHub -&gt;
               </a>
             </div>
-            {portfolioContact.emailIsPlaceholder && (
-              <p className="placeholderNotice">
-                E-Mail-Platzhalter: {portfolioContact.email} - vor Veröffentlichung durch deine echte Adresse ersetzen.
-              </p>
-            )}
           </div>
         </section>
 
