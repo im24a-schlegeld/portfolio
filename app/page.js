@@ -1,47 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import SiteHeader from './components/SiteHeader';
-import { projects, siteFeatures } from '../data/portfolio';
+import { portfolioContact, projects, technologyList } from '../data/portfolio';
 
 export const metadata = {
   title: 'Portfolio',
   description: 'Portfolio von Dario Schlegel mit Projekten aus Informatik, Frontend, Interface Design und persönlichen Arbeiten.',
 };
-
-const roadStops = [
-  {
-    align: 'left',
-    eyebrow: 'Startpunkt',
-    title: 'Dario Schlegel',
-    text: 'Portfolio für Informatik, Interface Design, Frontend und Motion. Die Seite führt wie eine Strasse durch Projekte, Experimente und persönliche Bereiche.',
-    link: '#projects',
-    linkLabel: 'Route ansehen',
-  },
-  {
-    align: 'right',
-    eyebrow: 'Profil',
-    title: 'Interface & Code',
-    text: 'Klare Layouts, saubere Komponenten und Animationen, die Orientierung geben. Der Fokus liegt auf digitalen Oberflächen mit Struktur und eigener visueller Sprache.',
-    link: '#profile',
-    linkLabel: 'Profil lesen',
-  },
-  {
-    align: 'left',
-    eyebrow: 'Abzweigung links',
-    title: 'Freizeit',
-    text: 'Motorrad, Tauchen und Pfadi haben eine eigene Seite mit persönlichen Animationen und visuellen Details.',
-    link: '/about',
-    linkLabel: 'Zur Freizeit',
-  },
-  {
-    align: 'right',
-    eyebrow: 'Abzweigung rechts',
-    title: 'Projekte',
-    text: 'Eine eigene Projektseite mit externer Website-Vorschau und Arbeiten, die später weiter ausgebaut werden können.',
-    link: '/projekte',
-    linkLabel: 'Zu den Projekten',
-  },
-];
 
 export default function Home() {
   return (
@@ -53,39 +18,15 @@ export default function Home() {
 
         <section className="intersectionHero">
           <div className="heroPanel">
-            <p className="roadLabel">3-way intersection</p>
-            <h1>Choose the route.</h1>
-            <p>
-              Eine Portfolio-Startseite wie eine dunkle Landstrasse: links und
-              rechts liegen die Stationen, in der Mitte führt die Linie weiter.
-            </p>
+            <h1>Dario Schlegel</h1>
+            <p>Ich besuche die Informatik-Mittelschule und entwickle neben dem Unterricht eigene Projekte.</p>
           </div>
         </section>
 
-        <section id="profile" className="routeStops" aria-label="Portfolio Route">
-          {roadStops.map((stop) => (
-            <article className={`routeStop ${stop.align}`} key={stop.title}>
-              <span className="roadPin" aria-hidden="true" />
-              <div className="stopCard">
-                <p className="roadLabel">{stop.eyebrow}</p>
-                <h2>{stop.title}</h2>
-                <p>{stop.text}</p>
-                <Link className="roadButton" href={stop.link}>
-                  {stop.linkLabel}
-                </Link>
-              </div>
-            </article>
-          ))}
-        </section>
-
-        <section id="projects" className="projectsSection">
+        <section id="projects" className="projectsSection" aria-labelledby="projects-title">
           <div className="sectionIntro">
-            <p className="roadLabel">Roadside projects</p>
-            <h2>Projekte entlang der Strecke</h2>
-            <p>
-              Jede Karte sitzt neben der Mittellinie wie ein Wegschild: kurz,
-              klar und direkt erreichbar.
-            </p>
+            <h2 id="projects-title">Projekte</h2>
+            <p>Projekte aus der Schule und aus eigener Arbeit.</p>
           </div>
 
           <div className="projectGrid">
@@ -95,41 +36,58 @@ export default function Home() {
                 href={`/projekte#${project.id}`}
                 key={project.id}
               >
-                <span>{project.homeMeta}</span>
                 <h3>{project.title}</h3>
-                <p>{project.homeText}</p>
-                <strong className="projectCardCta">Projekt ansehen -&gt;</strong>
+                <p>{project.description}</p>
+                <strong className="projectCardCta">Projekt ansehen</strong>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="siteFeaturesSection" aria-labelledby="site-features-title">
-          <div className="siteFeaturesIntro">
-            <p className="roadLabel">Über diese Website</p>
-            <h2 id="site-features-title">Portfolio-System</h2>
-            <p>Diese Elemente gehören zur Portfolio-Website selbst und sind bewusst von den Softwareprojekten getrennt.</p>
+        <section id="about" className="contentSection contentSectionLeft" aria-labelledby="about-title">
+          <div className="contentCard">
+            <h2 id="about-title">Über mich</h2>
+            <p>Ich besuche die Informatik-Mittelschule an der Kantonsschule Hottingen. Neben dem Unterricht arbeite ich an eigenen Projekten und probiere dabei verschiedene Bereiche der Informatik aus.</p>
+            <p>Viele Projekte entstehen dadurch, dass ich eine bestimmte Technologie oder Idee ausprobieren möchte. So sind unter anderem MusicStation, der lyricsseperator und dieses Portfolio entstanden.</p>
           </div>
-          <div className="siteFeatureGrid">
-            {siteFeatures.map((feature) => (
-              <article className="projectCard" key={feature.title}>
-                <span>{feature.meta}</span>
-                <h3>{feature.title}</h3>
-                <p>{feature.text}</p>
-              </article>
-            ))}
+        </section>
+
+        <section id="education" className="contentSection contentSectionRight" aria-labelledby="education-title">
+          <div className="contentCard">
+            <h2 id="education-title">Ausbildung</h2>
+            <h3>Informatik-Mittelschule</h3>
+            <p className="contentEmphasis">Kantonsschule Hottingen</p>
+            <p className="contentDate">2024 – 2027</p>
+            <p>An der IMS beschäftige ich mich mit verschiedenen Bereichen der Informatik. Dazu gehören Programmierung, Webentwicklung, Datenbanken, Cloud-Technologien und Applikationssicherheit.</p>
+            <p>Nach dem schulischen Abschluss folgt von Sommer 2027 bis Sommer 2028 mein Praktikumsjahr in der Informatik.</p>
+          </div>
+        </section>
+
+        <section id="technologies" className="contentSection contentSectionLeft" aria-labelledby="technologies-title">
+          <div className="contentCard">
+            <h2 id="technologies-title">Technologien</h2>
+            <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
+            <ul className="technologyList">
+              {technologyList.map((technology) => <li key={technology}>{technology}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section id="portfolio-project" className="contentSection contentSectionRight" aria-labelledby="portfolio-project-title">
+          <div className="contentCard">
+            <h2 id="portfolio-project-title">Portfolio als Projekt</h2>
+            <p>Dieses Portfolio begann als Schulprojekt. Die erste Seite, die ich dafür umgesetzt habe, war meine Freizeit-Seite.</p>
+            <p>Danach habe ich die Website weiterentwickelt und zusätzliche Seiten und Projekte eingebaut. Dabei nutze ich sie auch, um neue Ideen im Webdesign und in der Frontend-Entwicklung auszuprobieren.</p>
+            <p>Die Website ist deshalb nicht nur eine Übersicht meiner Projekte, sondern selbst eines meiner laufenden Projekte.</p>
           </div>
         </section>
 
         <section id="contact" className="contactSection" aria-labelledby="contact-title">
           <div className="contactCard">
-            <p className="roadLabel">Kontakt</p>
-            <h2 id="contact-title">Kontakt aufnehmen</h2>
-            <p>Weitere Projekte und den aktuellen Code findest du auf GitHub.</p>
+            <h2 id="contact-title">Kontakt</h2>
+            <p>Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.</p>
             <div className="contactActions">
-              <a className="roadButton" href="https://github.com/im24a-schlegeld" target="_blank" rel="noreferrer">
-                GitHub -&gt;
-              </a>
+              <a className="roadButton" href={`mailto:${portfolioContact.email}`}>E-Mail schreiben</a>
             </div>
           </div>
         </section>
@@ -151,7 +109,6 @@ export default function Home() {
 
       <footer className="roadFooter">
         <span>Dario Schlegel</span>
-        <span>Portfolio route system</span>
       </footer>
 
       <style>{`
@@ -295,7 +252,7 @@ export default function Home() {
           font-size: clamp(54px, 10vw, 122px);
           line-height: 0.82;
           letter-spacing: -0.08em;
-          text-transform: uppercase;
+          text-transform: none;
         }
 
         .heroPanel p:last-child {
@@ -329,44 +286,6 @@ export default function Home() {
           grid-column: 3;
         }
 
-        .roadPin {
-          position: absolute;
-          top: 50%;
-          width: 28px;
-          height: 28px;
-          transform: translate(-50%, -50%) rotate(45deg);
-          border: 3px solid var(--paint);
-          background: #171717;
-          box-shadow: 0 0 0 9px rgba(242, 201, 76, 0.08), 0 0 20px var(--paint-soft);
-        }
-
-        .routeStop.left .roadPin {
-          left: calc(50% - var(--lane-clear));
-        }
-
-        .routeStop.right .roadPin {
-          left: calc(50% + var(--lane-clear));
-        }
-
-        .routeStop::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, rgba(242, 201, 76, 0.52));
-        }
-
-        .routeStop.left::before {
-          left: calc(50% - 240px);
-          right: calc(50% + 88px);
-        }
-
-        .routeStop.right::before {
-          left: calc(50% + 88px);
-          right: calc(50% - 240px);
-          background: linear-gradient(90deg, rgba(242, 201, 76, 0.52), transparent);
-        }
-
         .stopCard,
         .projectCard {
           position: relative;
@@ -393,7 +312,7 @@ export default function Home() {
         .sectionIntro h2,
         .projectCard h3 {
           margin: 0;
-          text-transform: uppercase;
+          text-transform: none;
           letter-spacing: -0.04em;
         }
 
@@ -513,7 +432,7 @@ export default function Home() {
         }
 
         .projectCard h3 {
-          margin-top: 28px;
+          margin-top: 0;
           font-size: clamp(22px, 2.5vw, 32px);
           line-height: 1;
         }
@@ -552,6 +471,82 @@ export default function Home() {
         .contactSection {
           position: relative;
           padding: 90px 0 20px;
+        }
+
+        .contentSection {
+          position: relative;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+          padding: 90px 0 20px;
+        }
+
+        .contentSectionLeft .contentCard {
+          grid-column: 1;
+        }
+
+        .contentSectionRight .contentCard {
+          grid-column: 3;
+        }
+
+        .contentCard {
+          width: min(560px, 100%);
+          padding: clamp(28px, 5vw, 48px);
+          border: 1px solid rgba(245, 242, 233, 0.13);
+          background: rgba(10, 10, 10, 0.84);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+        }
+
+        .contentCard h2 {
+          margin: 0;
+          font-size: clamp(38px, 6vw, 72px);
+          line-height: 0.95;
+          letter-spacing: -0.05em;
+          text-transform: none;
+        }
+
+        .contentCard h3 {
+          margin: 34px 0 0;
+          color: var(--paint);
+          font-size: clamp(22px, 3vw, 32px);
+          line-height: 1;
+          text-transform: uppercase;
+        }
+
+        .contentCard p {
+          margin: 22px 0 0;
+          color: #c7c0b3;
+          font-size: 17px;
+          line-height: 1.6;
+        }
+
+        .contentCard .contentEmphasis {
+          margin-top: 10px;
+          color: var(--white);
+          font-weight: 800;
+        }
+
+        .contentCard .contentDate {
+          margin-top: 8px;
+          color: var(--paint);
+          font-weight: 800;
+        }
+
+        .technologyList {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          padding: 0;
+          margin: 28px 0 0;
+          list-style: none;
+        }
+
+        .technologyList li {
+          padding: 10px 12px;
+          border: 1px solid rgba(242, 201, 76, 0.34);
+          color: var(--white);
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0.08em;
         }
 
         .siteFeaturesIntro,
@@ -674,19 +669,6 @@ export default function Home() {
             padding-left: 82px;
           }
 
-          .roadPin {
-            left: 54px !important;
-            width: 22px;
-            height: 22px;
-          }
-
-          .routeStop::before {
-            left: 34px !important;
-            right: auto !important;
-            width: 42px;
-            background: linear-gradient(90deg, rgba(242, 201, 76, 0.52), transparent) !important;
-          }
-
           .projectsSection {
             display: block;
             padding-top: 70px;
@@ -708,8 +690,17 @@ export default function Home() {
           }
 
           .siteFeaturesSection,
-          .contactSection {
+          .contactSection,
+          .contentSection {
             padding-left: 82px;
+          }
+
+          .contentSection {
+            display: block;
+          }
+
+          .contentCard {
+            width: 100%;
           }
 
           .siteFeatureGrid {

@@ -25,9 +25,9 @@ export default function ProjectEmbed({ src, title }) {
     <>
       <div className={`embedFallback ${loaded ? 'isHidden' : ''}`}>
         <strong>{title}</strong>
-        <span>{timedOut ? 'Live-Vorschau reagiert nicht.' : 'Live-Vorschau wird geladen.'}</span>
+        <span>{timedOut ? 'Vorschau reagiert nicht.' : 'Vorschau wird geladen.'}</span>
         <a href={src} target="_blank" rel="noreferrer">
-          Projekt öffnen
+          Projekt ansehen
         </a>
       </div>
       <iframe
@@ -38,7 +38,7 @@ export default function ProjectEmbed({ src, title }) {
         onLoad={handleLoad}
       />
       <a className="embedOpenLink" href={src} target="_blank" rel="noreferrer">
-        Extern öffnen
+        Projekt ansehen
       </a>
     </>
   );
