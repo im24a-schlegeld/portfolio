@@ -5,135 +5,77 @@ export const navigationItems = [
   { key: 'contact', label: 'Kontakt', href: '/kontakt' },
 ];
 
+export const technologyList = [
+  'Python',
+  'Java',
+  'JavaScript',
+  'HTML',
+  'CSS',
+  'SQL',
+  'MongoDB',
+  'NoSQL',
+  'AWS',
+  'Docker',
+  'Git',
+  'GitHub',
+  'Applikationssicherheit',
+  'Datenschutz',
+];
+
 export const projects = [
   {
     id: 'smash-a-meerkat',
-    number: '01',
-    title: 'Smash-A-Meerkat',
-    category: 'Browser Game',
-    subtitle: 'Backend-zentriertes Reaktionsspiel mit Echtzeit-Kommunikation',
-    homeText:
-      'Browserbasiertes Reaktionsspiel mit Java/Spring-Boot-Backend und WebSocket-Kommunikation in Echtzeit.',
-    homeMeta: 'Game / Backend',
-    description:
-      'Smash-A-Meerkat ist ein browserbasiertes Reaktionsspiel, das an "Whack-a-Mole" erinnert. Ziel war es, ein Spiel mit bewusst backend-zentrierter Architektur zu entwickeln. Die Spiellogik läuft mit Java und Spring Boot im Backend, während Frontend und Server über WebSockets in Echtzeit kommunizieren.',
-    role: 'Backend-Architektur, Spiellogik und WebSocket-Anbindung',
-    status: 'Code verfügbar',
-    portfolioYear: '2026',
-    implementation:
-      'Die zentrale Spiellogik liegt im Spring-Boot-Backend. Der Browser übernimmt Darstellung und Eingabe, während Spielzustand und Ereignisse über WebSockets zwischen Client und Server synchronisiert werden.',
-    challenge:
-      'Spielzustand, Treffer und Timing müssen zwischen Browser und Server konsistent bleiben, ohne dass die Spiellogik nur im Frontend liegt.',
-    solution:
-      'Eine backend-zentrierte Struktur mit Spring Boot und WebSockets hält die Logik auf dem Server und verteilt Zustandsänderungen in Echtzeit an den Client.',
-    result:
-      'Ein spielbarer Reaktions-Workflow mit klarer Trennung zwischen serverseitiger Logik und browserseitiger Darstellung.',
-    technologies: ['Java', 'Spring Boot', 'WebSocket', 'JavaScript', 'HTML/CSS', 'Maven'],
+    title: 'Smash a Meerkat',
+    description: 'Kleines Java-Spiel aus einem Gruppenprojekt in der Schule.',
+    detailText: [
+      'Smash a Meerkat entstand als Gruppenprojekt während des Java-Unterrichts.',
+      'Ziel war es, gemeinsam ein kleines funktionierendes Spiel umzusetzen und die zuvor gelernten Java-Grundlagen praktisch anzuwenden.',
+      'Neben der Programmierung selbst war bei diesem Projekt auch die Zusammenarbeit wichtig. Der Code musste aufgeteilt, zusammengeführt und so organisiert werden, dass mehrere Personen gleichzeitig daran arbeiten konnten.',
+    ],
+    technologies: [],
     githubUrl: 'https://github.com/im24a-schlegeld/SmashAMeerkat',
     media: {
       type: 'video',
       src: '/smash-a-meerkat-preview.mp4',
-      label: 'Smash-A-Meerkat Gameplay Vorschau',
+      label: 'Smash a Meerkat',
     },
   },
   {
     id: 'lyrics-separator',
-    number: '02',
-    title: 'Lyrics Separator',
-    category: 'Web Application',
-    subtitle: 'Webanwendung zur Verarbeitung von Audio und Lyrics',
-    homeText:
-      'Webanwendung zur Verarbeitung von Audio und Lyrics mit Clip-Vorschau, API-Anbindung und Export-Workflow.',
-    homeMeta: 'Audio / Web App',
-    description:
-      'Lyrics Separator verarbeitet Audiodateien zusammen mit Songtexten und erstellt daraus einzelne, abspielbare Audio-Clips passend zu den jeweiligen Lyrics-Abschnitten.',
-    role: 'Frontend, Audio-Workflow und API-Integration',
-    status: 'Live-Demo',
-    portfolioYear: '2026',
-    implementation:
-      'Entwicklung einer interaktiven Benutzeroberfläche für Audio-Import, Lyrics-Verarbeitung, Clip-Vorschau und Export. Zusätzlich wurde eine API-basierte Backend-Architektur für Audio- und Lyrics-Verarbeitung umgesetzt.',
-    challenge:
-      'Audio, Lyrics-Timings, Vorschau und Export müssen in einem verständlichen Ablauf zusammengeführt werden.',
-    solution:
-      'Der Workflow verbindet eine React-Oberfläche mit REST-Endpunkten und einer optionalen FastAPI-/ffmpeg-Verarbeitung für die Audioschritte.',
-    result:
-      'Lyrics-Abschnitte können als einzelne Audio-Clips verarbeitet, kontrolliert und gesammelt exportiert werden.',
+    title: 'lyricsseperator',
+    description: 'Eine MP3 hochladen und den Song in einzelne Lyric-Zeilen aufteilen.',
+    detailText: [
+      'Der lyricsseperator ist ein Projekt, das ich ursprünglich in der Schule begonnen habe.',
+      'Der Benutzer kann eine MP3-Datei eines Songs hochladen. Die Anwendung verarbeitet die Datei und gibt den Inhalt anschliessend in einzelnen Lyric-Zeilen zurück.',
+      'Bei diesem Projekt wollte ich ausprobieren, wie ich eine externe API in eine eigene Anwendung einbauen kann. Statt nur einzelne API-Anfragen zu testen, wollte ich daraus eine Anwendung mit einem klaren Ablauf machen.',
+    ],
+    technologies: [],
     liveUrl: 'https://lyricsseperator-xi.vercel.app/',
     githubUrl: 'https://github.com/im24a-schlegeld/lyricsseperator',
-    technologies: [
-      'React',
-      'Vite',
-      'JavaScript',
-      'Web Audio',
-      'Python',
-      'FastAPI',
-      'REST API',
-      'ffmpeg',
-    ],
     media: {
       type: 'website',
       src: 'https://lyricsseperator-xi.vercel.app/',
-      label: 'Lyrics Separator Live Demo Vorschau',
+      label: 'lyricsseperator',
     },
-    highlights: [
-      {
-        title: 'Audio Processing',
-        text: 'Audio wird verarbeitet und anhand der Lyrics-Timings in einzelne Clips aufgeteilt.',
-      },
-      {
-        title: 'API Architecture',
-        text: 'Frontend und optionale FastAPI-Backend-Architektur kommunizieren über REST-Endpunkte.',
-      },
-      {
-        title: 'Export',
-        text: 'Erstellte Audioabschnitte können gesammelt verarbeitet und exportiert werden.',
-      },
-    ],
   },
   {
     id: 'music-station',
-    number: '03',
     title: 'MusicStation',
-    category: 'Mobile App Preview',
-    subtitle: 'Mobile-first Website-Vorschau als App-Projekt',
-    homeText:
-      'Mobile-first Webprojekt mit Live-Vorschau im Smartphone-Kontext und direktem Zugriff auf die veröffentlichte Version.',
-    homeMeta: 'Mobile / Frontend',
-    description:
-      'MusicStation ist ein eigenständiges Webprojekt für die mobile Nutzung und wird bewusst in einer Smartphone-Ansicht gezeigt, damit der App-Charakter direkt erkennbar bleibt.',
-    role: 'Frontend und mobile Präsentation',
-    status: 'Live-Demo',
-    portfolioYear: '2026',
-    implementation:
-      'Das Projekt wird als mobile Anwendung präsentiert. Die Live-Version bleibt direkt erreichbar und die Portfolio-Darstellung nutzt zwei Smartphone-Vorschauen für die Live-App und einen mobilen Walkthrough.',
-    challenge:
-      'Ein klar mobile-first aufgebautes Projekt soll im Desktop-Portfolio verständlich gezeigt werden, ohne seinen eigentlichen Nutzungskontext zu verlieren.',
-    solution:
-      'Die Live-Seite wird in einer Smartphone-Darstellung eingebettet und mit einer zweiten, automatisch laufenden Mobile-Aufnahme ergänzt. Beide Wege bleiben direkt erreichbar.',
-    result:
-      'Besucher sehen den mobilen Charakter sofort und können bei Problemen mit der Einbettung direkt zur Live-Version wechseln.',
-    technologies: ['Frontend', 'Mobile Preview', 'Deployment'],
+    description: 'Lokale Anwendung und Webseite zum Abspielen eigener Musik.',
+    detailText: [
+      'MusicStation entstand aus der Idee, einen eigenen Musikplayer zu bauen, statt nur einen bestehenden zu verwenden.',
+      'Das Projekt besteht aus einer lokalen Anwendung zum Abspielen von Musik und einer dazugehörigen Webseite. Für mich war das Projekt vor allem eine Möglichkeit, mich mit der Entwicklung einer eigenen Anwendung auseinanderzusetzen und verschiedene Funktionen selbst umzusetzen.',
+      'Ich wollte ausprobieren, wie eine eigene Anwendung aufgebaut werden kann und gleichzeitig etwas entwickeln, das ich selbst benutzen kann.',
+    ],
+    technologies: [],
     liveUrl: 'https://music-station-omega.vercel.app/',
     githubUrl: 'https://github.com/im24a-schlegeld/MusicStation',
     media: {
       type: 'phone',
       src: 'https://music-station-omega.vercel.app/',
       videoSrc: '/music-station-preview.mp4',
-      label: 'MusicStation mobile Website Vorschau',
-      videoLabel: 'MusicStation mobile Video-Vorschau',
+      label: 'MusicStation',
+      videoLabel: 'MusicStation',
     },
-  },
-];
-
-export const siteFeatures = [
-  {
-    title: 'Portfolio Road System',
-    text: 'Die Startseite nutzt die Strasse als Navigationssystem: Inhalte liegen als Stationen links und rechts der Route.',
-    meta: 'Diese Website / Frontend',
-  },
-  {
-    title: 'Freizeit-Animationen',
-    text: 'Motorrad, Pfadi-Schwert und Walhai bilden einen bewusst persönlichen, experimentellen Bereich ausserhalb der Softwareprojekte.',
-    meta: 'Diese Website / Motion',
   },
 ];

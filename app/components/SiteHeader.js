@@ -14,6 +14,12 @@ export default function SiteHeader({ activeKey, roadStripes = false, roadTexture
     if (storedDirection === 'left' || storedDirection === 'right') {
       headerRef.current?.setAttribute('data-direction', storedDirection);
     }
+
+    const frame = window.requestAnimationFrame(() => {
+      headerRef.current?.setAttribute('data-transition', 'true');
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const handleNavigation = (key) => {

@@ -32,10 +32,14 @@
     transparent 82px 118px
   );
   background-position: 0 0;
-  animation: roadHeaderStripes 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: none;
 }
 
-.siteHeaderRoad[data-direction='right']::after {
+.siteHeaderRoad[data-transition='true']::after {
+  animation: roadHeaderStripesLeft 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.siteHeaderRoad[data-transition='true'][data-direction='right']::after {
   animation-name: roadHeaderStripesRight;
 }
 
@@ -102,21 +106,21 @@
   background: #f2c94c;
 }
 
-@keyframes roadHeaderStripes {
+@keyframes roadHeaderStripesLeft {
   from {
-    transform: translate3d(-84px, 0, 0);
+    background-position: -118px 0;
   }
   to {
-    transform: translate3d(0, 0, 0);
+    background-position: 0 0;
   }
 }
 
 @keyframes roadHeaderStripesRight {
   from {
-    transform: translate3d(84px, 0, 0);
+    background-position: 118px 0;
   }
   to {
-    transform: translate3d(0, 0, 0);
+    background-position: 0 0;
   }
 }
 

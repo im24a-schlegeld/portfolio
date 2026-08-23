@@ -40,14 +40,13 @@ const FREIZEIT_COPY = {
 };
 
 function FreizeitHeader() {
-  return <SiteHeader activeKey="about" roadStripes />;
+  return <SiteHeader activeKey="about" />;
 }
 
 function PageIntro() {
   return (
     <div className="section">
-      <p className="kicker">Persönliche Interessen</p>
-      <h1 className={`title ${racingSansOne.className}`}>{FREIZEIT_COPY.pageTitle}</h1>
+      <h1 className="title">{FREIZEIT_COPY.pageTitle}</h1>
     </div>
   );
 }
@@ -545,12 +544,15 @@ export default function About() {
       <style>{`
         .page {
           --site-header-height: 70px;
-          --freizeit-beige: #d7ac39;
-          --freizeit-dark: #0c0d0f;
-          --freizeit-blue: #d7ac39;
-          --freizeit-beige-ink: #21190d;
-          --freizeit-light: #f7f7f4;
-          --freizeit-blue-ink: #21190d;
+          --freizeit-beige: #17211A;
+          --freizeit-beige-accent: #5F7A61;
+          --freizeit-beige-ink: #F2F1EC;
+          --freizeit-dark: #080808;
+          --freizeit-dark-accent: #A6A6A6;
+          --freizeit-dark-ink: #F5F5F5;
+          --freizeit-blue: #071D24;
+          --freizeit-blue-accent: #16758A;
+          --freizeit-blue-ink: #EEF7F8;
           --header-bg: #090a0b;
           --header-border: #232426;
           --header-active: #ece4dd;
@@ -691,7 +693,7 @@ export default function About() {
 
         .kicker {
           margin: 0 0 10px;
-          color: rgba(36, 29, 23, 0.68);
+          color: var(--freizeit-beige-accent);
           font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.16em;
@@ -701,6 +703,8 @@ export default function About() {
         .title {
           margin: 0;
           font-size: 40px;
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+          font-weight: 700;
           letter-spacing: -0.02em;
           color: var(--freizeit-beige-ink);
         }
@@ -743,7 +747,7 @@ export default function About() {
         }
 
         .swordLink:focus-visible {
-          outline: 2px solid rgba(36, 29, 23, 0.65);
+          outline: 2px solid var(--freizeit-beige-accent);
           outline-offset: 10px;
         }
 
@@ -774,8 +778,8 @@ export default function About() {
           width: 24px;
           height: 24px;
           margin: -12px 0 0 -12px;
-          border: 2px solid rgba(36, 29, 23, 0.2);
-          border-top-color: rgba(36, 29, 23, 0.78);
+          border: 2px solid rgba(95, 122, 97, 0.24);
+          border-top-color: var(--freizeit-beige-accent);
           border-radius: 50%;
           animation: swordLoadingSpin 0.75s linear infinite;
         }
@@ -802,7 +806,7 @@ export default function About() {
           margin: 0 0 12px;
           font-size: 22px;
           font-weight: 400;
-          color: #2b2119;
+          color: var(--freizeit-beige-accent);
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
@@ -814,7 +818,7 @@ export default function About() {
           font-size: 30px;
           font-weight: 400;
           line-height: 1.35;
-          color: #31251c;
+          color: var(--freizeit-beige-ink);
           overflow-wrap: break-word;
         }
 
@@ -880,7 +884,7 @@ export default function About() {
           margin: 0;
           font-size: 22px;
           font-weight: 400;
-          color: #ffffff;
+          color: var(--freizeit-dark-accent);
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
@@ -894,7 +898,7 @@ export default function About() {
           font-style: normal;
           font-size: 32px;
           font-weight: 400;
-          color: #ffffff;
+          color: var(--freizeit-dark-ink);
         }
 
         .desktopDiveContent {
@@ -947,8 +951,8 @@ export default function About() {
           width: 24px;
           height: 24px;
           margin: -12px 0 0 -12px;
-          border: 2px solid rgba(36, 29, 23, 0.2);
-          border-top-color: rgba(36, 29, 23, 0.78);
+          border: 2px solid rgba(22, 117, 138, 0.24);
+          border-top-color: var(--freizeit-blue-accent);
           border-radius: 50%;
           animation: swordLoadingSpin 0.75s linear infinite;
           transition: opacity 180ms ease;
@@ -964,7 +968,7 @@ export default function About() {
           width: 100%;
           font-size: 22px;
           font-weight: 400;
-          color: var(--freizeit-blue-ink);
+          color: var(--freizeit-blue-accent);
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
@@ -1003,7 +1007,7 @@ export default function About() {
         .footer {
           position: relative;
           z-index: 4;
-          border-top: 1px solid rgba(23, 50, 72, 0.16);
+          border-top: 1px solid rgba(22, 117, 138, 0.42);
           background: var(--freizeit-blue);
           padding: 26px 0 32px;
         }
@@ -1026,7 +1030,7 @@ export default function About() {
         .footerText {
           margin: 6px 0 0;
           font-size: 13px;
-          color: rgba(23, 50, 72, 0.72);
+          color: rgba(238, 247, 248, 0.72);
         }
 
         .footerLinks {
@@ -1035,7 +1039,7 @@ export default function About() {
           gap: 18px;
           font-size: 13px;
           font-weight: 600;
-          color: rgba(23, 50, 72, 0.78);
+          color: rgba(238, 247, 248, 0.78);
         }
 
         .footerLink {
@@ -1043,7 +1047,7 @@ export default function About() {
         }
 
         .footerLink:hover {
-          color: #0f2739;
+          color: var(--freizeit-blue-accent);
         }
 
         @media (prefers-reduced-motion: reduce) {

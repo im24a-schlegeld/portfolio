@@ -8,13 +8,6 @@ export const metadata = {
   description: 'Software- und Webprojekte von Dario Schlegel mit Live-Demos, technischen Details und verwendeten Technologien.',
 };
 
-const smashProject = projects.find((project) => project.id === 'smash-a-meerkat');
-const featuredProject = projects.find((project) => project.id === 'lyrics-separator');
-const finalProject = projects.find((project) => project.id === 'music-station');
-
-const firstProjects = [smashProject].filter(Boolean);
-const lastProjects = [finalProject].filter(Boolean);
-
 function ProjectMedia({ project }) {
   if (!project.media) {
     return (
@@ -121,27 +114,8 @@ function ProjectMedia({ project }) {
   );
 }
 
-function ProjectFacts({ project }) {
-  return (
-    <dl className="projectFacts" aria-label={`${project.title} Projektdaten`}>
-      <div>
-        <dt>Rolle</dt>
-        <dd>{project.role}</dd>
-      </div>
-      <div>
-        <dt>Status</dt>
-        <dd>{project.status}</dd>
-      </div>
-      <div>
-        <dt>Portfolio-Stand</dt>
-        <dd>{project.portfolioYear}</dd>
-      </div>
-    </dl>
-  );
-}
-
-function ProjectActions({ project, detailsHref }) {
-  if (!project.liveUrl && !project.githubUrl && !detailsHref) {
+function ProjectActions({ project }) {
+  if (!project.liveUrl && !project.githubUrl) {
     return null;
   }
 
@@ -149,7 +123,7 @@ function ProjectActions({ project, detailsHref }) {
     <div className="actions compactActions" aria-label={`${project.title} Projektaktionen`}>
       {project.liveUrl && (
         <a className="primaryAction" href={project.liveUrl} target="_blank" rel="noreferrer">
-          Live Demo <span aria-hidden="true">-&gt;</span>
+          Projekt ansehen <span aria-hidden="true">-&gt;</span>
           <span className="srOnly"> in neuem Tab öffnen</span>
         </a>
       )}
@@ -159,31 +133,7 @@ function ProjectActions({ project, detailsHref }) {
           <span className="srOnly"> in neuem Tab öffnen</span>
         </a>
       )}
-      {detailsHref && (
-        <a className="ghostAction" href={detailsHref}>
-          Details
-        </a>
-      )}
     </div>
-  );
-}
-
-function ProjectCaseStudy({ project }) {
-  return (
-    <section className="caseStudy" aria-label={`${project.title} Herausforderung, Lösung und Ergebnis`}>
-      <article>
-        <span>Herausforderung</span>
-        <p>{project.challenge}</p>
-      </article>
-      <article>
-        <span>Lösung</span>
-        <p>{project.solution}</p>
-      </article>
-      <article>
-        <span>Ergebnis</span>
-        <p>{project.result}</p>
-      </article>
-    </section>
   );
 }
 
@@ -196,31 +146,22 @@ function ProjectShowcase({ project }) {
     >
       <ProjectMedia project={project} />
       <div className="showcaseInfo">
-        <div className="projectMeta compactMeta">
-          <span>{project.number}</span>
-          <span>{project.category}</span>
-        </div>
-        <p className="projectIndex">{project.number} - Projekt</p>
         <h2 id={`${project.id}-title`}>{project.title}</h2>
-        <p className="subtitle">{project.subtitle}</p>
         <p className="description">{project.description}</p>
 
-        <ProjectFacts project={project} />
-
-        <div className="techList compactTech" aria-label={`${project.title} Tech Stack`}>
-          {project.technologies.map((technology) => (
-            <span key={technology}>{technology}</span>
-          ))}
+        <div className="projectDetailText">
+          {project.detailText.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
 
+        {project.technologies.length > 0 && (
+          <div className="techList compactTech" aria-label={`${project.title} Technologien`}>
+            {project.technologies.map((technology) => (
+              <span key={technology}>{technology}</span>
+            ))}
+          </div>
+        )}
+
         <ProjectActions project={project} />
-
-        <section className="implementation" aria-label={`${project.title} Umsetzung`}>
-          <h3>Meine Umsetzung</h3>
-          <p>{project.implementation}</p>
-        </section>
-
-        <ProjectCaseStudy project={project} />
       </div>
     </article>
   );
@@ -231,93 +172,12 @@ export default function Projekte() {
     <main className="projectsPage">
       <SiteHeader activeKey="projects" roadStripes />
       <section className="projectsIntro" aria-labelledby="projects-title">
-        <p className="eyebrow">Portfolio</p>
         <h1 id="projects-title">Projekte</h1>
-        <p className="introText">
-          Eine Auswahl meiner Projekte aus Webentwicklung, Softwareentwicklung und Teamarbeit.
-        </p>
+        <p className="introText">Projekte aus der Schule und aus eigener Arbeit.</p>
       </section>
 
-      <section className="projectStack firstProjectStack" aria-label="Erstes Projekt">
-        {firstProjects.map((project) => (
-          <ProjectShowcase project={project} key={project.title} />
-        ))}
-      </section>
-
-      <section id={featuredProject.id} className="featuredProject" aria-labelledby="lyrics-title">
-        <div className="projectPreview" aria-label="Lyrics Separator Live-Vorschau">
-          <div className="browserFrame">
-            <div className="browserTop" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <p>{featuredProject.liveUrl?.replace('https://', '').replace('/', '')}</p>
-            </div>
-            <div className="previewScreen">
-              {featuredProject.liveUrl ? (
-                <ProjectEmbed
-                  src={featuredProject.liveUrl}
-                  title="Lyrics Separator Live Demo Vorschau"
-                />
-              ) : (
-                <div className="embedFallback">
-                  <strong>{featuredProject.title}</strong>
-                  <span>Keine Live-Vorschau hinterlegt.</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <article className="projectInfo">
-          <div className="projectMeta">
-            <span>{featuredProject.number}</span>
-            <span>{featuredProject.category}</span>
-          </div>
-
-          <p className="projectIndex">{featuredProject.number} - Projekt</p>
-          <h2 id="lyrics-title">{featuredProject.title}</h2>
-          <p className="subtitle">{featuredProject.subtitle}</p>
-          <p className="description">{featuredProject.description}</p>
-
-          <ProjectFacts project={featuredProject} />
-
-          <div className="techList" aria-label="Tech Stack">
-            {featuredProject.technologies.map((technology) => (
-              <span key={technology}>{technology}</span>
-            ))}
-          </div>
-
-          <ProjectActions project={featuredProject} detailsHref="#lyrics-separator-details" />
-
-          <section className="implementation" aria-labelledby="implementation-title">
-            <h3 id="implementation-title">Meine Umsetzung</h3>
-            <p>{featuredProject.implementation}</p>
-          </section>
-
-          <ProjectCaseStudy project={featuredProject} />
-        </article>
-      </section>
-
-      <section
-        id="lyrics-separator-details"
-        className="technicalHighlights"
-        aria-labelledby="highlights-title"
-      >
-        <p className="eyebrow">Technische Highlights</p>
-        <h2 id="highlights-title">Audio, API und Export in einer klaren Projektstruktur.</h2>
-        <div className="highlightGrid">
-          {featuredProject.highlights.map((highlight) => (
-            <article className="highlightCard" key={highlight.title}>
-              <h3>{highlight.title}</h3>
-              <p>{highlight.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="projectStack lastProjectStack" aria-label="Letztes Projekt">
-        {lastProjects.map((project) => (
+      <section className="projectStack projectsList" aria-label="Projekte">
+        {projects.map((project) => (
           <ProjectShowcase project={project} key={project.title} />
         ))}
       </section>
@@ -601,6 +461,19 @@ export default function Projekte() {
 
         .description {
           margin: 20px 0 0;
+        }
+
+        .projectDetailText {
+          display: grid;
+          gap: 16px;
+          margin-top: 22px;
+        }
+
+        .projectDetailText p {
+          margin: 0;
+          color: #cfc7ba;
+          font-size: 16px;
+          line-height: 1.62;
         }
 
         .actions {
@@ -1060,8 +933,16 @@ export default function Projekte() {
         .projectShowcase > .mediaFrame,
         .projectShowcase > .phoneMedia {
           position: sticky;
-          top: 24px;
+          top: 50%;
           align-self: start;
+          transform: translateY(-50%);
+        }
+
+        .projectShowcase > .mediaFrame:hover,
+        .projectShowcase > .phoneMedia:hover,
+        .projectShowcase > .mediaFrame:focus-within,
+        .projectShowcase > .phoneMedia:focus-within {
+          transform: translateY(calc(-50% - 4px));
         }
 
         .compactMeta {
@@ -1073,7 +954,7 @@ export default function Projekte() {
           font-size: clamp(34px, 4.8vw, 68px);
           line-height: 0.92;
           letter-spacing: -0.065em;
-          text-transform: uppercase;
+          text-transform: none;
         }
 
         .compactTech {
@@ -1204,6 +1085,7 @@ export default function Projekte() {
           .projectShowcase > .phoneMedia {
             position: relative;
             top: auto;
+            transform: none;
           }
         }
       `}</style>
