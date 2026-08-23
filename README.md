@@ -1,18 +1,20 @@
 # Portfolio
 
-Personal portfolio website for Dario Schlegel. It presents software projects alongside a more experimental, visual profile section built around a road-style navigation concept.
+Mein persönliches Portfolio mit Projekten aus der Schule und eigenen Projekten.
+
+Das Portfolio habe ich ursprünglich in der Schule begonnen und danach weiterentwickelt. Ich nutze die Website auch, um Dinge in der Webentwicklung und Gestaltung auszuprobieren.
 
 ## Live
 
-https://portfolio-eight-tau-usv97cdepc.vercel.app
+https://portfolio-darioschlegel.vercel.app/
 
-## Projects
+## Projekte
 
-- **Smash A Meerkat** – browser reaction game with a Java/Spring Boot backend and WebSocket updates.
-- **Lyrics Separator** – audio and lyrics workflow with clip preview and export.
-- **X-Archive** – mobile-first web project shown in a phone preview.
+Auf der Website zeige ich meine aktuellen Projekte und verlinke die jeweiligen Anwendungen beziehungsweise GitHub-Repositories.
 
-## Tech Stack
+Neben den Projekten gibt es eine eigene Freizeit-Seite.
+
+## Technik
 
 - Next.js
 - React
@@ -20,14 +22,7 @@ https://portfolio-eight-tau-usv97cdepc.vercel.app
 - Three.js
 - Vercel
 
-## Features
-
-- Responsive road-style navigation and project overview
-- Project pages with video and external website previews
-- Fallback links for embedded previews
-- Animated leisure section with video, responsive images and a dynamically loaded Three.js sword model
-
-## Local Development
+## Lokal starten
 
 ```bash
 git clone https://github.com/im24a-schlegeld/portfolio.git
@@ -36,21 +31,11 @@ npm install
 npm run dev
 ```
 
-Run the production checks with:
+Prüfen mit:
 
 ```bash
 npm run lint
 npm run build
 ```
 
-## Structure
-
-- `app/` contains the App Router pages and UI.
-- `app/projekte/` renders project details and previews.
-- `app/about/` contains the animated leisure section.
-- `data/portfolio.js` contains navigation, project and contact data.
-- `public/` contains images, videos and the 3D model.
-
-## Engineering Notes
-
-Three.js is imported only on the client, so the initial server-rendered page does not require the renderer or GLTF loader. Embedded external project previews are lazy-loaded and retain a direct fallback link when an iframe cannot be displayed. The application is deployed on Vercel.
+Die Seiten liegen hauptsächlich unter `app/`. Bilder, Videos und andere statische Dateien liegen unter `public/`.
