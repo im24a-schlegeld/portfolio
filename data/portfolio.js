@@ -1,7 +1,7 @@
 export const navigationItems = [
   { key: 'home', label: 'Start', href: '/' },
   { key: 'projects', label: 'Projekte', href: '/projekte' },
-  { key: 'about', label: 'Freizeit', href: '/about' },
+  { key: 'about', label: 'Freizeit', href: '/freizeit' },
   { key: 'contact', label: 'Kontakt', href: '/kontakt' },
 ];
 
@@ -78,7 +78,6 @@ export const projects = [
     githubUrl: 'https://github.com/im24a-schlegeld/MusicStation',
     media: {
       type: 'phone',
-      src: 'https://music-station-omega.vercel.app/',
       videoSrc: '/music-station-preview.mp4',
       label: 'MusicStation',
       videoLabel: 'MusicStation',

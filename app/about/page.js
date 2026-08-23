@@ -40,7 +40,7 @@ const FREIZEIT_COPY = {
 };
 
 function FreizeitHeader() {
-  return <SiteHeader activeKey="about" />;
+  return <SiteHeader activeKey="about" roadStripes />;
 }
 
 function PageIntro() {
@@ -272,7 +272,7 @@ function FreizeitFooter() {
           <Link className="footerLink" href="/">
             Portfolio
           </Link>
-          <Link className="footerLink" href="/about">
+          <Link className="footerLink" href="/freizeit">
             Freizeit
           </Link>
         </nav>

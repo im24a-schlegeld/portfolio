@@ -29,13 +29,15 @@ function ProjectMedia({ project }) {
     );
   }
 
-  if (project.media.type === 'phone' && project.media.src) {
+  if (project.media.type === 'phone') {
     const phoneItems = [
-      {
-        kind: 'website',
-        src: project.media.src,
-        label: project.media.label,
-      },
+      ...(project.media.src
+        ? [{
+          kind: 'website',
+          src: project.media.src,
+          label: project.media.label,
+        }]
+        : []),
       ...(project.media.videoSrc
         ? [{
           kind: 'video',
@@ -933,16 +935,16 @@ export default function Projekte() {
         .projectShowcase > .mediaFrame,
         .projectShowcase > .phoneMedia {
           position: sticky;
-          top: 50%;
+          top: 94px;
           align-self: start;
-          transform: translateY(-50%);
+          transform: none;
         }
 
         .projectShowcase > .mediaFrame:hover,
         .projectShowcase > .phoneMedia:hover,
         .projectShowcase > .mediaFrame:focus-within,
         .projectShowcase > .phoneMedia:focus-within {
-          transform: translateY(calc(-50% - 4px));
+          transform: translateY(-4px);
         }
 
         .compactMeta {
