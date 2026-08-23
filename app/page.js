@@ -86,8 +86,10 @@ export default function Home() {
           <div className="contactCard">
             <h2 id="contact-title">Kontakt</h2>
             <p>Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.</p>
-            <div className="contactActions">
-              <a className="roadButton" href={`mailto:${portfolioContact.email}`}>E-Mail schreiben</a>
+            <div className="contactDetails" aria-label="Kontaktmöglichkeiten">
+              <a className="contactLink" href={portfolioContact.githubUrl} target="_blank" rel="noreferrer">GitHub</a>
+              <a className="contactLink" href={`mailto:${portfolioContact.email}`}>{portfolioContact.emailDisplay}</a>
+              <a className="contactLink" href={`tel:${portfolioContact.phone}`}>{portfolioContact.phone}</a>
             </div>
           </div>
         </section>
@@ -568,6 +570,11 @@ export default function Home() {
           text-transform: uppercase;
         }
 
+        .contactCard h2 {
+          font-size: clamp(24px, 3vw, 38px);
+          letter-spacing: 0.02em;
+        }
+
         .siteFeaturesIntro > p:last-child,
         .contactCard > p {
           color: #c7c0b3;
@@ -590,16 +597,12 @@ export default function Home() {
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
         }
 
-        .contactActions {
+        .contactDetails {
           display: flex;
           align-items: center;
           flex-wrap: wrap;
-          gap: 16px;
+          gap: 10px 22px;
           margin-top: 24px;
-        }
-
-        .contactActions .roadButton {
-          margin-top: 0;
         }
 
         .contactLink {
@@ -608,6 +611,12 @@ export default function Home() {
           font-weight: 900;
           letter-spacing: 0.12em;
           text-transform: uppercase;
+        }
+
+        .contactLink:hover,
+        .contactLink:focus-visible {
+          color: var(--white);
+          outline: none;
         }
 
         .placeholderNotice {

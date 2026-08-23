@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import localFont from 'next/font/local';
 import { New_Rocker, Racing_Sans_One } from 'next/font/google';
 import SwordModel from './SwordModel';
@@ -256,28 +255,6 @@ function DesktopFreizeitStory({
         </div>
       </div>
     </section>
-  );
-}
-
-function FreizeitFooter() {
-  return (
-    <footer className="footer">
-      <div className="container footerInner">
-        <div>
-          <p className="footerName">Dario Schlegel</p>
-          <p className="footerText">Portfolio und Freizeit</p>
-        </div>
-
-        <nav className="footerLinks" aria-label="Footer Navigation">
-          <Link className="footerLink" href="/">
-            Portfolio
-          </Link>
-          <Link className="footerLink" href="/freizeit">
-            Freizeit
-          </Link>
-        </nav>
-      </div>
-    </footer>
   );
 }
 
@@ -538,8 +515,6 @@ export default function About() {
         </div>
 
       </main>
-
-      <FreizeitFooter />
 
       <style>{`
         .page {
@@ -1004,52 +979,6 @@ export default function About() {
           }
         }
 
-        .footer {
-          position: relative;
-          z-index: 4;
-          border-top: 1px solid rgba(22, 117, 138, 0.42);
-          background: var(--freizeit-blue);
-          padding: 26px 0 32px;
-        }
-
-        .footerInner {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-        }
-
-        .footerName {
-          margin: 0;
-          font-size: 14px;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          color: var(--freizeit-blue-ink);
-        }
-
-        .footerText {
-          margin: 6px 0 0;
-          font-size: 13px;
-          color: rgba(238, 247, 248, 0.72);
-        }
-
-        .footerLinks {
-          display: flex;
-          align-items: center;
-          gap: 18px;
-          font-size: 13px;
-          font-weight: 600;
-          color: rgba(238, 247, 248, 0.78);
-        }
-
-        .footerLink {
-          transition: color 0.2s ease;
-        }
-
-        .footerLink:hover {
-          color: var(--freizeit-blue-accent);
-        }
-
         @media (prefers-reduced-motion: reduce) {
           .section,
           .swordModelWrap,
@@ -1366,14 +1295,6 @@ export default function About() {
             border-radius: 18px;
           }
 
-          .footer {
-            padding: 24px 0 28px;
-          }
-
-          .footerInner {
-            align-items: flex-start;
-            flex-direction: column;
-          }
         }
 
         @media (min-width: 768px) and (max-width: 1179px) and (max-height: 680px) {
