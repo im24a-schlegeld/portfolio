@@ -16,10 +16,10 @@ export default function Home() {
       <main className="roadMap">
         <div className="centerRoadLine" aria-hidden="true" />
 
-        <section className="intersectionHero">
-          <div className="heroPanel">
+        <section className="intersectionHero" aria-labelledby="hero-title">
+          <div className="heroIntro">
             <span className="heroKicker">Portfolio / Informatik</span>
-            <h1><span>Dario</span><span>Schlegel</span></h1>
+            <h1 id="hero-title"><span>Dario</span><span>Schlegel</span></h1>
             <div className="heroRule" aria-hidden="true" />
             <p>Ich besuche die Informatik-Mittelschule und entwickle neben dem Unterricht eigene Projekte.</p>
           </div>
@@ -51,7 +51,7 @@ export default function Home() {
                   </span>
                 </div>
                 <div className="projectItemMain">
-                  <div>
+                  <div className="projectItemCopy">
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
                   </div>
@@ -93,11 +93,15 @@ export default function Home() {
             <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
             <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
             <ul className="technologyDirectory">
-              {technologyList.map((technology, index) => <li key={technology}><span>{String(index + 1).padStart(2, '0')}</span>{technology}</li>)}
+              {technologyList.map((technology, index) => (
+                <li key={technology}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{technology}</strong>
+                </li>
+              ))}
             </ul>
           </div>
         </section>
-
       </main>
 
       <div className="stopSignWrap" aria-hidden="true">
@@ -117,31 +121,18 @@ export default function Home() {
         .roadMain {
           --asphalt: #171717;
           --asphalt-dark: #070707;
-          --asphalt-light: #242424;
           --paint: #f2c94c;
           --paint-soft: rgba(242, 201, 76, 0.24);
           --paint-muted: rgba(242, 201, 76, 0.68);
-          --paint-ghost: rgba(242, 201, 76, 0.14);
           --white: #f5f2e9;
           --muted: #aaa395;
-          --card: rgba(16, 16, 16, 0.82);
-          --lane-clear: 68px;
           position: relative;
+          min-height: 100vh;
           width: 100%;
           isolation: isolate;
-          min-height: 100vh;
-          margin: 0;
-          padding-top: 0;
-          overflow-x: clip;
           color: var(--white);
+          background: linear-gradient(180deg, #191919 0%, #101010 48%, #080808 100%);
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
-          background:
-            radial-gradient(ellipse at 18% 9%, rgba(255, 255, 255, 0.052), transparent 15rem),
-            radial-gradient(ellipse at 84% 19%, rgba(255, 255, 255, 0.026), transparent 20rem),
-            radial-gradient(ellipse at 28% 47%, rgba(0, 0, 0, 0.38), transparent 24rem),
-            radial-gradient(ellipse at 72% 72%, rgba(255, 255, 255, 0.031), transparent 18rem),
-            radial-gradient(ellipse at 48% 94%, rgba(0, 0, 0, 0.46), transparent 26rem),
-            linear-gradient(180deg, #1d1d1d 0%, #101010 48%, #070707 100%);
         }
 
         .roadMain,
@@ -149,408 +140,30 @@ export default function Home() {
           box-sizing: border-box;
         }
 
-        .roadMain::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          pointer-events: none;
-          background:
-            radial-gradient(circle, rgba(255, 255, 255, 0.22) 0 0.55px, transparent 0.9px),
-            radial-gradient(circle, rgba(255, 255, 255, 0.13) 0 0.75px, transparent 1.15px),
-            radial-gradient(circle, rgba(0, 0, 0, 0.82) 0 1px, transparent 1.45px),
-            radial-gradient(circle, rgba(255, 255, 255, 0.08) 0 1px, transparent 1.35px),
-            radial-gradient(ellipse at 22% 18%, rgba(255, 255, 255, 0.07), transparent 15rem),
-            radial-gradient(ellipse at 66% 39%, rgba(0, 0, 0, 0.44), transparent 19rem),
-            radial-gradient(ellipse at 41% 78%, rgba(255, 255, 255, 0.045), transparent 17rem),
-            repeating-conic-gradient(from 18deg, rgba(255, 255, 255, 0.032) 0 7deg, rgba(0, 0, 0, 0.28) 7deg 18deg);
-          background-position: 0 0, 2px 3px, 4px 1px, 7px 6px, 0 0, 0 0, 0 0, 0 0;
-          background-size: 4px 4px, 7px 7px, 5px 5px, 11px 11px, 100% 900px, 100% 760px, 100% 840px, 19px 19px;
-          opacity: 0.76;
-          filter: contrast(1.62) brightness(0.78);
-        }
-
+        .roadMain::before,
         .roadMain::after {
           content: '';
           position: absolute;
           inset: 0;
           z-index: 0;
           pointer-events: none;
+        }
+
+        .roadMain::before {
           background:
-            radial-gradient(ellipse at 12% 28%, rgba(0, 0, 0, 0.46), transparent 24rem),
-            radial-gradient(ellipse at 82% 52%, rgba(255, 255, 255, 0.034), transparent 20rem),
-            radial-gradient(ellipse at 50% 84%, rgba(0, 0, 0, 0.5), transparent 28rem),
-            radial-gradient(circle at 50% 50%, transparent 0 34%, rgba(0, 0, 0, 0.42) 82%),
-            linear-gradient(90deg, rgba(0, 0, 0, 0.24), transparent 22% 78%, rgba(0, 0, 0, 0.24));
-          opacity: 0.88;
+            radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 0.55px, transparent 0.9px),
+            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.3px),
+            radial-gradient(ellipse at 50% 15%, rgba(255, 255, 255, 0.04), transparent 34rem);
+          background-position: 0 0, 3px 2px, 0 0;
+          background-size: 5px 5px, 8px 8px, 100% 900px;
+          opacity: 0.36;
         }
 
-        .roadMain a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .roadMap {
-          position: relative;
-          z-index: 1;
-          width: 100%;
-          margin: 0 auto;
-          padding: 0 max(20px, calc((100% - 1180px) / 2)) 120px;
-        }
-
-        .centerRoadLine {
-          position: absolute;
-          top: 0;
-          bottom: -470px;
-          left: 50%;
-          width: 18px;
-          transform: translateX(-50%);
+        .roadMain::after {
           background:
-            repeating-linear-gradient(
-              180deg,
-              transparent 0 28px,
-              var(--paint) 28px 82px,
-              transparent 82px 122px
-            );
-          opacity: 0.96;
-        }
-
-        .intersectionHero {
-          position: relative;
-          min-height: 560px;
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
-          align-items: center;
-          padding: 156px 0 90px;
-        }
-
-        .heroPanel {
-          position: relative;
-          z-index: 2;
-          grid-column: 1;
-          justify-self: end;
-          width: min(500px, 100%);
-          margin-right: 56px;
-          padding: clamp(28px, 5vw, 56px);
-          text-align: left;
-          border: 1px solid rgba(245, 242, 233, 0.14);
-          background:
-            linear-gradient(180deg, rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.82)),
-            repeating-linear-gradient(12deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 8px);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.12),
-            0 40px 100px rgba(0, 0, 0, 0.5);
-        }
-
-        .roadLabel {
-          margin: 0 0 14px;
-          color: var(--paint);
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-        }
-
-        .heroPanel h1 {
-          margin: 0;
-          font-size: clamp(54px, 10vw, 122px);
-          line-height: 0.82;
-          letter-spacing: -0.08em;
-          text-transform: none;
-        }
-
-        .heroPanel p:last-child {
-          max-width: 560px;
-          margin: 26px 0 0;
-          color: #d0cabd;
-          font-size: clamp(17px, 1.8vw, 21px);
-          line-height: 1.55;
-        }
-
-        .routeStops {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          gap: 96px;
-          padding: 30px 0 110px;
-        }
-
-        .routeStop {
-          position: relative;
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
-          align-items: center;
-        }
-
-        .routeStop.left .stopCard {
-          grid-column: 1;
-        }
-
-        .routeStop.right .stopCard {
-          grid-column: 3;
-        }
-
-        .stopCard,
-        .projectCard {
-          position: relative;
-          padding: 28px;
-          border: 1px solid rgba(245, 242, 233, 0.13);
-          background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
-            rgba(10, 10, 10, 0.84);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.09),
-            0 26px 70px rgba(0, 0, 0, 0.38);
-        }
-
-        .stopCard::before,
-        .projectCard::before {
-          content: '';
-          position: absolute;
-          inset: 12px;
-          border: 1px dashed rgba(242, 201, 76, 0.18);
-          pointer-events: none;
-        }
-
-        .stopCard h2,
-        .sectionIntro h2,
-        .projectCard h3 {
-          margin: 0;
-          text-transform: none;
-          letter-spacing: -0.04em;
-        }
-
-        .stopCard h2 {
-          font-size: clamp(30px, 4.6vw, 56px);
-          line-height: 0.95;
-        }
-
-        .stopCard p {
-          margin: 18px 0 0;
-          color: #c7c0b3;
-          font-size: 17px;
-          line-height: 1.62;
-        }
-
-        .roadButton {
-          min-height: 42px;
-          display: inline-flex;
-          align-items: center;
-          margin-top: 24px;
-          padding: 0 18px;
-          border: 1px solid rgba(242, 201, 76, 0.5);
-          color: #171717;
-          background: var(--paint);
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          transition: transform 0.2s ease, filter 0.2s ease;
-        }
-
-        .roadButton:hover,
-        .roadButton:focus-visible {
-          transform: translateY(-2px);
-          filter: brightness(1.08);
-          outline: none;
-        }
-
-        .projectsSection {
-          position: relative;
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
-          align-items: start;
-          gap: 0;
-          padding: 90px 0 20px;
-        }
-
-        .stopSignWrap {
-          position: relative;
-          z-index: 3;
-          width: min(1180px, calc(100% - 40px));
-          margin: 0 auto -170px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: flex-start;
-          padding: 40px 0 0;
-        }
-
-        .stopSignMarker {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0;
-        }
-
-        .stopSignImage {
-          display: block;
-          width: 150px;
-          height: auto;
-          object-fit: contain;
-          filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.32));
-        }
-
-        .stopSignPole {
-          width: 10px;
-          height: 260px;
-          background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
-          box-shadow:
-            inset 2px 0 0 rgba(255, 255, 255, 0.22),
-            inset -2px 0 0 rgba(0, 0, 0, 0.18);
-        }
-
-        .sectionIntro {
-          grid-column: 1;
-          justify-self: end;
-          width: min(500px, 100%);
-          margin: 0 56px 0 0;
-          text-align: right;
-        }
-
-        .sectionIntro h2 {
-          font-size: clamp(38px, 6vw, 78px);
-          line-height: 0.92;
-        }
-
-        .sectionIntro p:last-child {
-          max-width: 560px;
-          margin: 20px 0 0 auto;
-          color: #c7c0b3;
-          font-size: 18px;
-          line-height: 1.55;
-        }
-
-        .projectGrid {
-          grid-column: 3;
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 18px;
-        }
-
-        .projectCard span {
-          color: var(--paint);
-          font-size: 11px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-        }
-
-        .projectCard h3 {
-          margin-top: 0;
-          font-size: clamp(22px, 2.5vw, 32px);
-          line-height: 1;
-        }
-
-        .projectCard p {
-          margin: 16px 0 0;
-          color: #c7c0b3;
-          font-size: 16px;
-          line-height: 1.55;
-        }
-
-        .projectCardLink {
-          display: block;
-          transition: transform 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
-        }
-
-        .projectCardLink:hover,
-        .projectCardLink:focus-visible {
-          transform: translateY(-3px);
-          border-color: rgba(242, 201, 76, 0.5);
-          filter: brightness(1.05);
-          outline: none;
-        }
-
-        .projectCardCta {
-          display: inline-block;
-          margin-top: 20px;
-          color: var(--paint);
-          font-size: 11px;
-          font-weight: 900;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-        }
-
-        .siteFeaturesSection,
-        .contactSection {
-          position: relative;
-          padding: 90px 0 20px;
-        }
-
-        .contentSection {
-          position: relative;
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
-          padding: 90px 0 20px;
-        }
-
-        .contentSectionLeft .contentCard {
-          grid-column: 1;
-        }
-
-        .contentSectionRight .contentCard {
-          grid-column: 3;
-        }
-
-        .contentCard {
-          width: min(560px, 100%);
-          padding: clamp(28px, 5vw, 48px);
-          border: 1px solid rgba(245, 242, 233, 0.13);
-          background: rgba(10, 10, 10, 0.84);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
-        }
-
-        .contentCard h2 {
-          margin: 0;
-          font-size: clamp(38px, 6vw, 72px);
-          line-height: 0.95;
-          letter-spacing: -0.05em;
-          text-transform: none;
-        }
-
-        .contentCard h3 {
-          margin: 34px 0 0;
-          color: var(--paint);
-          font-size: clamp(22px, 3vw, 32px);
-          line-height: 1;
-          text-transform: uppercase;
-        }
-
-        .contentCard p {
-          margin: 22px 0 0;
-          color: #c7c0b3;
-          font-size: 17px;
-          line-height: 1.6;
-        }
-
-        .contentCard .contentEmphasis {
-          margin-top: 10px;
-          color: var(--white);
-          font-weight: 800;
-        }
-
-        .contentCard .contentDate {
-          margin-top: 8px;
-          color: var(--paint);
-          font-weight: 800;
-        }
-
-        .technologyList {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          padding: 0;
-          margin: 28px 0 0;
-          list-style: none;
-        }
-
-        .technologyList li {
-          padding: 10px 12px;
-          border: 1px solid rgba(242, 201, 76, 0.34);
-          color: var(--white);
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.08em;
+            radial-gradient(ellipse at 50% 42%, transparent 0 38%, rgba(0, 0, 0, 0.28) 100%),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 20% 80%, rgba(0, 0, 0, 0.18));
+          opacity: 0.76;
         }
 
         .roadMain > header[data-road-stripes='true'] {
@@ -562,32 +175,60 @@ export default function Home() {
           background-size: 6px 6px, 8px 8px, 100% 100%;
         }
 
-        .roadMain > header[data-road-stripes='true'] a:first-child {
-          transform: translateY(4px);
+        .roadMap {
+          position: relative;
+          z-index: 1;
+          width: min(1180px, calc(100% - 40px));
+          margin: 0 auto;
+          padding: 0 0 28px;
+        }
+
+        .centerRoadLine {
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          bottom: -72px;
+          left: 50%;
+          width: 18px;
+          pointer-events: none;
+          transform: translateX(-50%);
+          background: repeating-linear-gradient(
+            180deg,
+            transparent 0 28px,
+            var(--paint) 28px 82px,
+            transparent 82px 122px
+          );
+          opacity: 0.96;
+        }
+
+        section {
+          position: relative;
+          z-index: 1;
+          min-width: 0;
         }
 
         .intersectionHero {
-          min-height: 610px;
+          display: grid;
+          grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.7fr);
+          column-gap: clamp(48px, 8vw, 130px);
           align-items: end;
-          padding-top: 178px;
-          padding-bottom: 128px;
+          min-height: 640px;
+          padding-block: clamp(130px, 13vw, 176px) clamp(110px, 11vw, 146px);
         }
 
-        .heroPanel {
-          width: min(600px, calc(100% - 56px));
-          margin-right: 56px;
-          padding: 0 0 0 28px;
-          border: 0;
+        .heroIntro {
+          min-width: 0;
+          width: 100%;
+          padding-left: 28px;
           border-left: 6px solid var(--paint);
           background: linear-gradient(90deg, rgba(8, 8, 8, 0.6), transparent 92%);
-          box-shadow: none;
         }
 
         .heroKicker,
         .sectionIndex,
-        .projectItemMeta,
-        .heroMeta {
-          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
+        .heroMeta,
+        .projectItemCategory {
+          color: var(--paint-muted);
           font-size: 11px;
           font-weight: 900;
           letter-spacing: 0.18em;
@@ -599,18 +240,15 @@ export default function Home() {
           margin-bottom: 24px;
         }
 
-        .heroPanel h1 {
+        .heroIntro h1 {
           display: flex;
           flex-direction: column;
-          gap: 0;
-          max-width: 520px;
-          font-size: clamp(58px, 8vw, 108px);
+          max-width: 760px;
+          margin: 0;
+          color: var(--white);
+          font-size: clamp(64px, 9vw, 130px);
           line-height: 0.86;
           letter-spacing: -0.055em;
-        }
-
-        .heroPanel h1 span:last-child {
-          color: var(--white);
         }
 
         .heroRule,
@@ -621,62 +259,69 @@ export default function Home() {
           background: var(--paint);
         }
 
-        .heroPanel p:last-child {
-          max-width: 420px;
-          margin-top: 24px;
+        .heroIntro p {
+          max-width: 540px;
+          margin: 24px 0 0;
           color: #c7c0b3;
+          font-size: clamp(16px, 1.8vw, 20px);
+          line-height: 1.55;
         }
 
         .heroMeta {
-          grid-column: 3;
-          align-self: end;
-          justify-self: start;
-          width: min(330px, 100%);
-          margin-left: 56px;
           display: grid;
           gap: 18px;
+          min-width: 0;
           padding: 0 0 8px 18px;
           border-left: 1px solid var(--paint-soft);
           line-height: 1.35;
         }
 
-        .heroMeta span {
-          display: block;
-        }
-
-        .projectsSection {
-          padding-top: 142px;
-          padding-bottom: 52px;
+        .projectsSection,
+        .contentSection {
+          padding-block: clamp(100px, 10vw, 150px);
         }
 
         .sectionIntro {
-          align-self: start;
-          margin-top: 14px;
+          min-width: 0;
+          margin-bottom: 38px;
+        }
+
+        .sectionIndex {
+          display: block;
+          margin: 0 0 22px;
+          font-size: 11px;
         }
 
         .sectionIntro h2 {
-          font-size: clamp(44px, 7vw, 88px);
+          max-width: 100%;
+          margin: 0;
+          font-size: clamp(42px, 5vw, 72px);
+          line-height: 0.9;
           letter-spacing: -0.06em;
+          text-transform: none;
         }
 
-        .sectionIntro p:last-child {
-          max-width: 300px;
-          margin-top: 26px;
-          font-size: 14px;
+        .sectionIntro p,
+        .directoryBlock > p {
+          max-width: 620px;
+          margin: 16px 0 0;
+          color: #c7c0b3;
+          font-size: 16px;
+          line-height: 1.55;
         }
 
         .projectList {
-          grid-column: 3;
-          width: min(570px, calc(100% - 56px));
-          margin-left: 56px;
+          width: 100%;
+          min-width: 0;
         }
 
         .projectItem {
-          position: relative;
           display: block;
-          padding: 28px 0 32px;
+          min-width: 0;
+          padding: 30px 0 34px;
           border-top: 1px solid rgba(245, 242, 233, 0.24);
-          background: transparent;
+          color: inherit;
+          text-decoration: none;
           transition: transform 220ms ease, border-color 220ms ease;
         }
 
@@ -686,34 +331,57 @@ export default function Home() {
 
         .projectItem:hover,
         .projectItem:focus-visible {
-          transform: translateX(8px);
           border-color: var(--paint);
           outline: none;
+          transform: translateX(6px);
         }
 
-        .projectItemMeta {
+        .projectItemTop {
           display: flex;
           align-items: baseline;
           justify-content: space-between;
-          gap: 18px;
-          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
+          gap: 24px;
+          min-width: 0;
         }
 
-        .projectItemMeta span:first-child {
+        .projectItemNumber {
+          flex: 0 0 auto;
           color: var(--paint);
           font-size: 34px;
+          font-weight: 900;
           letter-spacing: -0.04em;
         }
 
+        .projectItemCategory {
+          min-width: 0;
+          overflow-wrap: anywhere;
+          text-align: right;
+        }
+
+        .projectItemMain {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: end;
+          gap: 24px 48px;
+          min-width: 0;
+          margin-top: 10px;
+        }
+
+        .projectItemCopy {
+          min-width: 0;
+        }
+
         .projectItem h3 {
-          margin: 14px 0 0;
-          font-size: clamp(28px, 4vw, 48px);
+          min-width: 0;
+          margin: 0;
+          overflow-wrap: anywhere;
+          font-size: clamp(25px, 3vw, 42px);
           line-height: 0.96;
           letter-spacing: -0.055em;
         }
 
         .projectItem p {
-          max-width: 460px;
+          max-width: 700px;
           margin: 16px 0 0;
           color: #b8b1a5;
           font-size: 15px;
@@ -722,13 +390,15 @@ export default function Home() {
 
         .projectItemCta {
           display: inline-flex;
+          flex: 0 0 auto;
           gap: 8px;
-          margin-top: 22px;
+          margin: 0;
           color: var(--paint);
           font-size: 11px;
           font-weight: 900;
           letter-spacing: 0.14em;
           text-transform: uppercase;
+          white-space: nowrap;
         }
 
         .projectItemCta span {
@@ -740,533 +410,13 @@ export default function Home() {
           transform: translateX(5px);
         }
 
-        .contentSection {
-          padding-top: 154px;
-          padding-bottom: 50px;
-        }
-
-        .editorialBlock,
-        .timelineBlock,
-        .directoryBlock {
-          position: relative;
-          width: min(560px, 100%);
-        }
-
         .editorialBlock {
-          grid-column: 1;
-          justify-self: end;
-          width: min(560px, calc(100% - 56px));
-          margin-right: 56px;
-        }
-
-        .sectionIndex {
-          display: block;
-          margin-bottom: 24px;
-        }
-
-        .editorialBlock h2,
-        .timelineBlock h2,
-        .directoryBlock h2 {
-          margin: 0;
-          font-size: clamp(46px, 7vw, 86px);
-          line-height: 0.86;
-          letter-spacing: -0.06em;
-          text-transform: uppercase;
-        }
-
-        .editorialBlock h2 span {
-          display: block;
-        }
-
-        .editorialBlock p,
-        .timelineBlock p,
-        .directoryBlock > p {
-          max-width: 560px;
-          margin: 24px 0 0;
-          color: #c7c0b3;
-          font-size: 17px;
-          line-height: 1.62;
-        }
-
-        .timelineBlock {
-          grid-column: 3;
-          width: min(560px, calc(100% - 56px));
-          margin-left: 56px;
-          padding-left: 28px;
-          border-left: 1px solid rgba(242, 201, 76, 0.45);
-        }
-
-        .timelineTrack {
-          position: absolute;
-          top: 88px;
-          bottom: 0;
-          left: -5px;
-          width: 9px;
-          background: var(--paint);
-          clip-path: polygon(0 0, 100% 0, 100% 8px, 0 8px, 0 50%, 100% 50%, 100% calc(50% + 8px), 0 calc(50% + 8px), 0 100%, 100% 100%, 100% calc(100% - 8px), 0 calc(100% - 8px));
-        }
-
-        .timelineEntry {
-          position: relative;
-          display: grid;
-          grid-template-columns: 82px minmax(0, 1fr);
-          gap: 18px;
-          margin-top: 56px;
-        }
-
-        .timelineEntry strong {
-          color: var(--paint);
-          font-size: 30px;
-          line-height: 1;
-          letter-spacing: -0.04em;
-        }
-
-        .timelineEntry h3 {
-          margin: 0;
-          font-size: clamp(20px, 3vw, 30px);
-          line-height: 1;
-          text-transform: uppercase;
-        }
-
-        .timelineEntry p {
-          margin-top: 10px;
-          font-size: 15px;
-        }
-
-        .timelineEntry .contentEmphasis {
-          color: var(--white);
-          font-weight: 800;
-        }
-
-        .timelineEntry .contentDate {
-          color: var(--paint);
-          font-weight: 800;
-        }
-
-        .timelineEntryEnd {
-          margin-top: 48px;
-        }
-
-        .directoryBlock {
-          grid-column: 1;
-          justify-self: end;
-          width: min(560px, calc(100% - 56px));
-          margin-right: 56px;
-        }
-
-        .technologyDirectory {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          margin: 34px 0 0;
-          padding: 0;
-          list-style: none;
-          border-top: 1px solid rgba(245, 242, 233, 0.24);
-        }
-
-        .technologyDirectory li {
-          display: flex;
-          align-items: baseline;
-          gap: 12px;
+          width: min(780px, calc(50% - 56px));
           min-width: 0;
-          padding: 14px 8px 14px 0;
-          border-bottom: 1px solid rgba(245, 242, 233, 0.24);
-          color: var(--white);
-          font-size: clamp(17px, 2vw, 24px);
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          text-transform: uppercase;
-        }
-
-        .technologyDirectory li:nth-child(even) {
-          padding-left: 18px;
-          border-left: 1px solid rgba(245, 242, 233, 0.18);
-        }
-
-        .technologyDirectory li span {
-          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
-          font-size: 10px;
-          letter-spacing: 0.1em;
-        }
-
-        .siteFeaturesIntro,
-        .contactCard {
-          max-width: 780px;
-          margin: 0 auto;
-        }
-
-        .siteFeaturesIntro {
-          text-align: center;
-        }
-
-        .siteFeaturesIntro h2,
-        .contactCard h2 {
-          margin: 0;
-          font-size: clamp(38px, 6vw, 72px);
-          line-height: 0.95;
-          letter-spacing: -0.05em;
-          text-transform: uppercase;
-        }
-
-        .contactCard h2 {
-          font-size: clamp(24px, 3vw, 38px);
-          letter-spacing: 0.02em;
-        }
-
-        .siteFeaturesIntro > p:last-child,
-        .contactCard > p {
-          color: #c7c0b3;
-          font-size: 17px;
-          line-height: 1.6;
-        }
-
-        .siteFeatureGrid {
-          width: min(920px, 100%);
-          margin: 34px auto 0;
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 18px;
-        }
-
-        .contactCard {
-          padding: clamp(28px, 5vw, 48px);
-          border: 1px solid rgba(245, 242, 233, 0.13);
-          background: rgba(10, 10, 10, 0.84);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
-        }
-
-        .contactDetails {
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 10px 22px;
-          margin-top: 24px;
-        }
-
-        .contactLink {
-          color: var(--paint);
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-        }
-
-        .contactLink:hover,
-        .contactLink:focus-visible {
-          color: var(--white);
-          outline: none;
-        }
-
-        .placeholderNotice {
-          margin-top: 18px !important;
-          color: #8d8678 !important;
-          font-size: 12px !important;
-        }
-
-        .roadFooter {
-          position: relative;
-          z-index: 1;
-          width: min(1180px, calc(100% - 40px));
-          min-height: 90px;
-          margin: 0 auto;
-          padding-left: 190px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-          color: #8d8678;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-        }
-
-        @media (max-width: 860px) {
-          .roadMap {
-            width: 100%;
-            padding-inline: 14px;
-          }
-
-          .centerRoadLine {
-            left: 24px;
-          }
-
-          .intersectionHero {
-            min-height: 500px;
-            display: block;
-            padding: 132px 0 72px;
-          }
-
-          .heroPanel {
-            margin-left: 54px;
-            margin-right: 0;
-            text-align: left;
-          }
-
-          .heroPanel p:last-child {
-            margin-left: 0;
-          }
-
-          .routeStops {
-            gap: 58px;
-          }
-
-          .routeStop {
-            display: block;
-            padding-left: 82px;
-          }
-
-          .projectsSection {
-            display: block;
-            padding-top: 70px;
-          }
-
-          .sectionIntro {
-            width: auto;
-            margin: 0 0 34px 82px;
-            text-align: left;
-          }
-
-          .sectionIntro p:last-child {
-            margin-left: 0;
-          }
-
-          .projectGrid {
-            grid-template-columns: 1fr;
-            margin-left: 82px;
-          }
-
-          .siteFeaturesSection,
-          .contactSection,
-          .contentSection {
-            padding-left: 82px;
-          }
-
-          .contentSection {
-            display: block;
-          }
-
-          .contentCard {
-            width: 100%;
-          }
-
-          .siteFeatureGrid {
-            grid-template-columns: 1fr;
-          }
-
-          .roadFooter {
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            padding-left: 174px;
-          }
-        }
-
-        @media (max-width: 520px) {
-          .roadFooter {
-            width: min(100% - 28px, 420px);
-          }
-
-          .heroPanel {
-            margin-left: 58px;
-            padding: 24px;
-          }
-
-          .routeStop,
-          .sectionIntro,
-          .projectGrid,
-          .siteFeaturesSection,
-          .contactSection {
-            margin-left: 0;
-            padding-left: 70px;
-          }
-
-          .heroPanel h1 {
-            font-size: clamp(44px, 17vw, 72px);
-          }
-
-          .stopCard,
-          .projectCard {
-            padding: 24px;
-          }
-
-          .stopSignWrap {
-            width: min(100% - 28px, 420px);
-            margin-bottom: -150px;
-            padding: 28px 0 0;
-          }
-
-          .stopSignImage {
-            width: 112px;
-          }
-
-          .stopSignPole {
-            width: 8px;
-            height: 210px;
-          }
-
-          .centerRoadLine {
-            bottom: -380px;
-          }
-
-          .roadFooter {
-            padding-left: 128px;
-          }
-        }
-
-        .roadMain {
-          background: linear-gradient(180deg, #191919 0%, #101010 48%, #080808 100%);
-        }
-
-        .roadMain::before {
-          background:
-            radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 0.55px, transparent 0.9px),
-            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.3px),
-            radial-gradient(ellipse at 50% 15%, rgba(255, 255, 255, 0.04), transparent 34rem);
-          background-position: 0 0, 3px 2px, 0 0;
-          background-size: 5px 5px, 8px 8px, 100% 900px;
-          opacity: 0.36;
-          filter: none;
-        }
-
-        .roadMain::after {
-          background:
-            radial-gradient(ellipse at 50% 42%, transparent 0 38%, rgba(0, 0, 0, 0.28) 100%),
-            linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 20% 80%, rgba(0, 0, 0, 0.18));
-          opacity: 0.76;
-        }
-
-        .roadMap {
-          padding-bottom: 24px;
-        }
-
-        .centerRoadLine {
-          bottom: -80px;
-        }
-
-        .intersectionHero {
-          grid-template-columns: minmax(0, 1.55fr) 150px minmax(240px, 0.75fr);
-          min-height: 640px;
-          padding: 176px 0 146px;
-        }
-
-        .heroPanel {
-          width: min(760px, calc(100% - 40px));
-          margin-right: 0;
-        }
-
-        .heroPanel h1 {
-          font-size: clamp(64px, 9vw, 130px);
-        }
-
-        .heroPanel p:last-child {
-          max-width: 540px;
-        }
-
-        .heroMeta {
-          margin-left: 36px;
-        }
-
-        .projectsSection {
-          display: block;
-          padding: 152px 0 54px;
-        }
-
-        .sectionIntro {
-          width: 100%;
-          margin: 0 0 32px;
-          text-align: left;
-        }
-
-        .sectionIntro h2 {
-          font-size: clamp(42px, 5vw, 72px);
-        }
-
-        .sectionIntro p:last-child {
-          max-width: 620px;
-          margin: 16px 0 0;
-        }
-
-        .projectList {
-          width: 100%;
-          margin-left: 0;
-        }
-
-        .projectItem {
-          padding: 30px 0 34px;
-        }
-
-        .projectItemTop {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 24px;
-        }
-
-        .projectItemNumber {
-          color: var(--paint);
-          font-size: 34px;
-          font-weight: 900;
-          letter-spacing: -0.04em;
-        }
-
-        .projectItemCategory {
-          color: var(--paint-muted);
-          font-size: 11px;
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-        }
-
-        .projectItemMain {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
-          align-items: end;
-          gap: 28px;
-          margin-top: 10px;
-        }
-
-        .projectItem h3 {
-          margin-top: 0;
-          font-size: clamp(25px, 3vw, 42px);
-        }
-
-        .projectItem p {
-          max-width: 700px;
-        }
-
-        .projectItemCta {
-          margin-top: 0;
-          white-space: nowrap;
-        }
-
-        .contentSection {
-          display: block;
-          padding: 178px 0 70px;
-        }
-
-        .editorialBlock,
-        .timelineBlock,
-        .directoryBlock {
-          width: 100%;
-          margin: 0;
-        }
-
-        .editorialBlock {
-          max-width: 800px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        .editorialBlock h2,
-        .timelineBlock h2,
-        .directoryBlock h2 {
-          font-size: 12px;
-          line-height: 1.2;
-          letter-spacing: 0.18em;
         }
 
         .aboutLead {
-          max-width: 800px;
+          max-width: 780px;
           margin-top: 22px;
           color: var(--white);
           font-size: clamp(22px, 3vw, 38px);
@@ -1274,19 +424,18 @@ export default function Home() {
           letter-spacing: -0.025em;
         }
 
-        .editorialBlock .editorialRule {
-          margin-top: 30px;
-        }
-
         .editorialBlock p {
           max-width: 680px;
-          margin-top: 24px;
+          margin: 24px 0 0;
+          color: #c7c0b3;
           font-size: 16px;
+          line-height: 1.62;
         }
 
-        .timelineBlock {
-          padding: 0;
-          border: 0;
+        .timelineBlock,
+        .directoryBlock {
+          width: 100%;
+          min-width: 0;
         }
 
         .timelineScale {
@@ -1331,8 +480,8 @@ export default function Home() {
         }
 
         .timelineDetails {
-          margin: 32px 0 0 9%;
           max-width: 720px;
+          margin: 36px 0 0 9%;
         }
 
         .timelineDetails h3 {
@@ -1357,247 +506,171 @@ export default function Home() {
         }
 
         .technologyDirectory {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          margin-top: 36px;
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          width: 100%;
+          margin: 36px 0 0;
+          padding: 0;
+          list-style: none;
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
         }
 
-        .technologyDirectory li,
-        .technologyDirectory li:nth-child(even) {
+        .technologyDirectory li {
+          display: flex;
+          align-items: baseline;
+          gap: 12px;
+          min-width: 0;
           min-height: 90px;
           padding: 18px 14px 16px 0;
-          border-left: 0;
+          border-bottom: 1px solid rgba(245, 242, 233, 0.24);
+          color: var(--white);
         }
 
-        .technologyDirectory li:nth-child(3n + 2),
-        .technologyDirectory li:nth-child(3n + 3) {
+        .technologyDirectory li:nth-child(4n + 2),
+        .technologyDirectory li:nth-child(4n + 3),
+        .technologyDirectory li:nth-child(4n + 4) {
           padding-left: 18px;
           border-left: 1px solid rgba(245, 242, 233, 0.18);
         }
 
         .technologyDirectory li span {
+          flex: 0 0 auto;
           align-self: start;
+          color: var(--paint-muted);
+          font-size: 10px;
+          letter-spacing: 0.1em;
+        }
+
+        .technologyDirectory li strong {
+          min-width: 0;
+          overflow-wrap: anywhere;
+          font-size: clamp(16px, 2vw, 24px);
+          line-height: 1.05;
+          letter-spacing: -0.03em;
         }
 
         .stopSignWrap {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          justify-content: flex-start;
           width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          justify-content: center;
-          padding: 58px 0 96px;
+          padding: 72px 0 110px;
+        }
+
+        .stopSignMarker {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+          margin-left: clamp(70px, 13vw, 170px);
         }
 
         .stopSignImage {
+          display: block;
           width: 132px;
+          height: auto;
+          object-fit: contain;
+          filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.32));
         }
 
-        @media (max-width: 860px) {
-          .intersectionHero {
-            min-height: 590px;
-            padding: 126px 0 92px;
+        .stopSignPole {
+          width: 10px;
+          height: 220px;
+          background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
+          box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.22), inset -2px 0 0 rgba(0, 0, 0, 0.18);
+        }
+
+        @media (max-width: 1200px) {
+          .technologyDirectory {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
           }
 
-          .heroPanel {
-            width: auto;
-            margin-left: 54px;
-            margin-right: 0;
-          }
-
-          .heroMeta {
-            display: grid;
-            grid-column: auto;
-            width: auto;
-            margin: 44px 0 0 82px;
-          }
-
-          .projectList {
-            width: auto;
-            margin-left: 82px;
-          }
-
-          .editorialBlock,
-          .timelineBlock,
-          .directoryBlock {
-            width: auto;
-            margin-right: 0;
-            margin-left: 82px;
-          }
-
-          .contentSection {
+          .technologyDirectory li:nth-child(4n + 2),
+          .technologyDirectory li:nth-child(4n + 3),
+          .technologyDirectory li:nth-child(4n + 4) {
             padding-left: 0;
+            border-left: 0;
           }
 
-          .contentSection .contentCard {
-            width: calc(100% - 82px);
-            margin-left: 82px;
-          }
-
-          .timelineBlock {
-            padding-left: 24px;
-          }
-        }
-
-        @media (max-width: 520px) {
-          .roadMain > header[data-road-stripes='true'] a:first-child {
-            transform: translateY(2px);
-          }
-
-          .intersectionHero {
-            min-height: 580px;
-            padding-top: 112px;
-          }
-
-          .heroPanel {
-            margin-left: 58px;
+          .technologyDirectory li:nth-child(3n + 2),
+          .technologyDirectory li:nth-child(3n + 3) {
             padding-left: 18px;
-          }
-
-          .heroKicker,
-          .sectionIndex,
-          .projectItemMeta,
-          .heroMeta {
-            font-size: 9px;
-            letter-spacing: 0.14em;
-          }
-
-          .heroPanel h1 {
-            font-size: clamp(48px, 17vw, 76px);
-          }
-
-          .heroPanel p:last-child {
-            font-size: 15px;
-          }
-
-          .heroMeta {
-            margin-left: 70px;
-          }
-
-          .projectList,
-          .editorialBlock,
-          .timelineBlock,
-          .directoryBlock {
-            margin-left: 70px;
-          }
-
-          .contentSection .contentCard {
-            width: calc(100% - 70px);
-            margin-left: 70px;
-          }
-
-          .projectItem {
-            padding-top: 24px;
-            padding-bottom: 26px;
-          }
-
-          .projectItemMeta span:first-child {
-            font-size: 28px;
-          }
-
-          .projectItem h3 {
-            font-size: clamp(25px, 8vw, 36px);
-          }
-
-          .projectItem p,
-          .editorialBlock p,
-          .timelineBlock p,
-          .directoryBlock > p {
-            font-size: 15px;
-          }
-
-          .editorialBlock h2,
-          .timelineBlock h2,
-          .directoryBlock h2 {
-            font-size: clamp(36px, 11vw, 52px);
-            overflow-wrap: anywhere;
-          }
-
-          .timelineEntry {
-            grid-template-columns: 62px minmax(0, 1fr);
-            gap: 12px;
-          }
-
-          .timelineEntry strong {
-            font-size: 24px;
-          }
-
-          .technologyDirectory li {
-            gap: 7px;
-            padding-right: 4px;
-            font-size: 15px;
-          }
-
-          .technologyDirectory li:nth-child(even) {
-            padding-left: 10px;
+            border-left: 1px solid rgba(245, 242, 233, 0.18);
           }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-          .projectItem,
-          .projectItemCta span {
-            transition: none;
+        @media (max-width: 980px) {
+          .intersectionHero {
+            grid-template-columns: 1fr;
+            row-gap: 42px;
+          }
+
+          .heroMeta {
+            width: min(420px, 100%);
+            margin-left: 28px;
           }
         }
 
-        @media (max-width: 860px) {
+        @media (max-width: 760px) {
           .roadMap {
-            padding-inline: 14px;
+            width: calc(100% - 28px);
           }
 
           .centerRoadLine {
             left: 14px;
             width: 5px;
+            transform: none;
           }
 
           .intersectionHero {
-            min-height: 620px;
             display: block;
-            padding: 126px 0 92px;
+            min-height: 0;
+            padding-block: 118px 96px;
           }
 
-          .heroPanel {
-            width: auto;
-            margin: 0 0 0 40px;
+          .heroIntro {
+            width: calc(100% - 40px);
+            margin-left: 40px;
             padding-left: 18px;
           }
 
-          .heroPanel h1 {
-            font-size: clamp(54px, 16vw, 88px);
+          .heroIntro h1 {
+            font-size: clamp(52px, 16vw, 88px);
           }
 
           .heroMeta {
             width: auto;
-            margin: 46px 0 0 40px;
+            margin: 44px 0 0 40px;
           }
 
-          .projectsSection {
-            padding-top: 124px;
+          .projectsSection,
+          .contentSection {
+            padding-block: 112px 84px;
+            padding-left: 40px;
           }
 
           .sectionIntro,
-          .projectList {
-            width: auto;
-            margin-left: 40px;
-          }
-
-          .sectionIntro {
-            margin-bottom: 24px;
-          }
-
-          .projectItemMain {
-            display: block;
-          }
-
-          .projectItemCta {
-            margin-top: 20px;
-          }
-
-          .contentSection {
-            padding: 132px 0 54px 40px;
-          }
-
+          .projectList,
           .editorialBlock,
           .timelineBlock,
           .directoryBlock {
             width: 100%;
-            margin: 0;
+            margin-left: 0;
+          }
+
+          .sectionIntro {
+            margin-bottom: 28px;
+          }
+
+          .projectItemMain {
+            grid-template-columns: 1fr;
+            gap: 0;
+          }
+
+          .projectItemCta {
+            margin-top: 20px;
           }
 
           .timelineScale {
@@ -1617,11 +690,16 @@ export default function Home() {
 
           .timelineLine::before,
           .timelineLine::after {
+            top: auto;
             left: 50%;
             right: auto;
             width: 10px;
             height: 10px;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
+          }
+
+          .timelineLine::before {
+            top: 0;
           }
 
           .timelineLine::after {
@@ -1629,7 +707,7 @@ export default function Home() {
           }
 
           .timelineDetails {
-            margin: 26px 0 0;
+            margin: 36px 0 0;
           }
 
           .technologyDirectory {
@@ -1643,46 +721,49 @@ export default function Home() {
           }
 
           .technologyDirectory li:nth-child(even) {
-            padding-left: 14px;
+            padding-left: 12px;
             border-left: 1px solid rgba(245, 242, 233, 0.18);
           }
 
           .stopSignWrap {
-            width: calc(100% - 80px);
+            width: calc(100% - 68px);
             margin-left: 40px;
-            justify-content: flex-start;
-            padding-top: 36px;
+            padding: 42px 0 92px;
+          }
+
+          .stopSignMarker {
+            margin-left: 12px;
+          }
+
+          .stopSignImage {
+            width: 90px;
+          }
+
+          .stopSignPole {
+            height: 150px;
+            width: 8px;
           }
         }
 
-        @media (max-width: 520px) {
-          .heroPanel h1 {
-            font-size: clamp(48px, 16vw, 76px);
-          }
-
-          .projectItemTop {
-            gap: 12px;
-          }
-
-          .projectItemCategory {
-            font-size: 9px;
-          }
-
-          .projectItemNumber {
-            font-size: 28px;
-          }
-
-          .projectItem h3 {
-            font-size: clamp(24px, 8vw, 36px);
-          }
-
-          .technologyDirectory li {
-            min-height: 78px;
-            font-size: 15px;
+        @media (max-width: 390px) {
+          .technologyDirectory {
+            grid-template-columns: 1fr;
           }
 
           .technologyDirectory li:nth-child(even) {
-            padding-left: 10px;
+            padding-left: 0;
+            border-left: 0;
+          }
+
+          .heroIntro h1 {
+            font-size: clamp(48px, 15vw, 72px);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .projectItem,
+          .projectItemCta span {
+            transition: none;
           }
         }
       `}</style>
