@@ -589,8 +589,8 @@ export default function About() {
 
         .storyViewport {
           position: sticky;
-          top: var(--site-header-height);
-          height: calc(100vh - var(--site-header-height));
+          top: 0;
+          height: 100vh;
           overflow: hidden;
           background: var(--freizeit-beige);
           isolation: isolate;
@@ -1014,8 +1014,8 @@ export default function About() {
 
         @media (max-width: 1179px) {
           .storyViewport {
-            top: var(--site-header-height);
-            height: calc(100vh - var(--site-header-height));
+            top: 0;
+            height: 100vh;
             contain: layout paint;
           }
 
@@ -1208,8 +1208,8 @@ export default function About() {
           }
 
           .storyViewport {
-            top: var(--site-header-height);
-            height: calc(100vh - var(--site-header-height));
+            top: 0;
+            height: 100vh;
           }
 
           .storyIntroMotion {

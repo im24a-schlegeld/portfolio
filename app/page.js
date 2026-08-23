@@ -18,8 +18,15 @@ export default function Home() {
 
         <section className="intersectionHero">
           <div className="heroPanel">
-            <h1>Dario Schlegel</h1>
+            <span className="heroKicker">Portfolio / Informatik</span>
+            <h1><span>Dario</span><span>Schlegel</span></h1>
+            <div className="heroRule" aria-hidden="true" />
             <p>Ich besuche die Informatik-Mittelschule und entwickle neben dem Unterricht eigene Projekte.</p>
+          </div>
+          <div className="heroMeta" aria-label="Portfolio-Schwerpunkte">
+            <span>Applikationsentwicklung</span>
+            <span>Zürich / Schweiz</span>
+            <span>Praktikum 2027 — 2028</span>
           </div>
         </section>
 
@@ -29,52 +36,70 @@ export default function Home() {
             <p>Projekte aus der Schule und aus eigener Arbeit.</p>
           </div>
 
-          <div className="projectGrid">
-            {projects.map((project) => (
+          <div className="projectList">
+            {projects.map((project, index) => (
               <Link
-                className="projectCard projectCardLink"
+                className="projectItem"
                 href={`/projekte#${project.id}`}
                 key={project.id}
               >
+                <div className="projectItemMeta">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <span>Projekt {String(index + 1).padStart(2, '0')}</span>
+                </div>
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
-                <strong className="projectCardCta">Projekt ansehen</strong>
+                <strong className="projectItemCta">Projekt ansehen <span aria-hidden="true">→</span></strong>
               </Link>
             ))}
           </div>
         </section>
 
         <section id="about" className="contentSection contentSectionLeft" aria-labelledby="about-title">
-          <div className="contentCard">
-            <h2 id="about-title">Über mich</h2>
+          <div className="editorialBlock">
+            <span className="sectionIndex">01 / Profil</span>
+            <h2 id="about-title"><span>Über</span><span>mich</span></h2>
+            <div className="editorialRule" aria-hidden="true" />
             <p>Ich besuche die Informatik-Mittelschule an der Kantonsschule Hottingen. Neben dem Unterricht arbeite ich an eigenen Projekten und probiere dabei verschiedene Bereiche der Informatik aus.</p>
             <p>Viele Projekte entstehen dadurch, dass ich eine bestimmte Technologie oder Idee ausprobieren möchte. So sind unter anderem MusicStation, der lyricsseperator und dieses Portfolio entstanden.</p>
           </div>
         </section>
 
         <section id="education" className="contentSection contentSectionRight" aria-labelledby="education-title">
-          <div className="contentCard">
+          <div className="timelineBlock">
+            <span className="sectionIndex">02 / Weg</span>
             <h2 id="education-title">Ausbildung</h2>
-            <h3>Informatik-Mittelschule</h3>
-            <p className="contentEmphasis">Kantonsschule Hottingen</p>
-            <p className="contentDate">2024 – 2027</p>
-            <p>An der IMS beschäftige ich mich mit verschiedenen Bereichen der Informatik. Dazu gehören Programmierung, Webentwicklung, Datenbanken, Cloud-Technologien und Applikationssicherheit.</p>
-            <p>Nach dem schulischen Abschluss folgt von Sommer 2027 bis Sommer 2028 mein Praktikumsjahr in der Informatik.</p>
+            <div className="timelineTrack" aria-hidden="true" />
+            <div className="timelineEntry">
+              <strong>2024</strong>
+              <div>
+                <h3>Informatik-Mittelschule</h3>
+                <p className="contentEmphasis">Kantonsschule Hottingen</p>
+              </div>
+            </div>
+            <div className="timelineEntry timelineEntryEnd">
+              <strong>2027</strong>
+              <div>
+                <p>An der IMS beschäftige ich mich mit Programmierung, Webentwicklung, Datenbanken, Cloud-Technologien und Applikationssicherheit.</p>
+                <p className="contentDate">Praktikumsjahr: Sommer 2027 — Sommer 2028</p>
+              </div>
+            </div>
           </div>
         </section>
 
         <section id="technologies" className="contentSection contentSectionLeft" aria-labelledby="technologies-title">
-          <div className="contentCard">
+          <div className="directoryBlock">
+            <span className="sectionIndex">03 / Werkzeuge</span>
             <h2 id="technologies-title">Technologien</h2>
             <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
-            <ul className="technologyList">
-              {technologyList.map((technology) => <li key={technology}>{technology}</li>)}
+            <ul className="technologyDirectory">
+              {technologyList.map((technology, index) => <li key={technology}><span>{String(index + 1).padStart(2, '0')}</span>{technology}</li>)}
             </ul>
           </div>
         </section>
 
         <section id="portfolio-project" className="contentSection contentSectionRight" aria-labelledby="portfolio-project-title">
-          <div className="contentCard">
+          <div className="contentCard portfolioProjectCard">
             <h2 id="portfolio-project-title">Portfolio als Projekt</h2>
             <p>Dieses Portfolio begann als Schulprojekt. Die erste Seite, die ich dafür umgesetzt habe, war meine Freizeit-Seite.</p>
             <p>Danach habe ich die Website weiterentwickelt und zusätzliche Seiten und Projekte eingebaut. Dabei nutze ich sie auch, um neue Ideen im Webdesign und in der Frontend-Entwicklung auszuprobieren.</p>
@@ -120,6 +145,8 @@ export default function Home() {
           --asphalt-light: #242424;
           --paint: #f2c94c;
           --paint-soft: rgba(242, 201, 76, 0.24);
+          --paint-muted: rgba(242, 201, 76, 0.68);
+          --paint-ghost: rgba(242, 201, 76, 0.14);
           --white: #f5f2e9;
           --muted: #aaa395;
           --card: rgba(16, 16, 16, 0.82);
@@ -551,6 +578,341 @@ export default function Home() {
           letter-spacing: 0.08em;
         }
 
+        .roadMain > header[data-road-stripes='true'] {
+          background:
+            radial-gradient(circle, rgba(255, 255, 255, 0.13) 0 0.55px, transparent 0.95px),
+            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.35px),
+            linear-gradient(180deg, #1a1a1a, #111111);
+          background-position: 0 0, 3px 2px, 0 0;
+          background-size: 6px 6px, 8px 8px, 100% 100%;
+        }
+
+        .roadMain > header[data-road-stripes='true'] a:first-child {
+          transform: translateY(4px);
+        }
+
+        .intersectionHero {
+          min-height: 610px;
+          align-items: end;
+          padding-top: 178px;
+          padding-bottom: 128px;
+        }
+
+        .heroPanel {
+          width: min(600px, calc(100% - 56px));
+          margin-right: 56px;
+          padding: 0 0 0 28px;
+          border: 0;
+          border-left: 6px solid var(--paint);
+          background: linear-gradient(90deg, rgba(8, 8, 8, 0.6), transparent 92%);
+          box-shadow: none;
+        }
+
+        .heroKicker,
+        .sectionIndex,
+        .projectItemMeta,
+        .heroMeta {
+          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .heroKicker {
+          display: block;
+          margin-bottom: 24px;
+        }
+
+        .heroPanel h1 {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          max-width: 520px;
+          font-size: clamp(58px, 8vw, 108px);
+          line-height: 0.86;
+          letter-spacing: -0.055em;
+        }
+
+        .heroPanel h1 span:last-child {
+          color: var(--white);
+        }
+
+        .heroRule,
+        .editorialRule {
+          width: min(260px, 70%);
+          height: 2px;
+          margin-top: 28px;
+          background: var(--paint);
+        }
+
+        .heroPanel p:last-child {
+          max-width: 420px;
+          margin-top: 24px;
+          color: #c7c0b3;
+        }
+
+        .heroMeta {
+          grid-column: 3;
+          align-self: end;
+          justify-self: start;
+          width: min(330px, 100%);
+          margin-left: 56px;
+          display: grid;
+          gap: 18px;
+          padding: 0 0 8px 18px;
+          border-left: 1px solid var(--paint-soft);
+          line-height: 1.35;
+        }
+
+        .heroMeta span {
+          display: block;
+        }
+
+        .projectsSection {
+          padding-top: 142px;
+          padding-bottom: 52px;
+        }
+
+        .sectionIntro {
+          align-self: start;
+          margin-top: 14px;
+        }
+
+        .sectionIntro h2 {
+          font-size: clamp(44px, 7vw, 88px);
+          letter-spacing: -0.06em;
+        }
+
+        .sectionIntro p:last-child {
+          max-width: 300px;
+          margin-top: 26px;
+          font-size: 14px;
+        }
+
+        .projectList {
+          grid-column: 3;
+          width: min(570px, calc(100% - 56px));
+          margin-left: 56px;
+        }
+
+        .projectItem {
+          position: relative;
+          display: block;
+          padding: 28px 0 32px;
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
+          background: transparent;
+          transition: transform 220ms ease, border-color 220ms ease;
+        }
+
+        .projectItem:last-child {
+          border-bottom: 1px solid rgba(245, 242, 233, 0.24);
+        }
+
+        .projectItem:hover,
+        .projectItem:focus-visible {
+          transform: translateX(8px);
+          border-color: var(--paint);
+          outline: none;
+        }
+
+        .projectItemMeta {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 18px;
+          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
+        }
+
+        .projectItemMeta span:first-child {
+          color: var(--paint);
+          font-size: 34px;
+          letter-spacing: -0.04em;
+        }
+
+        .projectItem h3 {
+          margin: 14px 0 0;
+          font-size: clamp(28px, 4vw, 48px);
+          line-height: 0.96;
+          letter-spacing: -0.055em;
+        }
+
+        .projectItem p {
+          max-width: 460px;
+          margin: 16px 0 0;
+          color: #b8b1a5;
+          font-size: 15px;
+          line-height: 1.5;
+        }
+
+        .projectItemCta {
+          display: inline-flex;
+          gap: 8px;
+          margin-top: 22px;
+          color: var(--paint);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
+
+        .projectItemCta span {
+          transition: transform 220ms ease;
+        }
+
+        .projectItem:hover .projectItemCta span,
+        .projectItem:focus-visible .projectItemCta span {
+          transform: translateX(5px);
+        }
+
+        .contentSection {
+          padding-top: 154px;
+          padding-bottom: 50px;
+        }
+
+        .editorialBlock,
+        .timelineBlock,
+        .directoryBlock {
+          position: relative;
+          width: min(560px, 100%);
+        }
+
+        .editorialBlock {
+          grid-column: 1;
+          justify-self: end;
+          width: min(560px, calc(100% - 56px));
+          margin-right: 56px;
+        }
+
+        .sectionIndex {
+          display: block;
+          margin-bottom: 24px;
+        }
+
+        .editorialBlock h2,
+        .timelineBlock h2,
+        .directoryBlock h2 {
+          margin: 0;
+          font-size: clamp(46px, 7vw, 86px);
+          line-height: 0.86;
+          letter-spacing: -0.06em;
+          text-transform: uppercase;
+        }
+
+        .editorialBlock h2 span {
+          display: block;
+        }
+
+        .editorialBlock p,
+        .timelineBlock p,
+        .directoryBlock > p {
+          max-width: 560px;
+          margin: 24px 0 0;
+          color: #c7c0b3;
+          font-size: 17px;
+          line-height: 1.62;
+        }
+
+        .timelineBlock {
+          grid-column: 3;
+          width: min(560px, calc(100% - 56px));
+          margin-left: 56px;
+          padding-left: 28px;
+          border-left: 1px solid rgba(242, 201, 76, 0.45);
+        }
+
+        .timelineTrack {
+          position: absolute;
+          top: 88px;
+          bottom: 0;
+          left: -5px;
+          width: 9px;
+          background: var(--paint);
+          clip-path: polygon(0 0, 100% 0, 100% 8px, 0 8px, 0 50%, 100% 50%, 100% calc(50% + 8px), 0 calc(50% + 8px), 0 100%, 100% 100%, 100% calc(100% - 8px), 0 calc(100% - 8px));
+        }
+
+        .timelineEntry {
+          position: relative;
+          display: grid;
+          grid-template-columns: 82px minmax(0, 1fr);
+          gap: 18px;
+          margin-top: 56px;
+        }
+
+        .timelineEntry strong {
+          color: var(--paint);
+          font-size: 30px;
+          line-height: 1;
+          letter-spacing: -0.04em;
+        }
+
+        .timelineEntry h3 {
+          margin: 0;
+          font-size: clamp(20px, 3vw, 30px);
+          line-height: 1;
+          text-transform: uppercase;
+        }
+
+        .timelineEntry p {
+          margin-top: 10px;
+          font-size: 15px;
+        }
+
+        .timelineEntry .contentEmphasis {
+          color: var(--white);
+          font-weight: 800;
+        }
+
+        .timelineEntry .contentDate {
+          color: var(--paint);
+          font-weight: 800;
+        }
+
+        .timelineEntryEnd {
+          margin-top: 48px;
+        }
+
+        .directoryBlock {
+          grid-column: 1;
+          justify-self: end;
+          width: min(560px, calc(100% - 56px));
+          margin-right: 56px;
+        }
+
+        .technologyDirectory {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          margin: 34px 0 0;
+          padding: 0;
+          list-style: none;
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
+        }
+
+        .technologyDirectory li {
+          display: flex;
+          align-items: baseline;
+          gap: 12px;
+          min-width: 0;
+          padding: 14px 8px 14px 0;
+          border-bottom: 1px solid rgba(245, 242, 233, 0.24);
+          color: var(--white);
+          font-size: clamp(17px, 2vw, 24px);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          text-transform: uppercase;
+        }
+
+        .technologyDirectory li:nth-child(even) {
+          padding-left: 18px;
+          border-left: 1px solid rgba(245, 242, 233, 0.18);
+        }
+
+        .technologyDirectory li span {
+          color: var(--paint-muted, rgba(242, 201, 76, 0.68));
+          font-size: 10px;
+          letter-spacing: 0.1em;
+        }
+
         .siteFeaturesIntro,
         .contactCard {
           max-width: 780px;
@@ -773,6 +1135,153 @@ export default function Home() {
 
           .roadFooter {
             padding-left: 128px;
+          }
+        }
+
+        @media (max-width: 860px) {
+          .intersectionHero {
+            min-height: 590px;
+            padding: 126px 0 92px;
+          }
+
+          .heroPanel {
+            width: auto;
+            margin-left: 54px;
+            margin-right: 0;
+          }
+
+          .heroMeta {
+            display: grid;
+            grid-column: auto;
+            width: auto;
+            margin: 44px 0 0 82px;
+          }
+
+          .projectList {
+            width: auto;
+            margin-left: 82px;
+          }
+
+          .editorialBlock,
+          .timelineBlock,
+          .directoryBlock {
+            width: auto;
+            margin-right: 0;
+            margin-left: 82px;
+          }
+
+          .contentSection {
+            padding-left: 0;
+          }
+
+          .contentSection .contentCard {
+            width: calc(100% - 82px);
+            margin-left: 82px;
+          }
+
+          .timelineBlock {
+            padding-left: 24px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .roadMain > header[data-road-stripes='true'] a:first-child {
+            transform: translateY(2px);
+          }
+
+          .intersectionHero {
+            min-height: 580px;
+            padding-top: 112px;
+          }
+
+          .heroPanel {
+            margin-left: 58px;
+            padding-left: 18px;
+          }
+
+          .heroKicker,
+          .sectionIndex,
+          .projectItemMeta,
+          .heroMeta {
+            font-size: 9px;
+            letter-spacing: 0.14em;
+          }
+
+          .heroPanel h1 {
+            font-size: clamp(48px, 17vw, 76px);
+          }
+
+          .heroPanel p:last-child {
+            font-size: 15px;
+          }
+
+          .heroMeta {
+            margin-left: 70px;
+          }
+
+          .projectList,
+          .editorialBlock,
+          .timelineBlock,
+          .directoryBlock {
+            margin-left: 70px;
+          }
+
+          .contentSection .contentCard {
+            width: calc(100% - 70px);
+            margin-left: 70px;
+          }
+
+          .projectItem {
+            padding-top: 24px;
+            padding-bottom: 26px;
+          }
+
+          .projectItemMeta span:first-child {
+            font-size: 28px;
+          }
+
+          .projectItem h3 {
+            font-size: clamp(25px, 8vw, 36px);
+          }
+
+          .projectItem p,
+          .editorialBlock p,
+          .timelineBlock p,
+          .directoryBlock > p {
+            font-size: 15px;
+          }
+
+          .editorialBlock h2,
+          .timelineBlock h2,
+          .directoryBlock h2 {
+            font-size: clamp(36px, 11vw, 52px);
+            overflow-wrap: anywhere;
+          }
+
+          .timelineEntry {
+            grid-template-columns: 62px minmax(0, 1fr);
+            gap: 12px;
+          }
+
+          .timelineEntry strong {
+            font-size: 24px;
+          }
+
+          .technologyDirectory li {
+            gap: 7px;
+            padding-right: 4px;
+            font-size: 15px;
+          }
+
+          .technologyDirectory li:nth-child(even) {
+            padding-left: 10px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .projectItem,
+          .projectItemCta span {
+            transition: none;
           }
         }
       `}</style>
