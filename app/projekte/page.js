@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import ProjectEmbed from './ProjectEmbed';
-import { navigationItems, projects } from '../../data/portfolio';
+import SiteHeader from '../components/SiteHeader';
+import { projects } from '../../data/portfolio';
 
 export const metadata = {
   title: 'Projekte',
@@ -10,7 +10,7 @@ export const metadata = {
 
 const smashProject = projects.find((project) => project.id === 'smash-a-meerkat');
 const featuredProject = projects.find((project) => project.id === 'lyrics-separator');
-const finalProject = projects.find((project) => project.id === 'x-archive');
+const finalProject = projects.find((project) => project.id === 'music-station');
 
 const firstProjects = [smashProject].filter(Boolean);
 const lastProjects = [finalProject].filter(Boolean);
@@ -37,20 +37,61 @@ function ProjectMedia({ project }) {
   }
 
   if (project.media.type === 'phone' && project.media.src) {
+    const phoneItems = [
+      {
+        kind: 'website',
+        src: project.media.src,
+        label: project.media.label,
+      },
+      ...(project.media.videoSrc
+        ? [{
+          kind: 'video',
+          src: project.media.videoSrc,
+          label: project.media.videoLabel || `${project.title} Video-Vorschau`,
+        }]
+        : []),
+    ];
+
     return (
       <div className="phoneMedia" aria-label={project.media.label}>
-        <div className="phoneMockup">
-          <div className="phoneScreen">
-            <ProjectEmbed src={project.media.src} title={project.media.label} />
-          </div>
-          <Image
-            className="phoneFrame"
-            src="/iphone_rahmen_transparent.png"
-            alt=""
-            width={362}
-            height={730}
-            aria-hidden="true"
-          />
+        <div className={`phonePair ${phoneItems.length > 1 ? 'phonePairDouble' : ''}`}>
+          {phoneItems.map((phone) => (
+            <div className="phoneMockup" key={phone.kind}>
+              <div className="phoneScreen">
+                {phone.kind === 'video' ? (
+                  <a
+                    className="phoneVideoLink"
+                    href={project.liveUrl || project.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${phone.label} öffnen`}
+                  >
+                    <video
+                      className="phonePreviewVideo"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    >
+                      <source src={phone.src} type="video/mp4" />
+                      Dein Browser kann diese Video-Vorschau nicht abspielen.
+                    </video>
+                  </a>
+                ) : (
+                  <ProjectEmbed src={phone.src} title={phone.label} />
+                )}
+              </div>
+              <Image
+                className="phoneFrame"
+                src="/iphone_rahmen_transparent.png"
+                alt=""
+                width={362}
+                height={730}
+                aria-hidden="true"
+              />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -188,18 +229,8 @@ function ProjectShowcase({ project }) {
 export default function Projekte() {
   return (
     <main className="projectsPage">
+      <SiteHeader activeKey="projects" roadStripes />
       <section className="projectsIntro" aria-labelledby="projects-title">
-        <nav className="projectsNav" aria-label="Hauptnavigation">
-          {navigationItems.map((item) => (
-            <Link
-              href={item.href}
-              key={item.key}
-              aria-current={item.key === 'projects' ? 'page' : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
         <p className="eyebrow">Portfolio</p>
         <h1 id="projects-title">Projekte</h1>
         <p className="introText">
@@ -298,8 +329,6 @@ export default function Projekte() {
           color: #f7f2e8;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
           background:
-            radial-gradient(circle at 72% 8%, rgba(242, 201, 76, 0.13), transparent 24rem),
-            radial-gradient(circle at 7% 34%, rgba(255, 255, 255, 0.055), transparent 18rem),
             linear-gradient(135deg, #070707 0%, #151411 48%, #050505 100%);
         }
 
@@ -313,7 +342,7 @@ export default function Projekte() {
             linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
           background-size: 96px 96px;
-          mask-image: radial-gradient(circle at 50% 20%, black, transparent 72%);
+          mask-image: none;
         }
 
         .projectsIntro,
@@ -326,40 +355,6 @@ export default function Projekte() {
 
         .projectsIntro {
           padding: clamp(34px, 7vw, 84px) 0 clamp(28px, 4vw, 56px);
-        }
-
-        .projectsNav {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-bottom: clamp(32px, 5vw, 70px);
-        }
-
-        .projectsNav a {
-          min-height: 42px;
-          display: inline-flex;
-          align-items: center;
-          padding: 0 18px;
-          border: 1px solid rgba(242, 201, 76, 0.24);
-          border-radius: 999px;
-          color: #cfc7ba;
-          background: rgba(0, 0, 0, 0.2);
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
-          text-decoration: none;
-          text-transform: uppercase;
-          transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
-        }
-
-        .projectsNav a:hover,
-        .projectsNav a:focus-visible,
-        .projectsNav a[aria-current='page'] {
-          color: #f2c94c;
-          transform: translateY(-2px);
-          border-color: #f2c94c;
-          background: rgba(242, 201, 76, 0.1);
-          outline: none;
         }
 
         .eyebrow {
@@ -391,23 +386,23 @@ export default function Projekte() {
         .featuredProject {
           display: grid;
           grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.82fr);
-          align-items: center;
+          align-items: start;
           gap: clamp(34px, 6vw, 86px);
           padding: clamp(26px, 5vw, 58px) 0 clamp(58px, 8vw, 104px);
         }
 
         .projectPreview {
           min-width: 0;
+          position: sticky;
+          top: 24px;
+          align-self: start;
           animation: projectReveal 680ms ease both;
         }
 
         .browserFrame {
           overflow: hidden;
           border: 1px solid rgba(242, 201, 76, 0.25);
-          border-radius: 30px;
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.14), transparent 22%),
-            rgba(8, 8, 8, 0.9);
+          background: rgba(8, 8, 8, 0.9);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.12),
             0 32px 80px rgba(0, 0, 0, 0.42);
@@ -437,7 +432,6 @@ export default function Projekte() {
         .browserTop span {
           width: 10px;
           height: 10px;
-          border-radius: 999px;
           background: rgba(242, 201, 76, 0.84);
         }
 
@@ -495,7 +489,7 @@ export default function Projekte() {
           padding: 20px;
           color: #f7f2e8;
           text-align: center;
-          background: radial-gradient(circle at 50% 30%, rgba(242, 201, 76, 0.12), transparent 60%), #050505;
+          background: #050505;
           transition: opacity 180ms ease;
         }
 
@@ -540,7 +534,6 @@ export default function Projekte() {
           z-index: 4;
           padding: 7px 9px;
           border: 1px solid rgba(242, 201, 76, 0.32);
-          border-radius: 999px;
           background: rgba(0, 0, 0, 0.78);
         }
 
@@ -548,10 +541,7 @@ export default function Projekte() {
           min-width: 0;
           padding: clamp(24px, 4vw, 42px);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 28px;
-          background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-            rgba(10, 10, 10, 0.74);
+          background: rgba(10, 10, 10, 0.78);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
           animation: projectReveal 680ms 120ms ease both;
         }
@@ -629,7 +619,6 @@ export default function Projekte() {
           justify-content: center;
           gap: 8px;
           padding: 0 18px;
-          border-radius: 999px;
           font-size: 12px;
           font-weight: 900;
           letter-spacing: 0.14em;
@@ -682,7 +671,6 @@ export default function Projekte() {
           align-items: center;
           padding: 0 12px;
           border: 1px solid rgba(242, 201, 76, 0.24);
-          border-radius: 999px;
           color: rgba(247, 242, 232, 0.84);
           background: rgba(0, 0, 0, 0.24);
           font-size: 12px;
@@ -731,7 +719,6 @@ export default function Projekte() {
         .caseStudy article {
           padding: 16px;
           border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 16px;
           background: rgba(255, 255, 255, 0.025);
         }
 
@@ -795,10 +782,7 @@ export default function Projekte() {
           min-height: 190px;
           padding: 24px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.07), transparent 38%),
-            rgba(9, 9, 9, 0.72);
+          background: rgba(9, 9, 9, 0.72);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
           transition: transform 180ms ease, border-color 180ms ease;
         }
@@ -833,14 +817,11 @@ export default function Projekte() {
         .projectShowcase {
           display: grid;
           grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.76fr);
-          align-items: center;
+          align-items: start;
           gap: clamp(24px, 5vw, 68px);
           padding: clamp(18px, 3vw, 28px);
           border: 1px solid rgba(245, 242, 233, 0.12);
-          border-radius: 32px;
-          background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
-            rgba(9, 9, 9, 0.72);
+          background: rgba(9, 9, 9, 0.78);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.08),
             0 24px 70px rgba(0, 0, 0, 0.32);
@@ -864,10 +845,7 @@ export default function Projekte() {
           min-width: 0;
           overflow: hidden;
           border: 1px solid rgba(242, 201, 76, 0.24);
-          border-radius: 26px;
-          background:
-            linear-gradient(145deg, rgba(242, 201, 76, 0.12), transparent 32%),
-            #050505;
+          background: #050505;
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.11),
             0 24px 58px rgba(0, 0, 0, 0.38);
@@ -879,18 +857,14 @@ export default function Projekte() {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background:
-            linear-gradient(90deg, transparent, rgba(242, 201, 76, 0.1), transparent),
-            radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.18), transparent 18rem);
-          opacity: 0.45;
-          mix-blend-mode: screen;
+          background: none;
+          opacity: 0;
         }
 
         .mediaFrame:hover,
         .mediaFrame:focus-within {
           transform: translateY(-4px);
           border-color: rgba(242, 201, 76, 0.52);
-          filter: brightness(1.05);
         }
 
         .gameplayFrame {
@@ -955,10 +929,7 @@ export default function Projekte() {
           align-items: center;
           padding: clamp(16px, 3vw, 28px);
           border: 1px solid rgba(242, 201, 76, 0.2);
-          border-radius: 30px;
-          background:
-            radial-gradient(circle at 50% 18%, rgba(242, 201, 76, 0.12), transparent 17rem),
-            rgba(5, 5, 5, 0.72);
+          background: rgba(5, 5, 5, 0.72);
           box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.08),
             0 24px 58px rgba(0, 0, 0, 0.34);
@@ -969,7 +940,6 @@ export default function Projekte() {
         .phoneMedia:focus-within {
           transform: translateY(-4px);
           border-color: rgba(242, 201, 76, 0.48);
-          filter: brightness(1.04);
         }
 
         .phoneMockup {
@@ -979,9 +949,22 @@ export default function Projekte() {
           filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.58));
         }
 
+        .phonePair {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: clamp(12px, 2.5vw, 26px);
+        }
+
+        .phonePairDouble .phoneMockup {
+          width: min(220px, calc((100% - 26px) / 2));
+        }
+
         .phoneScreen {
           position: absolute;
-          inset: 3.9% 5.7% 0.65%;
+          /* Let the live preview run behind the frame, including the camera island. */
+          inset: 0 5.7% 0.65%;
           z-index: 1;
           overflow: hidden;
           border-radius: 38px;
@@ -1000,6 +983,21 @@ export default function Projekte() {
           background: #050505;
           transform: translate(-50%, -50%) scale(calc(100cqw / 390px));
           transform-origin: center;
+        }
+
+        .phoneVideoLink,
+        .phonePreviewVideo {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+
+        .phoneVideoLink {
+          cursor: pointer;
+        }
+
+        .phonePreviewVideo {
+          object-fit: cover;
         }
 
         .phoneFrame {
@@ -1031,7 +1029,6 @@ export default function Projekte() {
         .miniBrowserTop span {
           width: 9px;
           height: 9px;
-          border-radius: 999px;
           background: rgba(242, 201, 76, 0.82);
         }
 
@@ -1058,6 +1055,13 @@ export default function Projekte() {
 
         .showcaseInfo {
           min-width: 0;
+        }
+
+        .projectShowcase > .mediaFrame,
+        .projectShowcase > .phoneMedia {
+          position: sticky;
+          top: 24px;
+          align-self: start;
         }
 
         .compactMeta {
@@ -1140,26 +1144,6 @@ export default function Projekte() {
             padding-top: 26px;
           }
 
-          .projectsNav {
-            gap: 7px;
-            margin-bottom: 34px;
-          }
-
-          .projectsNav a {
-            min-height: 36px;
-            padding: 0 12px;
-            font-size: 10px;
-          }
-
-          .browserFrame,
-          .projectInfo,
-          .highlightCard,
-          .projectShowcase,
-          .mediaFrame,
-          .phoneMedia {
-            border-radius: 20px;
-          }
-
           .browserTop {
             min-height: 42px;
             padding: 0 12px;
@@ -1171,6 +1155,10 @@ export default function Projekte() {
 
           .phoneMockup {
             width: min(218px, 66vw);
+          }
+
+          .phonePairDouble .phoneMockup {
+            width: min(164px, calc((100% - 14px) / 2));
           }
 
           .phoneScreen {
@@ -1203,11 +1191,19 @@ export default function Projekte() {
           .primaryAction,
           .secondaryAction,
           .ghostAction,
-          .projectsNav a,
           .embedFallback,
           .embedFrame {
             animation: none;
             transition: none;
+          }
+        }
+
+        @media (max-width: 980px) {
+          .projectPreview,
+          .projectShowcase > .mediaFrame,
+          .projectShowcase > .phoneMedia {
+            position: relative;
+            top: auto;
           }
         }
       `}</style>

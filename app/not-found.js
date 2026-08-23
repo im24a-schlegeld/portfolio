@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import SiteHeader from './components/SiteHeader';
 import { navigationItems } from '../data/portfolio';
 
 export default function NotFound() {
   return (
     <main className="notFoundPage">
+      <SiteHeader roadStripes />
       <div className="roadLine" aria-hidden="true" />
       <section className="notFoundCard">
         <p className="code">404 / Sackgasse</p>
@@ -24,15 +26,19 @@ export default function NotFound() {
         .notFoundPage {
           position: relative;
           min-height: 100svh;
-          display: grid;
-          place-items: center;
+          display: block;
           overflow: hidden;
-          padding: 28px;
+          padding: 0;
           color: #f5f2e9;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
           background:
             radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.05), transparent 20rem),
             linear-gradient(180deg, #1a1a1a, #070707);
+        }
+
+        .notFoundPage,
+        .notFoundPage * {
+          box-sizing: border-box;
         }
 
         .roadLine {
@@ -53,10 +59,10 @@ export default function NotFound() {
         .notFoundCard {
           position: relative;
           z-index: 1;
-          width: min(720px, 100%);
+          width: min(720px, calc(100% - 28px));
+          margin: clamp(100px, 15vw, 180px) auto 80px;
           padding: clamp(28px, 6vw, 58px);
           border: 1px solid rgba(245, 242, 233, 0.14);
-          border-radius: 28px;
           background: rgba(8, 8, 8, 0.9);
           box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
         }
@@ -99,7 +105,6 @@ export default function NotFound() {
           align-items: center;
           padding: 0 15px;
           border: 1px solid rgba(242, 201, 76, 0.35);
-          border-radius: 999px;
           color: #f2c94c;
           font-size: 11px;
           font-weight: 900;
