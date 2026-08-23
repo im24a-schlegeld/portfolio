@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import SiteHeader from './components/SiteHeader';
-import { portfolioContact, projects, technologyList } from '../data/portfolio';
+import { projects, technologyList } from '../data/portfolio';
 
 export const metadata = {
   title: 'Portfolio',
@@ -32,8 +32,9 @@ export default function Home() {
 
         <section id="projects" className="projectsSection" aria-labelledby="projects-title">
           <div className="sectionIntro">
+            <span className="sectionIndex">01 / Ausgewählte Projekte</span>
             <h2 id="projects-title">Projekte</h2>
-            <p>Projekte aus der Schule und aus eigener Arbeit.</p>
+            <p>Arbeiten aus der Schule und aus eigener Entwicklung.</p>
           </div>
 
           <div className="projectList">
@@ -43,79 +44,57 @@ export default function Home() {
                 href={`/projekte#${project.id}`}
                 key={project.id}
               >
-                <div className="projectItemMeta">
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <span>Projekt {String(index + 1).padStart(2, '0')}</span>
+                <div className="projectItemTop">
+                  <span className="projectItemNumber">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="projectItemCategory">
+                    {project.id === 'smash-a-meerkat' ? 'Java / Game' : project.id === 'lyrics-separator' ? 'Web / API' : 'App / Web'}
+                  </span>
                 </div>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <strong className="projectItemCta">Projekt ansehen <span aria-hidden="true">→</span></strong>
+                <div className="projectItemMain">
+                  <div>
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                  </div>
+                  <strong className="projectItemCta">Projekt ansehen <span aria-hidden="true">→</span></strong>
+                </div>
               </Link>
             ))}
           </div>
         </section>
 
-        <section id="about" className="contentSection contentSectionLeft" aria-labelledby="about-title">
+        <section id="about" className="contentSection aboutSection" aria-labelledby="about-title">
           <div className="editorialBlock">
-            <span className="sectionIndex">01 / Profil</span>
-            <h2 id="about-title"><span>Über</span><span>mich</span></h2>
+            <h2 id="about-title" className="sectionIndex">02 / Über mich</h2>
+            <div className="aboutLead">Ich besuche die Informatik-Mittelschule und entwickle nebenbei eigene Projekte.</div>
             <div className="editorialRule" aria-hidden="true" />
-            <p>Ich besuche die Informatik-Mittelschule an der Kantonsschule Hottingen. Neben dem Unterricht arbeite ich an eigenen Projekten und probiere dabei verschiedene Bereiche der Informatik aus.</p>
-            <p>Viele Projekte entstehen dadurch, dass ich eine bestimmte Technologie oder Idee ausprobieren möchte. So sind unter anderem MusicStation, der lyricsseperator und dieses Portfolio entstanden.</p>
+            <p>Mich interessiert besonders, wie aus einer Idee eine funktionierende Anwendung wird. Dabei probiere ich verschiedene Technologien aus und entwickle jedes Projekt Schritt für Schritt weiter.</p>
           </div>
         </section>
 
-        <section id="education" className="contentSection contentSectionRight" aria-labelledby="education-title">
+        <section id="education" className="contentSection educationSection" aria-labelledby="education-title">
           <div className="timelineBlock">
-            <span className="sectionIndex">02 / Weg</span>
-            <h2 id="education-title">Ausbildung</h2>
-            <div className="timelineTrack" aria-hidden="true" />
-            <div className="timelineEntry">
+            <h2 id="education-title" className="sectionIndex">03 / Ausbildung</h2>
+            <div className="timelineScale" aria-label="Ausbildungszeitraum 2024 bis 2027">
               <strong>2024</strong>
-              <div>
-                <h3>Informatik-Mittelschule</h3>
-                <p className="contentEmphasis">Kantonsschule Hottingen</p>
-              </div>
-            </div>
-            <div className="timelineEntry timelineEntryEnd">
+              <span className="timelineLine" aria-hidden="true" />
               <strong>2027</strong>
-              <div>
-                <p>An der IMS beschäftige ich mich mit Programmierung, Webentwicklung, Datenbanken, Cloud-Technologien und Applikationssicherheit.</p>
-                <p className="contentDate">Praktikumsjahr: Sommer 2027 — Sommer 2028</p>
-              </div>
+            </div>
+            <div className="timelineDetails">
+              <h3>Informatik-Mittelschule</h3>
+              <p className="contentEmphasis">Kantonsschule Hottingen</p>
+              <p>An der IMS beschäftige ich mich mit Programmierung, Webentwicklung, Datenbanken, Cloud-Technologien und Applikationssicherheit.</p>
+              <p className="contentDate">Praktikumsjahr: Sommer 2027 — Sommer 2028</p>
             </div>
           </div>
         </section>
 
-        <section id="technologies" className="contentSection contentSectionLeft" aria-labelledby="technologies-title">
+        <section id="technologies" className="contentSection technologySection" aria-labelledby="technologies-title">
           <div className="directoryBlock">
-            <span className="sectionIndex">03 / Werkzeuge</span>
-            <h2 id="technologies-title">Technologien</h2>
+            <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
             <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
             <ul className="technologyDirectory">
               {technologyList.map((technology, index) => <li key={technology}><span>{String(index + 1).padStart(2, '0')}</span>{technology}</li>)}
             </ul>
-          </div>
-        </section>
-
-        <section id="portfolio-project" className="contentSection contentSectionRight" aria-labelledby="portfolio-project-title">
-          <div className="contentCard portfolioProjectCard">
-            <h2 id="portfolio-project-title">Portfolio als Projekt</h2>
-            <p>Dieses Portfolio begann als Schulprojekt. Die erste Seite, die ich dafür umgesetzt habe, war meine Freizeit-Seite.</p>
-            <p>Danach habe ich die Website weiterentwickelt und zusätzliche Seiten und Projekte eingebaut. Dabei nutze ich sie auch, um neue Ideen im Webdesign und in der Frontend-Entwicklung auszuprobieren.</p>
-            <p>Die Website ist deshalb nicht nur eine Übersicht meiner Projekte, sondern selbst eines meiner laufenden Projekte.</p>
-          </div>
-        </section>
-
-        <section id="contact" className="contactSection" aria-labelledby="contact-title">
-          <div className="contactCard">
-            <h2 id="contact-title">Kontakt</h2>
-            <p>Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.</p>
-            <div className="contactDetails" aria-label="Kontaktmöglichkeiten">
-              <a className="contactLink" href={portfolioContact.githubUrl} target="_blank" rel="noreferrer">GitHub</a>
-              <a className="contactLink" href={`mailto:${portfolioContact.email}`}>{portfolioContact.emailDisplay}</a>
-              <a className="contactLink" href={`tel:${portfolioContact.phone}`}>{portfolioContact.phone}</a>
-            </div>
           </div>
         </section>
 
@@ -133,10 +112,6 @@ export default function Home() {
           <div className="stopSignPole" />
         </div>
       </div>
-
-      <footer className="roadFooter">
-        <span>Dario Schlegel</span>
-      </footer>
 
       <style>{`
         .roadMain {
@@ -1138,6 +1113,282 @@ export default function Home() {
           }
         }
 
+        .roadMain {
+          background: linear-gradient(180deg, #191919 0%, #101010 48%, #080808 100%);
+        }
+
+        .roadMain::before {
+          background:
+            radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 0.55px, transparent 0.9px),
+            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.3px),
+            radial-gradient(ellipse at 50% 15%, rgba(255, 255, 255, 0.04), transparent 34rem);
+          background-position: 0 0, 3px 2px, 0 0;
+          background-size: 5px 5px, 8px 8px, 100% 900px;
+          opacity: 0.36;
+          filter: none;
+        }
+
+        .roadMain::after {
+          background:
+            radial-gradient(ellipse at 50% 42%, transparent 0 38%, rgba(0, 0, 0, 0.28) 100%),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 20% 80%, rgba(0, 0, 0, 0.18));
+          opacity: 0.76;
+        }
+
+        .roadMap {
+          padding-bottom: 24px;
+        }
+
+        .centerRoadLine {
+          bottom: -80px;
+        }
+
+        .intersectionHero {
+          grid-template-columns: minmax(0, 1.55fr) 150px minmax(240px, 0.75fr);
+          min-height: 640px;
+          padding: 176px 0 146px;
+        }
+
+        .heroPanel {
+          width: min(760px, calc(100% - 40px));
+          margin-right: 0;
+        }
+
+        .heroPanel h1 {
+          font-size: clamp(64px, 9vw, 130px);
+        }
+
+        .heroPanel p:last-child {
+          max-width: 540px;
+        }
+
+        .heroMeta {
+          margin-left: 36px;
+        }
+
+        .projectsSection {
+          display: block;
+          padding: 152px 0 54px;
+        }
+
+        .sectionIntro {
+          width: 100%;
+          margin: 0 0 32px;
+          text-align: left;
+        }
+
+        .sectionIntro h2 {
+          font-size: clamp(42px, 5vw, 72px);
+        }
+
+        .sectionIntro p:last-child {
+          max-width: 620px;
+          margin: 16px 0 0;
+        }
+
+        .projectList {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        .projectItem {
+          padding: 30px 0 34px;
+        }
+
+        .projectItemTop {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 24px;
+        }
+
+        .projectItemNumber {
+          color: var(--paint);
+          font-size: 34px;
+          font-weight: 900;
+          letter-spacing: -0.04em;
+        }
+
+        .projectItemCategory {
+          color: var(--paint-muted);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+        }
+
+        .projectItemMain {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: end;
+          gap: 28px;
+          margin-top: 10px;
+        }
+
+        .projectItem h3 {
+          margin-top: 0;
+          font-size: clamp(25px, 3vw, 42px);
+        }
+
+        .projectItem p {
+          max-width: 700px;
+        }
+
+        .projectItemCta {
+          margin-top: 0;
+          white-space: nowrap;
+        }
+
+        .contentSection {
+          display: block;
+          padding: 178px 0 70px;
+        }
+
+        .editorialBlock,
+        .timelineBlock,
+        .directoryBlock {
+          width: 100%;
+          margin: 0;
+        }
+
+        .editorialBlock {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .editorialBlock h2,
+        .timelineBlock h2,
+        .directoryBlock h2 {
+          font-size: 12px;
+          line-height: 1.2;
+          letter-spacing: 0.18em;
+        }
+
+        .aboutLead {
+          max-width: 800px;
+          margin-top: 22px;
+          color: var(--white);
+          font-size: clamp(22px, 3vw, 38px);
+          line-height: 1.35;
+          letter-spacing: -0.025em;
+        }
+
+        .editorialBlock .editorialRule {
+          margin-top: 30px;
+        }
+
+        .editorialBlock p {
+          max-width: 680px;
+          margin-top: 24px;
+          font-size: 16px;
+        }
+
+        .timelineBlock {
+          padding: 0;
+          border: 0;
+        }
+
+        .timelineScale {
+          display: grid;
+          grid-template-columns: auto minmax(0, 1fr) auto;
+          align-items: center;
+          gap: 24px;
+          margin-top: 52px;
+        }
+
+        .timelineScale strong {
+          color: var(--paint);
+          font-size: clamp(32px, 5vw, 64px);
+          line-height: 1;
+          letter-spacing: -0.05em;
+        }
+
+        .timelineLine {
+          position: relative;
+          height: 4px;
+          background: linear-gradient(90deg, var(--paint), var(--paint-muted));
+        }
+
+        .timelineLine::before,
+        .timelineLine::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: var(--paint);
+          transform: translateY(-50%);
+        }
+
+        .timelineLine::before {
+          left: 0;
+        }
+
+        .timelineLine::after {
+          right: 0;
+        }
+
+        .timelineDetails {
+          margin: 32px 0 0 9%;
+          max-width: 720px;
+        }
+
+        .timelineDetails h3 {
+          margin: 0;
+          font-size: clamp(22px, 3vw, 34px);
+          line-height: 1;
+          text-transform: uppercase;
+        }
+
+        .timelineDetails p {
+          max-width: 720px;
+          margin: 12px 0 0;
+          color: #c7c0b3;
+          font-size: 16px;
+          line-height: 1.55;
+        }
+
+        .timelineDetails .contentEmphasis,
+        .timelineDetails .contentDate {
+          color: var(--paint);
+          font-weight: 800;
+        }
+
+        .technologyDirectory {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          margin-top: 36px;
+        }
+
+        .technologyDirectory li,
+        .technologyDirectory li:nth-child(even) {
+          min-height: 90px;
+          padding: 18px 14px 16px 0;
+          border-left: 0;
+        }
+
+        .technologyDirectory li:nth-child(3n + 2),
+        .technologyDirectory li:nth-child(3n + 3) {
+          padding-left: 18px;
+          border-left: 1px solid rgba(245, 242, 233, 0.18);
+        }
+
+        .technologyDirectory li span {
+          align-self: start;
+        }
+
+        .stopSignWrap {
+          width: min(1180px, calc(100% - 40px));
+          margin: 0 auto;
+          justify-content: center;
+          padding: 58px 0 96px;
+        }
+
+        .stopSignImage {
+          width: 132px;
+        }
+
         @media (max-width: 860px) {
           .intersectionHero {
             min-height: 590px;
@@ -1282,6 +1533,156 @@ export default function Home() {
           .projectItem,
           .projectItemCta span {
             transition: none;
+          }
+        }
+
+        @media (max-width: 860px) {
+          .roadMap {
+            padding-inline: 14px;
+          }
+
+          .centerRoadLine {
+            left: 14px;
+            width: 5px;
+          }
+
+          .intersectionHero {
+            min-height: 620px;
+            display: block;
+            padding: 126px 0 92px;
+          }
+
+          .heroPanel {
+            width: auto;
+            margin: 0 0 0 40px;
+            padding-left: 18px;
+          }
+
+          .heroPanel h1 {
+            font-size: clamp(54px, 16vw, 88px);
+          }
+
+          .heroMeta {
+            width: auto;
+            margin: 46px 0 0 40px;
+          }
+
+          .projectsSection {
+            padding-top: 124px;
+          }
+
+          .sectionIntro,
+          .projectList {
+            width: auto;
+            margin-left: 40px;
+          }
+
+          .sectionIntro {
+            margin-bottom: 24px;
+          }
+
+          .projectItemMain {
+            display: block;
+          }
+
+          .projectItemCta {
+            margin-top: 20px;
+          }
+
+          .contentSection {
+            padding: 132px 0 54px 40px;
+          }
+
+          .editorialBlock,
+          .timelineBlock,
+          .directoryBlock {
+            width: 100%;
+            margin: 0;
+          }
+
+          .timelineScale {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 40px;
+            padding-left: 22px;
+          }
+
+          .timelineLine {
+            width: 4px;
+            height: 86px;
+            margin-left: 11px;
+          }
+
+          .timelineLine::before,
+          .timelineLine::after {
+            left: 50%;
+            right: auto;
+            width: 10px;
+            height: 10px;
+            transform: translate(-50%, -50%);
+          }
+
+          .timelineLine::after {
+            top: 100%;
+          }
+
+          .timelineDetails {
+            margin: 26px 0 0;
+          }
+
+          .technologyDirectory {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .technologyDirectory li:nth-child(3n + 2),
+          .technologyDirectory li:nth-child(3n + 3) {
+            padding-left: 0;
+            border-left: 0;
+          }
+
+          .technologyDirectory li:nth-child(even) {
+            padding-left: 14px;
+            border-left: 1px solid rgba(245, 242, 233, 0.18);
+          }
+
+          .stopSignWrap {
+            width: calc(100% - 80px);
+            margin-left: 40px;
+            justify-content: flex-start;
+            padding-top: 36px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .heroPanel h1 {
+            font-size: clamp(48px, 16vw, 76px);
+          }
+
+          .projectItemTop {
+            gap: 12px;
+          }
+
+          .projectItemCategory {
+            font-size: 9px;
+          }
+
+          .projectItemNumber {
+            font-size: 28px;
+          }
+
+          .projectItem h3 {
+            font-size: clamp(24px, 8vw, 36px);
+          }
+
+          .technologyDirectory li {
+            min-height: 78px;
+            font-size: 15px;
+          }
+
+          .technologyDirectory li:nth-child(even) {
+            padding-left: 10px;
           }
         }
       `}</style>

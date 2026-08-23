@@ -409,8 +409,8 @@ export default function About() {
       const compactLayout = window.innerWidth < 1180;
       const headerHeight = getHeaderHeight();
       const stageHeight = compactLayout
-        ? Math.max(1, window.innerHeight - headerHeight)
-        : Math.max(460, window.innerHeight - headerHeight);
+        ? Math.max(1, window.innerHeight)
+        : Math.max(460, window.innerHeight);
       const cutHeight = window.innerWidth * Math.tan((5 * Math.PI) / 180);
       const compactBikeMinScale = stageHeight < 480 ? 0.34 : 0.56;
       const bikeScale = compactLayout
