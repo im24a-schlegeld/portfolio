@@ -5,6 +5,12 @@ export const navigationItems = [
   { key: 'contact', label: 'Kontakt', href: '/kontakt' },
 ];
 
+export const portfolioContact = {
+  email: 'dario.schlegel@example.com',
+  emailIsPlaceholder: true,
+  githubUrl: 'https://github.com/im24a-schlegeld',
+};
+
 export const technologyList = [
   'Python',
   'Java',
