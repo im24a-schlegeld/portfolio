@@ -11,7 +11,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className="roadMain">
-      <SiteHeader activeKey="home" roadStripes roadTexture />
+      <SiteHeader activeKey="home" roadTexture />
 
       <main className="roadMap">
         <div className="centerRoadLine" aria-hidden="true" />
@@ -131,7 +131,10 @@ export default function Home() {
           width: 100%;
           isolation: isolate;
           color: var(--white);
-          background: linear-gradient(180deg, #191919 0%, #101010 48%, #080808 100%);
+          background-color: #111111;
+          background-image: var(--asphalt-surface);
+          background-position: var(--asphalt-surface-position);
+          background-size: var(--asphalt-surface-size);
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
         }
 
@@ -149,30 +152,11 @@ export default function Home() {
           pointer-events: none;
         }
 
-        .roadMain::before {
-          background:
-            radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 0.55px, transparent 0.9px),
-            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.3px),
-            radial-gradient(ellipse at 50% 15%, rgba(255, 255, 255, 0.04), transparent 34rem);
-          background-position: 0 0, 3px 2px, 0 0;
-          background-size: 5px 5px, 8px 8px, 100% 900px;
-          opacity: 0.36;
-        }
-
         .roadMain::after {
           background:
             radial-gradient(ellipse at 50% 42%, transparent 0 38%, rgba(0, 0, 0, 0.28) 100%),
             linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 20% 80%, rgba(0, 0, 0, 0.18));
           opacity: 0.76;
-        }
-
-        .roadMain > header[data-road-stripes='true'] {
-          background:
-            radial-gradient(circle, rgba(255, 255, 255, 0.13) 0 0.55px, transparent 0.95px),
-            radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.35px),
-            linear-gradient(180deg, #1a1a1a, #111111);
-          background-position: 0 0, 3px 2px, 0 0;
-          background-size: 6px 6px, 8px 8px, 100% 100%;
         }
 
         .roadMap {
@@ -209,17 +193,17 @@ export default function Home() {
 
         .intersectionHero {
           display: grid;
-          grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.7fr);
-          column-gap: clamp(48px, 8vw, 130px);
+          grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.65fr);
+          column-gap: clamp(64px, 8vw, 140px);
           align-items: end;
-          min-height: 640px;
-          padding-block: clamp(130px, 13vw, 176px) clamp(110px, 11vw, 146px);
+          min-height: 720px;
+          padding-block: clamp(150px, 15vw, 210px) clamp(130px, 13vw, 180px);
         }
 
         .heroIntro {
           min-width: 0;
           width: 100%;
-          padding-left: 28px;
+          padding: clamp(30px, 4vw, 52px) 0 clamp(30px, 4vw, 52px) 36px;
           border-left: 6px solid var(--paint);
           background: linear-gradient(90deg, rgba(8, 8, 8, 0.6), transparent 92%);
         }
@@ -237,7 +221,7 @@ export default function Home() {
 
         .heroKicker {
           display: block;
-          margin-bottom: 24px;
+            margin-bottom: 32px;
         }
 
         .heroIntro h1 {
@@ -246,7 +230,7 @@ export default function Home() {
           max-width: 760px;
           margin: 0;
           color: var(--white);
-          font-size: clamp(64px, 9vw, 130px);
+          font-size: clamp(60px, 8.4vw, 118px);
           line-height: 0.86;
           letter-spacing: -0.055em;
         }
@@ -255,13 +239,13 @@ export default function Home() {
         .editorialRule {
           width: min(260px, 70%);
           height: 2px;
-          margin-top: 28px;
+          margin-top: 38px;
           background: var(--paint);
         }
 
         .heroIntro p {
           max-width: 540px;
-          margin: 24px 0 0;
+          margin: 30px 0 0;
           color: #c7c0b3;
           font-size: clamp(16px, 1.8vw, 20px);
           line-height: 1.55;
@@ -271,14 +255,14 @@ export default function Home() {
           display: grid;
           gap: 18px;
           min-width: 0;
-          padding: 0 0 8px 18px;
+          padding: 0 0 12px 22px;
           border-left: 1px solid var(--paint-soft);
           line-height: 1.35;
         }
 
         .projectsSection,
         .contentSection {
-          padding-block: clamp(100px, 10vw, 150px);
+          padding-block: clamp(120px, 10vw, 160px);
         }
 
         .sectionIntro {
@@ -318,7 +302,7 @@ export default function Home() {
         .projectItem {
           display: block;
           min-width: 0;
-          padding: 30px 0 34px;
+          padding: clamp(32px, 4vw, 52px) 0;
           border-top: 1px solid rgba(245, 242, 233, 0.24);
           color: inherit;
           text-decoration: none;
@@ -364,7 +348,7 @@ export default function Home() {
           align-items: end;
           gap: 24px 48px;
           min-width: 0;
-          margin-top: 10px;
+          margin-top: 22px;
         }
 
         .projectItemCopy {

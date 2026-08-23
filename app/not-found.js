@@ -5,7 +5,7 @@ import { navigationItems } from '../data/portfolio';
 export default function NotFound() {
   return (
     <main className="notFoundPage">
-      <SiteHeader roadStripes />
+      <SiteHeader roadTexture />
       <div className="roadLine" aria-hidden="true" />
       <section className="notFoundCard">
         <p className="code">404 / Sackgasse</p>

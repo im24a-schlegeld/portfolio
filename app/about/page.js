@@ -39,7 +39,7 @@ const FREIZEIT_COPY = {
 };
 
 function FreizeitHeader() {
-  return <SiteHeader activeKey="about" roadStripes />;
+  return <SiteHeader activeKey="about" roadTexture />;
 }
 
 function PageIntro() {

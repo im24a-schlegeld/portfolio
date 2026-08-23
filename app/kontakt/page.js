@@ -6,79 +6,237 @@ export const metadata = {
   description: 'Kontaktseite von Dario Schlegel.',
 };
 
+function ContactRow({ index, label, value, action, href, external = false }) {
+  return (
+    <a
+      className="contactRow"
+      href={href}
+      {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+    >
+      <span className="contactRowIndex">{index}</span>
+      <span className="contactRowLabel">{label}</span>
+      <span className="contactRowValue">{value}</span>
+      <strong className="contactRowAction">
+        {action} <span className="contactArrow" aria-hidden="true">-&gt;</span>
+      </strong>
+    </a>
+  );
+}
+
 export default function Kontakt() {
   return (
     <main className="contactPage">
-      <SiteHeader activeKey="contact" roadStripes />
+      <SiteHeader activeKey="contact" roadTexture />
 
       <section className="contactContent" aria-labelledby="contact-title">
-        <h1 id="contact-title">Kontakt</h1>
-        <p className="contactLead">
-          Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.
-        </p>
-        <a className="contactButton" href={`mailto:${portfolioContact.email}`}>
-          E-Mail schreiben
-        </a>
+        <div className="contactIntro">
+          <span className="contactKicker">Portfolio / Verbindung</span>
+          <h1 id="contact-title">Kontakt</h1>
+          <div className="contactRule" aria-hidden="true" />
+          <p className="contactLead">
+            Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.
+          </p>
+        </div>
+
+        <div className="contactDirectory" aria-label="Kontaktmöglichkeiten">
+          <ContactRow
+            index="01"
+            label="E-Mail"
+            value={portfolioContact.emailDisplay}
+            action="Schreiben"
+            href={`mailto:${portfolioContact.email}`}
+          />
+          <ContactRow
+            index="02"
+            label="Telefon"
+            value={portfolioContact.phone}
+            action="Anrufen"
+            href={`tel:${portfolioContact.phone}`}
+          />
+          <ContactRow
+            index="03"
+            label="GitHub"
+            value={portfolioContact.githubUrl.replace(/^https?:\/\//, '')}
+            action="Öffnen"
+            href={portfolioContact.githubUrl}
+            external
+          />
+        </div>
       </section>
 
       <style>{`
         .contactPage {
           min-height: 100svh;
-          color: #f7f2e8;
+          color: #f5f2e9;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
-          background: linear-gradient(135deg, #070707 0%, #151411 48%, #050505 100%);
+          background-color: #111111;
+          background-image: var(--asphalt-surface);
+          background-position: var(--asphalt-surface-position);
+          background-size: var(--asphalt-surface-size);
+        }
+
+        .contactPage,
+        .contactPage * {
+          box-sizing: border-box;
         }
 
         .contactContent {
-          width: min(820px, calc(100% - 40px));
+          width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          padding: clamp(84px, 13vw, 170px) 0 140px;
+          padding: clamp(112px, 12vw, 170px) 0 150px;
         }
 
-        .contactContent h1 {
+        .contactIntro {
+          width: min(820px, 100%);
+          padding: clamp(24px, 4vw, 48px) 0 clamp(26px, 4vw, 52px) 36px;
+          border-left: 6px solid #f2c94c;
+          background: linear-gradient(90deg, rgba(8, 8, 8, 0.56), transparent 92%);
+        }
+
+        .contactKicker,
+        .contactRowIndex,
+        .contactRowLabel {
+          color: rgba(242, 201, 76, 0.72);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .contactKicker {
+          display: block;
+          margin-bottom: 30px;
+        }
+
+        .contactIntro h1 {
           margin: 0;
-          font-size: clamp(64px, 13vw, 156px);
-          line-height: 0.8;
-          letter-spacing: -0.08em;
-          text-transform: none;
+          font-size: clamp(58px, 9vw, 120px);
+          line-height: 0.88;
+          letter-spacing: -0.07em;
+          text-transform: uppercase;
+        }
+
+        .contactRule {
+          width: min(280px, 72%);
+          height: 2px;
+          margin-top: 38px;
+          background: #f2c94c;
         }
 
         .contactLead {
-          max-width: 680px;
-          margin: 34px 0 0;
-          color: #cfc7ba;
-          font-size: clamp(19px, 2.4vw, 27px);
-          line-height: 1.5;
+          max-width: 720px;
+          margin: 32px 0 0;
+          color: #c7c0b3;
+          font-size: clamp(18px, 2.2vw, 25px);
+          line-height: 1.52;
         }
 
-        .contactButton {
-          min-height: 46px;
-          display: inline-flex;
+        .contactDirectory {
+          margin-top: clamp(82px, 10vw, 136px);
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
+        }
+
+        .contactRow {
+          display: grid;
+          grid-template-columns: 52px minmax(150px, 0.35fr) minmax(0, 1fr) auto;
           align-items: center;
-          margin-top: 34px;
-          padding: 0 18px;
-          border: 1px solid rgba(242, 201, 76, 0.5);
-          color: #171717;
-          background: #f2c94c;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
+          gap: 20px;
+          min-width: 0;
+          min-height: 92px;
+          padding: 22px 0;
+          border-bottom: 1px solid rgba(245, 242, 233, 0.24);
+          color: inherit;
           text-decoration: none;
-          text-transform: uppercase;
-          transition: transform 180ms ease, filter 180ms ease;
+          transition: border-color 180ms ease, color 180ms ease;
         }
 
-        .contactButton:hover,
-        .contactButton:focus-visible {
-          transform: translateY(-2px);
-          filter: brightness(1.08);
+        .contactRow:hover,
+        .contactRow:focus-visible {
+          border-color: #f2c94c;
           outline: none;
         }
 
-        @media (max-width: 620px) {
+        .contactRowIndex {
+          color: #f2c94c;
+        }
+
+        .contactRowLabel {
+          color: #f5f2e9;
+        }
+
+        .contactRowValue {
+          min-width: 0;
+          overflow-wrap: anywhere;
+          color: #c7c0b3;
+          font-size: clamp(16px, 2vw, 22px);
+          line-height: 1.35;
+        }
+
+        .contactRowAction {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #f2c94c;
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        .contactArrow {
+          display: inline-block;
+          transition: transform 180ms ease;
+        }
+
+        .contactRow:hover .contactArrow,
+        .contactRow:focus-visible .contactArrow {
+          transform: translateX(5px);
+        }
+
+        @media (max-width: 700px) {
           .contactContent {
-            width: min(100% - 28px, 820px);
-            padding-top: 70px;
+            width: calc(100% - 28px);
+            padding: 96px 0 100px;
+          }
+
+          .contactIntro {
+            width: calc(100% - 26px);
+            padding-left: 22px;
+          }
+
+          .contactRow {
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            gap: 12px;
+            min-height: 112px;
+            padding: 22px 0;
+          }
+
+          .contactRowLabel {
+            grid-column: 2 / -1;
+            grid-row: 1;
+          }
+
+          .contactRowIndex {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            align-self: start;
+          }
+
+          .contactRowValue {
+            grid-column: 2;
+            grid-row: 2;
+          }
+
+          .contactRowAction {
+            grid-column: 3;
+            grid-row: 2;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .contactRow,
+          .contactArrow {
+            transition: none;
           }
         }
       `}</style>
