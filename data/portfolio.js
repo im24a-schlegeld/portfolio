@@ -97,33 +97,36 @@ export const projects = [
     ],
   },
   {
-    id: 'x-archive',
+    id: 'music-station',
     number: '03',
-    title: 'X-Archive',
+    title: 'MusicStation',
     category: 'Mobile App Preview',
     subtitle: 'Mobile-first Website-Vorschau als App-Projekt',
     homeText:
       'Mobile-first Webprojekt mit Live-Vorschau im Smartphone-Kontext und direktem Zugriff auf die veröffentlichte Version.',
     homeMeta: 'Mobile / Frontend',
     description:
-      'X-Archive bleibt als eigenständiges Webprojekt im Portfolio erhalten und wird bewusst in einer Smartphone-Ansicht gezeigt, damit der App-Charakter und die mobile Nutzung direkt erkennbar bleiben.',
+      'MusicStation ist ein eigenständiges Webprojekt für die mobile Nutzung und wird bewusst in einer Smartphone-Ansicht gezeigt, damit der App-Charakter direkt erkennbar bleibt.',
     role: 'Frontend und mobile Präsentation',
     status: 'Live-Demo',
     portfolioYear: '2026',
     implementation:
-      'Das Projekt wird als mobile Anwendung präsentiert. Die Live-Version bleibt direkt erreichbar und die Portfolio-Darstellung nutzt eine Smartphone-Vorschau, ohne den eigentlichen Projektzugang zu ersetzen.',
+      'Das Projekt wird als mobile Anwendung präsentiert. Die Live-Version bleibt direkt erreichbar und die Portfolio-Darstellung nutzt zwei Smartphone-Vorschauen für die Live-App und einen mobilen Walkthrough.',
     challenge:
       'Ein klar mobile-first aufgebautes Projekt soll im Desktop-Portfolio verständlich gezeigt werden, ohne seinen eigentlichen Nutzungskontext zu verlieren.',
     solution:
-      'Die Live-Seite wird in einer Smartphone-Darstellung eingebettet und zusätzlich immer über einen direkten externen Link zugänglich gemacht.',
+      'Die Live-Seite wird in einer Smartphone-Darstellung eingebettet und mit einer zweiten, automatisch laufenden Mobile-Aufnahme ergänzt. Beide Wege bleiben direkt erreichbar.',
     result:
       'Besucher sehen den mobilen Charakter sofort und können bei Problemen mit der Einbettung direkt zur Live-Version wechseln.',
     technologies: ['Frontend', 'Mobile Preview', 'Deployment'],
-    liveUrl: 'https://x-archive-v1.vercel.app/',
+    liveUrl: 'https://music-station-omega.vercel.app/',
+    githubUrl: 'https://github.com/im24a-schlegeld/MusicStation',
     media: {
       type: 'phone',
-      src: 'https://x-archive-v1.vercel.app/',
-      label: 'X-Archive mobile Website Vorschau',
+      src: 'https://music-station-omega.vercel.app/',
+      videoSrc: '/music-station-preview.mp4',
+      label: 'MusicStation mobile Website Vorschau',
+      videoLabel: 'MusicStation mobile Video-Vorschau',
     },
   },
 ];

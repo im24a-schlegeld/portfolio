@@ -5,7 +5,7 @@ import Link from 'next/link';
 import localFont from 'next/font/local';
 import { New_Rocker, Racing_Sans_One } from 'next/font/google';
 import SwordModel from './SwordModel';
-import { navigationItems } from '../../data/portfolio';
+import SiteHeader from '../components/SiteHeader';
 
 const racingSansOne = Racing_Sans_One({
   subsets: ['latin'],
@@ -40,28 +40,7 @@ const FREIZEIT_COPY = {
 };
 
 function FreizeitHeader() {
-  return (
-    <header className="header">
-      <div className="container headerInner">
-        <Link className="logo" href="/">
-          Dario Schlegel
-        </Link>
-
-        <nav className="nav" aria-label="Seitennavigation">
-          {navigationItems.map((item) => (
-            <Link
-              className={`navLink ${item.key === 'about' ? 'active' : ''}`}
-              href={item.href}
-              key={item.key}
-              aria-current={item.key === 'about' ? 'page' : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-    </header>
-  );
+  return <SiteHeader activeKey="about" />;
 }
 
 function PageIntro() {
@@ -321,7 +300,7 @@ export default function About() {
     const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
     const getHeaderHeight = () => (
-      document.querySelector('.header')?.getBoundingClientRect().height ?? 70
+      document.querySelector('[data-site-header="true"]')?.getBoundingClientRect().height ?? 70
     );
 
     const renderStory = () => {
@@ -557,13 +536,14 @@ export default function About() {
       <FreizeitFooter />
 
       <style>{`
-        :root {
-          --freizeit-beige: #bb9d75;
+        .page {
+          --site-header-height: 70px;
+          --freizeit-beige: #f2c94c;
           --freizeit-dark: #0c0d0f;
-          --freizeit-blue: #b9ddeb;
-          --freizeit-beige-ink: #241d17;
+          --freizeit-blue: #f2c94c;
+          --freizeit-beige-ink: #21190d;
           --freizeit-light: #f7f7f4;
-          --freizeit-blue-ink: #173248;
+          --freizeit-blue-ink: #21190d;
           --header-bg: #090a0b;
           --header-border: #232426;
           --header-active: #ece4dd;
@@ -614,61 +594,6 @@ export default function About() {
           padding: 0 24px;
         }
 
-        .header {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-          border-bottom: 1px solid var(--header-border);
-          background: var(--header-bg);
-        }
-
-        .headerInner {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          height: 70px;
-        }
-
-        .logo {
-          font-weight: 700;
-          font-size: 18px;
-          color: #f0f0f0;
-          letter-spacing: 0.04em;
-        }
-
-        .nav {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .navLink {
-          display: inline-flex;
-          align-items: center;
-          min-height: 36px;
-          padding: 0 14px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 999px;
-          font-size: 13px;
-          font-weight: 600;
-          color: #a7a7a7;
-          letter-spacing: 0.04em;
-          transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        }
-
-        .navLink:hover,
-        .navLink:focus-visible {
-          border-color: rgba(255, 255, 255, 0.24);
-          color: #ffffff;
-          outline: none;
-        }
-
-        .active {
-          border-color: rgba(236, 228, 221, 0.58);
-          background: var(--header-active);
-          color: #101010;
-        }
-
         .responsivePanel {
           position: relative;
         }
@@ -680,8 +605,8 @@ export default function About() {
 
         .storyViewport {
           position: sticky;
-          top: 70px;
-          height: calc(100vh - 70px);
+          top: var(--site-header-height);
+          height: calc(100vh - var(--site-header-height));
           overflow: hidden;
           background: var(--freizeit-beige);
           isolation: isolate;
@@ -996,7 +921,6 @@ export default function About() {
         .whalesharkVideo {
           width: 100%;
           display: block;
-          border-radius: 40px;
         }
 
         .diveTitle {
@@ -1121,8 +1045,8 @@ export default function About() {
 
         @media (max-width: 1179px) {
           .storyViewport {
-            top: 70px;
-            height: calc(100vh - 70px);
+            top: var(--site-header-height);
+            height: calc(100vh - var(--site-header-height));
             contain: layout paint;
           }
 
@@ -1247,7 +1171,7 @@ export default function About() {
              center remains independent from the sheet's safety extension. */
           .desktopDiveContent {
             top: var(--panel-cut);
-            height: var(--story-stage-height, calc(100vh - 70px));
+            height: var(--story-stage-height, calc(100vh - var(--site-header-height)));
           }
 
           .desktopDiveInner {
@@ -1278,7 +1202,6 @@ export default function About() {
             width: 100%;
             max-height: 34vh;
             object-fit: cover;
-            border-radius: 28px;
           }
 
           .diveTitle {
@@ -1295,8 +1218,9 @@ export default function About() {
         }
 
         @media (max-width: 767px) {
-          :root {
+          .page {
             --panel-cut: 8.75vw;
+            --site-header-height: 112px;
           }
 
           html,
@@ -1309,29 +1233,9 @@ export default function About() {
             max-width: 100%;
           }
 
-          .headerInner {
-            height: 64px;
-          }
-
-          .logo {
-            display: none;
-          }
-
-          .nav {
-            width: 100%;
-            justify-content: center;
-            gap: 6px;
-          }
-
-          .navLink {
-            min-height: 34px;
-            padding: 0 10px;
-            font-size: 11px;
-          }
-
           .storyViewport {
-            top: 64px;
-            height: calc(100vh - 64px);
+            top: var(--site-header-height);
+            height: calc(100vh - var(--site-header-height));
           }
 
           .storyIntroMotion {
@@ -1382,7 +1286,7 @@ export default function About() {
           }
 
           .desktopDiveContent {
-            height: var(--story-stage-height, calc(100vh - 64px));
+            height: var(--story-stage-height, calc(100vh - var(--site-header-height)));
           }
 
           .desktopDiveInner {
@@ -1410,7 +1314,6 @@ export default function About() {
 
           .whalesharkVideo {
             max-height: 31vh;
-            border-radius: 18px;
           }
 
           .footer {

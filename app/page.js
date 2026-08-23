@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { navigationItems, portfolioContact, projects, siteFeatures } from '../data/portfolio';
+import SiteHeader from './components/SiteHeader';
+import { portfolioContact, projects, siteFeatures } from '../data/portfolio';
 
 export const metadata = {
   title: 'Portfolio',
@@ -45,25 +46,7 @@ const roadStops = [
 export default function Home() {
   return (
     <div className="roadMain">
-      <header className="roadHeader">
-        <div className="headerInner">
-          <Link className="brand" href="/">
-            Dario Schlegel
-          </Link>
-
-          <nav className="nav" aria-label="Hauptnavigation">
-            {navigationItems.map((item) => (
-              <Link
-                href={item.href}
-                key={item.key}
-                aria-current={item.key === 'home' ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </header>
+      <SiteHeader activeKey="home" roadStripes />
 
       <main className="roadMap">
         <div className="centerRoadLine" aria-hidden="true" />
@@ -254,87 +237,12 @@ export default function Home() {
           text-decoration: none;
         }
 
-        .roadHeader {
-          position: relative;
-          z-index: 20;
-          background: transparent;
-        }
-
-        .headerInner {
-          width: min(1180px, calc(100% - 40px));
-          min-height: 86px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 24px;
-        }
-
-        .brand {
-          font-size: clamp(19px, 2vw, 30px);
-          font-weight: 900;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-        }
-
-        .nav {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
-          justify-content: flex-end;
-        }
-
-        .nav a {
-          min-height: 36px;
-          display: inline-flex;
-          align-items: center;
-          padding: 0 13px;
-          border: 0;
-          border-radius: 999px;
-          color: var(--muted);
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          background: rgba(0, 0, 0, 0.2);
-          transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
-        }
-
-        .nav a:hover,
-        .nav a:focus-visible {
-          color: var(--white);
-          background: rgba(242, 201, 76, 0.18);
-          transform: translateY(-2px);
-          outline: none;
-        }
-
         .roadMap {
           position: relative;
           z-index: 1;
           width: 100%;
           margin: 0 auto;
           padding: 0 max(20px, calc((100% - 1180px) / 2)) 120px;
-        }
-
-        .roadMap::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          z-index: 0;
-          width: 100%;
-          height: 16px;
-          pointer-events: none;
-          background:
-            repeating-linear-gradient(
-              90deg,
-              transparent 0 32px,
-              var(--paint) 32px 82px,
-              transparent 82px 118px
-            );
-          background-size: 118px 100%;
-          background-position: calc(50% - 57px) top;
         }
 
         .centerRoadLine {
@@ -373,7 +281,6 @@ export default function Home() {
           padding: clamp(28px, 5vw, 56px);
           text-align: left;
           border: 1px solid rgba(245, 242, 233, 0.14);
-          border-radius: 34px;
           background:
             linear-gradient(180deg, rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.82)),
             repeating-linear-gradient(12deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 8px);
@@ -473,7 +380,6 @@ export default function Home() {
           position: relative;
           padding: 28px;
           border: 1px solid rgba(245, 242, 233, 0.13);
-          border-radius: 26px;
           background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
             rgba(10, 10, 10, 0.84);
@@ -488,7 +394,6 @@ export default function Home() {
           position: absolute;
           inset: 12px;
           border: 1px dashed rgba(242, 201, 76, 0.18);
-          border-radius: 18px;
           pointer-events: none;
         }
 
@@ -519,7 +424,6 @@ export default function Home() {
           margin-top: 24px;
           padding: 0 18px;
           border: 1px solid rgba(242, 201, 76, 0.5);
-          border-radius: 999px;
           color: #171717;
           background: var(--paint);
           font-size: 12px;
@@ -695,7 +599,6 @@ export default function Home() {
         .contactCard {
           padding: clamp(28px, 5vw, 48px);
           border: 1px solid rgba(245, 242, 233, 0.13);
-          border-radius: 28px;
           background: rgba(10, 10, 10, 0.84);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
         }
@@ -745,18 +648,6 @@ export default function Home() {
         }
 
         @media (max-width: 860px) {
-          .headerInner {
-            min-height: 78px;
-            align-items: flex-start;
-            justify-content: center;
-            flex-direction: column;
-            padding: 16px 0;
-          }
-
-          .nav {
-            justify-content: flex-start;
-          }
-
           .roadMap {
             width: 100%;
             padding-inline: 14px;
@@ -842,21 +733,13 @@ export default function Home() {
         }
 
         @media (max-width: 520px) {
-          .headerInner,
           .roadFooter {
             width: min(100% - 28px, 420px);
-          }
-
-          .nav a {
-            min-height: 32px;
-            padding: 0 10px;
-            font-size: 10px;
           }
 
           .heroPanel {
             margin-left: 58px;
             padding: 24px;
-            border-radius: 24px;
           }
 
           .routeStop,
