@@ -12,11 +12,32 @@ export default function StopSignReveal() {
 
     if (!sentinel) return undefined;
 
+    let animationFrame = null;
+    let hasRevealed = false;
+
+    const revealAtDocumentEnd = () => {
+      animationFrame = null;
+
+      const page = document.documentElement;
+      const remainingScroll = page.scrollHeight - (window.scrollY + window.innerHeight);
+
+      // Browser zoom can leave a sub-pixel remainder at the real scroll limit.
+      if (!hasRevealed && remainingScroll <= 0.5) {
+        hasRevealed = true;
+        setShowStopSign(true);
+      }
+    };
+
+    const checkDocumentEnd = () => {
+      if (!hasRevealed && animationFrame === null) {
+        animationFrame = window.requestAnimationFrame(revealAtDocumentEnd);
+      }
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShowStopSign(true);
-          observer.disconnect();
+          checkDocumentEnd();
         }
       },
       { threshold: 0.1 }
@@ -24,7 +45,19 @@ export default function StopSignReveal() {
 
     observer.observe(sentinel);
 
-    return () => observer.disconnect();
+    window.addEventListener('scroll', checkDocumentEnd, { passive: true });
+    window.addEventListener('resize', checkDocumentEnd);
+    checkDocumentEnd();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', checkDocumentEnd);
+      window.removeEventListener('resize', checkDocumentEnd);
+
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };
   }, []);
 
   return (
