@@ -3,13 +3,6 @@ import Link from 'next/link';
 import SiteHeader from './components/SiteHeader';
 import { projects, technologyList } from '../data/portfolio';
 
-const hiddenMainTechnologies = new Set([
-  'NoSQL',
-  'Git',
-  'Applikationssicherheit',
-  'Datenschutz',
-]);
-
 export const metadata = {
   title: 'Portfolio',
   description: 'Portfolio von Dario Schlegel mit Projekten aus Informatik, Frontend, Interface Design und persönlichen Arbeiten.',
@@ -95,36 +88,36 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="technologies" className="contentSection technologySection" aria-labelledby="technologies-title">
-          <div className="directoryBlock">
-            <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
-            <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
-            <ul className="technologyDirectory">
-              {technologyList
-                .filter((technology) => !hiddenMainTechnologies.has(technology))
-                .map((technology, index) => (
+        <div className="finalRoadSection">
+          <section id="technologies" className="contentSection technologySection" aria-labelledby="technologies-title">
+            <div className="directoryBlock">
+              <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
+              <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
+              <ul className="technologyDirectory">
+                {technologyList.map((technology, index) => (
                   <li key={technology}>
                     <span>{String(index + 1).padStart(2, '0')}</span>
                     <strong>{technology}</strong>
                   </li>
                 ))}
-            </ul>
-          </div>
-        </section>
-      </main>
+              </ul>
+            </div>
+          </section>
 
-      <div className="stopSignWrap" aria-hidden="true">
-        <div className="stopSignMarker">
-          <Image
-            className="stopSignImage"
-            src="/Stop_sign.png"
-            alt=""
-            width={608}
-            height={608}
-          />
-          <div className="stopSignPole" />
+          <div className="stopSignWrap" aria-hidden="true">
+            <div className="stopSignMarker">
+              <Image
+                className="stopSignImage"
+                src="/Stop_sign.png"
+                alt=""
+                width={608}
+                height={608}
+              />
+              <div className="stopSignPole" />
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
 
       <style>{`
         .roadMain {
@@ -277,14 +270,19 @@ export default function Home() {
           padding-block: clamp(72px, 7vw, 105px);
         }
 
-        .technologySection {
+        .finalRoadSection {
           position: relative;
           z-index: 2;
-          padding-bottom: 28px;
-          background-color: var(--asphalt);
-          background-image: var(--asphalt-surface);
-          background-position: var(--asphalt-surface-position);
-          background-size: var(--asphalt-surface-size);
+          width: 100%;
+        }
+
+        .technologySection {
+          width: 100%;
+          padding: clamp(72px, 7vw, 105px) clamp(24px, 4vw, 52px) clamp(180px, 16vw, 230px);
+          border: 1px solid rgba(245, 242, 233, 0.24);
+          border-top-color: rgba(242, 201, 76, 0.55);
+          border-radius: 0;
+          background: rgba(5, 5, 5, 0.22);
         }
 
         .sectionIntro {
@@ -523,15 +521,27 @@ export default function Home() {
           font-weight: 800;
         }
 
+        .technologySection .directoryBlock,
+        .technologySection .directoryBlock > h2,
+        .technologySection .directoryBlock > p {
+          width: 100%;
+          max-width: none;
+        }
+
+        .technologySection .directoryBlock > p {
+          max-width: 760px;
+        }
+
         .technologyDirectory {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          width: min(100%, 1040px);
-          margin: 24px 0 0;
-          margin-inline: auto;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          width: 100%;
+          margin: clamp(32px, 4vw, 48px) 0 0;
           padding: 0;
           list-style: none;
-          border: 1px solid rgba(245, 242, 233, 0.24);
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
+          border-left: 1px solid rgba(245, 242, 233, 0.12);
+          background: rgba(5, 5, 5, 0.48);
         }
 
         .technologyDirectory li {
@@ -539,15 +549,11 @@ export default function Home() {
           align-items: baseline;
           gap: 12px;
           min-width: 0;
-          min-height: 70px;
-          padding: 14px 14px 12px 0;
+          min-height: 74px;
+          padding: 16px 18px 14px;
+          border-right: 1px solid rgba(245, 242, 233, 0.12);
           border-bottom: 1px solid rgba(245, 242, 233, 0.24);
           color: var(--white);
-        }
-
-        .technologyDirectory li:nth-child(even) {
-          padding-left: 24px;
-          border-left: 1px solid rgba(245, 242, 233, 0.18);
         }
 
         .technologyDirectory li span {
@@ -561,33 +567,32 @@ export default function Home() {
         .technologyDirectory li strong {
           min-width: 0;
           overflow-wrap: break-word;
-          font-size: clamp(16px, 2vw, 24px);
-          line-height: 1.05;
+          hyphens: auto;
+          font-size: clamp(16px, 1.7vw, 22px);
+          line-height: 1.12;
           letter-spacing: -0.03em;
         }
 
         .stopSignWrap {
-          position: relative;
-          z-index: 3;
-          display: flex;
-          justify-content: flex-start;
-          width: min(1180px, calc(100% - 40px));
-          margin: 0 auto;
-          padding: 0 0 24px;
+          position: absolute;
+          z-index: 5;
+          inset: 0;
+          pointer-events: none;
         }
 
         .stopSignMarker {
+          position: absolute;
+          bottom: 1px;
+          left: calc(50% - 310px);
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 0;
-          margin-left: clamp(70px, 13vw, 170px);
-          transform: translateY(-44px);
         }
 
         .stopSignImage {
           display: block;
-          width: 132px;
+          width: 124px;
           height: auto;
           object-fit: contain;
           filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.32));
@@ -595,7 +600,7 @@ export default function Home() {
 
         .stopSignPole {
           width: 10px;
-          height: 220px;
+          height: 160px;
           background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
           box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.22), inset -2px 0 0 rgba(0, 0, 0, 0.18);
         }
@@ -640,9 +645,23 @@ export default function Home() {
             width: 100%;
             max-width: 720px;
           }
+
+          .technologySection {
+            padding-inline: clamp(24px, 4vw, 40px);
+            padding-bottom: 230px;
+          }
+
+          .stopSignMarker {
+            right: 32px;
+            left: auto;
+          }
         }
 
         @media (max-width: 900px) {
+          .technologyDirectory {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
           .projectItemTop {
             align-items: flex-start;
             flex-direction: column;
@@ -744,7 +763,7 @@ export default function Home() {
           }
 
           .technologySection {
-            padding-bottom: 28px;
+            padding: 64px clamp(20px, 5vw, 32px) 180px;
           }
 
           .sectionIntro,
@@ -761,23 +780,22 @@ export default function Home() {
           }
 
           .stopSignWrap {
-            width: calc(100% - var(--mobile-content-offset) - var(--mobile-stop-gutter));
-            margin-left: var(--mobile-content-offset);
-            padding: 0 0 32px;
+            inset: 0;
           }
 
           .stopSignMarker {
-            margin-left: 12px;
-            transform: translateY(-28px);
+            right: clamp(18px, 6vw, 36px);
+            bottom: 1px;
+            left: auto;
           }
 
           .stopSignImage {
-            width: 90px;
+            width: 82px;
           }
 
           .stopSignPole {
-            height: 150px;
-            width: 8px;
+            width: 7px;
+            height: 125px;
           }
         }
 
@@ -786,9 +804,8 @@ export default function Home() {
             grid-template-columns: 1fr;
           }
 
-          .technologyDirectory li:nth-child(even) {
-            padding-left: 0;
-            border-left: 0;
+          .technologyDirectory li {
+            min-height: 62px;
           }
 
           .heroIntro h1 {
