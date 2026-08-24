@@ -1,7 +1,24 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import SiteHeader from './components/SiteHeader';
+import StopSignReveal from './components/StopSignReveal';
 import { projects, technologyList } from '../data/portfolio';
+
+const mainPageTechnologyNames = [
+  'Python',
+  'Java',
+  'JavaScript',
+  'HTML',
+  'CSS',
+  'SQL',
+  'MongoDB',
+  'AWS',
+  'Docker',
+  'GitHub',
+];
+
+const mainPageTechnologies = mainPageTechnologyNames.filter((technology) =>
+  technologyList.includes(technology)
+);
 
 export const metadata = {
   title: 'Portfolio',
@@ -94,7 +111,7 @@ export default function Home() {
               <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
               <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
               <ul className="technologyDirectory">
-                {technologyList.map((technology, index) => (
+                {mainPageTechnologies.map((technology, index) => (
                   <li key={technology}>
                     <span>{String(index + 1).padStart(2, '0')}</span>
                     <strong>{technology}</strong>
@@ -104,18 +121,7 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="stopSignWrap" aria-hidden="true">
-            <div className="stopSignMarker">
-              <Image
-                className="stopSignImage"
-                src="/Stop_sign.png"
-                alt=""
-                width={608}
-                height={608}
-              />
-              <div className="stopSignPole" />
-            </div>
-          </div>
+          <StopSignReveal />
         </div>
       </main>
 
@@ -582,12 +588,25 @@ export default function Home() {
 
         .stopSignMarker {
           position: absolute;
+          z-index: 10;
           bottom: 1px;
           left: calc(50% - 310px);
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 0;
+          opacity: 0;
+          transform: translateY(90px) scale(0.92);
+          transform-origin: 50% 100%;
+          transition:
+            opacity 420ms ease,
+            transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+          will-change: opacity, transform;
+        }
+
+        .stopSignMarker.isVisible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
 
         .stopSignImage {
@@ -603,6 +622,15 @@ export default function Home() {
           height: 160px;
           background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
           box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.22), inset -2px 0 0 rgba(0, 0, 0, 0.18);
+        }
+
+        .bottomSentinel {
+          position: absolute;
+          right: 0;
+          bottom: 64px;
+          width: 1px;
+          height: 1px;
+          pointer-events: none;
         }
 
         @media (max-width: 1050px) {
@@ -816,6 +844,12 @@ export default function Home() {
         @media (prefers-reduced-motion: reduce) {
           .projectItem,
           .projectItemCta span {
+            transition: none;
+          }
+
+          .stopSignMarker,
+          .stopSignMarker.isVisible {
+            transform: none;
             transition: none;
           }
         }
