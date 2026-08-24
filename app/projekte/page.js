@@ -172,7 +172,7 @@ function ProjectShowcase({ project }) {
 export default function Projekte() {
   return (
     <main className="projectsPage">
-      <SiteHeader activeKey="projects" roadTexture />
+      <SiteHeader activeKey="projects" />
       <section className="projectsIntro" aria-labelledby="projects-title">
         <h1 id="projects-title">Projekte</h1>
         <p className="introText">Projekte aus der Schule und aus eigener Arbeit.</p>

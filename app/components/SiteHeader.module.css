@@ -1,20 +1,49 @@
 .siteHeader {
-  --site-header-height: 78px;
+  --site-header-height: 92px;
   box-sizing: border-box;
   position: relative;
   z-index: 50;
   min-height: var(--site-header-height);
-  border-bottom: 1px solid rgba(245, 242, 233, 0.12);
-  background-color: #111111;
+  border-bottom: 0;
+  background: linear-gradient(180deg, #0b0c0d 0%, #090a0b 100%);
   color: #f5f2e9;
 }
 
-.siteHeaderRoadTexture {
-  background-color: #151515;
-  background-image: var(--asphalt-surface);
-  background-position: var(--asphalt-surface-position);
-  background-size: var(--asphalt-surface-size);
-  border-bottom-color: transparent;
+.siteHeaderHome {
+  background: linear-gradient(
+    180deg,
+    #090a0b 0%,
+    #090a0b 62%,
+    rgba(9, 10, 11, 0.92) 76%,
+    rgba(9, 10, 11, 0.54) 90%,
+    rgba(9, 10, 11, 0) 100%
+  );
+}
+
+.siteHeaderHome::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  left: 0;
+  height: 8px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 32px,
+    #f2c94c 32px 82px,
+    transparent 82px 118px
+  );
+  background-position: 0 0;
+  animation: none;
+}
+
+.siteHeaderHome[data-transition='true']::after {
+  animation: roadHeaderStripesLeft 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.siteHeaderHome[data-transition='true'][data-direction='right']::after {
+  animation-name: roadHeaderStripesRight;
 }
 
 .siteHeader * {
@@ -52,7 +81,7 @@
 
 .siteNavLink {
   position: relative;
-  min-height: 36px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   padding: 0 13px;
@@ -78,22 +107,42 @@
   content: '';
   position: absolute;
   right: 13px;
-  bottom: 4px;
+  bottom: 7px;
   left: 13px;
   height: 2px;
   background: #f2c94c;
 }
 
+@keyframes roadHeaderStripesLeft {
+  from {
+    background-position: -118px 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes roadHeaderStripesRight {
+  from {
+    background-position: 118px 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
 @media (max-width: 700px) {
   .siteHeader {
-    --site-header-height: 108px;
+    --site-header-height: 126px;
   }
 
   .siteHeaderInner {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
-    gap: 14px;
+    gap: 12px;
     padding: 16px 0;
   }
 
@@ -103,13 +152,17 @@
   }
 
   .siteNavLink {
-    min-height: 31px;
+    min-height: 44px;
     padding: 0 9px;
     font-size: 10px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .siteHeaderHome::after {
+    animation: none;
+  }
+
   .siteNavLink {
     transition: none;
   }

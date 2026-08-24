@@ -11,7 +11,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className="roadMain">
-      <SiteHeader activeKey="home" roadTexture />
+      <SiteHeader activeKey="home" variant="home" />
 
       <main className="roadMap">
         <div className="centerRoadLine" aria-hidden="true" />
@@ -119,6 +119,9 @@ export default function Home() {
 
       <style>{`
         .roadMain {
+          --mobile-road-x: 14px;
+          --mobile-content-offset: 40px;
+          --mobile-stop-gutter: 28px;
           --asphalt: #171717;
           --asphalt-dark: #070707;
           --paint: #f2c94c;
@@ -193,7 +196,7 @@ export default function Home() {
 
         .intersectionHero {
           display: grid;
-          grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.65fr);
+          grid-template-columns: minmax(0, calc(50% - 42px)) minmax(250px, 1fr);
           column-gap: clamp(64px, 8vw, 140px);
           align-items: end;
           min-height: 720px;
@@ -266,6 +269,7 @@ export default function Home() {
         }
 
         .sectionIntro {
+          width: min(780px, calc(50% - 42px));
           min-width: 0;
           margin-bottom: 38px;
         }
@@ -338,13 +342,13 @@ export default function Home() {
 
         .projectItemCategory {
           min-width: 0;
-          overflow-wrap: anywhere;
+          overflow-wrap: break-word;
           text-align: right;
         }
 
         .projectItemMain {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-columns: minmax(0, calc(50% - 42px)) minmax(0, 1fr);
           align-items: end;
           gap: 24px 48px;
           min-width: 0;
@@ -358,7 +362,7 @@ export default function Home() {
         .projectItem h3 {
           min-width: 0;
           margin: 0;
-          overflow-wrap: anywhere;
+          overflow-wrap: break-word;
           font-size: clamp(25px, 3vw, 42px);
           line-height: 0.96;
           letter-spacing: -0.055em;
@@ -374,6 +378,7 @@ export default function Home() {
 
         .projectItemCta {
           display: inline-flex;
+          justify-self: end;
           flex: 0 0 auto;
           gap: 8px;
           margin: 0;
@@ -395,7 +400,7 @@ export default function Home() {
         }
 
         .editorialBlock {
-          width: min(780px, calc(50% - 56px));
+          width: min(780px, calc(50% - 42px));
           min-width: 0;
         }
 
@@ -420,6 +425,15 @@ export default function Home() {
         .directoryBlock {
           width: 100%;
           min-width: 0;
+        }
+
+        .directoryBlock > h2,
+        .directoryBlock > p {
+          width: min(780px, calc(50% - 42px));
+        }
+
+        .directoryBlock > p {
+          max-width: min(620px, calc(50% - 42px));
         }
 
         .timelineScale {
@@ -464,8 +478,9 @@ export default function Home() {
         }
 
         .timelineDetails {
-          max-width: 720px;
-          margin: 36px 0 0 9%;
+          width: 100%;
+          max-width: min(720px, calc(44% - 42px));
+          margin: 36px 0 0 6%;
         }
 
         .timelineDetails h3 {
@@ -527,7 +542,7 @@ export default function Home() {
 
         .technologyDirectory li strong {
           min-width: 0;
-          overflow-wrap: anywhere;
+          overflow-wrap: break-word;
           font-size: clamp(16px, 2vw, 24px);
           line-height: 1.05;
           letter-spacing: -0.03em;
@@ -585,67 +600,57 @@ export default function Home() {
           }
         }
 
-        @media (max-width: 980px) {
+        @media (max-width: 1050px) {
+          .centerRoadLine {
+            left: var(--mobile-road-x);
+            width: 5px;
+            transform: none;
+          }
+
           .intersectionHero {
             grid-template-columns: 1fr;
             row-gap: 42px;
+            padding-left: var(--mobile-content-offset);
           }
 
           .heroMeta {
             width: min(420px, 100%);
             margin-left: 28px;
           }
-        }
-
-        @media (max-width: 760px) {
-          .roadMap {
-            width: calc(100% - 28px);
-          }
-
-          .centerRoadLine {
-            left: 14px;
-            width: 5px;
-            transform: none;
-          }
-
-          .intersectionHero {
-            display: block;
-            min-height: 0;
-            padding-block: 118px 96px;
-          }
-
-          .heroIntro {
-            width: calc(100% - 40px);
-            margin-left: 40px;
-            padding-left: 18px;
-          }
-
-          .heroIntro h1 {
-            font-size: clamp(52px, 16vw, 88px);
-          }
-
-          .heroMeta {
-            width: auto;
-            margin: 44px 0 0 40px;
-          }
 
           .projectsSection,
           .contentSection {
-            padding-block: 112px 84px;
-            padding-left: 40px;
+            padding-left: var(--mobile-content-offset);
           }
 
-          .sectionIntro,
-          .projectList,
-          .editorialBlock,
-          .timelineBlock,
-          .directoryBlock {
+          .editorialBlock {
             width: 100%;
-            margin-left: 0;
           }
 
           .sectionIntro {
-            margin-bottom: 28px;
+            width: 100%;
+          }
+
+          .timelineDetails {
+            max-width: 720px;
+          }
+
+          .directoryBlock > h2,
+          .directoryBlock > p {
+            width: 100%;
+            max-width: 720px;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .projectItemTop {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
+          }
+
+          .projectItemCategory {
+            text-align: left;
           }
 
           .projectItemMain {
@@ -654,6 +659,7 @@ export default function Home() {
           }
 
           .projectItemCta {
+            justify-self: start;
             margin-top: 20px;
           }
 
@@ -691,6 +697,7 @@ export default function Home() {
           }
 
           .timelineDetails {
+            max-width: 720px;
             margin: 36px 0 0;
           }
 
@@ -708,10 +715,64 @@ export default function Home() {
             padding-left: 12px;
             border-left: 1px solid rgba(245, 242, 233, 0.18);
           }
+        }
+
+        @media (max-width: 760px) {
+          .roadMap {
+            width: calc(100% - 28px);
+          }
+
+          .centerRoadLine {
+            left: var(--mobile-road-x);
+            width: 5px;
+            transform: none;
+          }
+
+          .intersectionHero {
+            display: block;
+            min-height: 0;
+            padding-left: 0;
+            padding-block: 118px 96px;
+          }
+
+          .heroIntro {
+            width: calc(100% - 40px);
+            width: calc(100% - var(--mobile-content-offset));
+            margin-left: var(--mobile-content-offset);
+            padding-left: 18px;
+          }
+
+          .heroIntro h1 {
+            font-size: clamp(52px, 16vw, 88px);
+          }
+
+          .heroMeta {
+            width: auto;
+            margin: 44px 0 0 var(--mobile-content-offset);
+          }
+
+          .projectsSection,
+          .contentSection {
+            padding-block: 112px 84px;
+            padding-left: var(--mobile-content-offset);
+          }
+
+          .sectionIntro,
+          .projectList,
+          .editorialBlock,
+          .timelineBlock,
+          .directoryBlock {
+            width: 100%;
+            margin-left: 0;
+          }
+
+          .sectionIntro {
+            margin-bottom: 28px;
+          }
 
           .stopSignWrap {
-            width: calc(100% - 68px);
-            margin-left: 40px;
+            width: calc(100% - var(--mobile-content-offset) - var(--mobile-stop-gutter));
+            margin-left: var(--mobile-content-offset);
             padding: 42px 0 92px;
           }
 
@@ -729,7 +790,7 @@ export default function Home() {
           }
         }
 
-        @media (max-width: 390px) {
+        @media (max-width: 500px) {
           .technologyDirectory {
             grid-template-columns: 1fr;
           }

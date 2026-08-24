@@ -26,16 +26,12 @@ function ContactRow({ index, label, value, action, href, external = false }) {
 export default function Kontakt() {
   return (
     <main className="contactPage">
-      <SiteHeader activeKey="contact" roadTexture />
+      <SiteHeader activeKey="contact" />
 
       <section className="contactContent" aria-labelledby="contact-title">
         <div className="contactIntro">
-          <span className="contactKicker">Portfolio / Verbindung</span>
           <h1 id="contact-title">Kontakt</h1>
           <div className="contactRule" aria-hidden="true" />
-          <p className="contactLead">
-            Für mein Praktikumsjahr von Sommer 2027 bis Sommer 2028 suche ich eine Stelle im Bereich Informatik Applikationsentwicklung.
-          </p>
         </div>
 
         <div className="contactDirectory" aria-label="Kontaktmöglichkeiten">
@@ -69,10 +65,7 @@ export default function Kontakt() {
           min-height: 100svh;
           color: #f5f2e9;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
-          background-color: #111111;
-          background-image: var(--asphalt-surface);
-          background-position: var(--asphalt-surface-position);
-          background-size: var(--asphalt-surface-size);
+          background: linear-gradient(135deg, #070707 0%, #111111 55%, #070707 100%);
         }
 
         .contactPage,
@@ -83,17 +76,16 @@ export default function Kontakt() {
         .contactContent {
           width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          padding: clamp(112px, 12vw, 170px) 0 150px;
+          padding: clamp(100px, 11vw, 150px) 0 150px;
         }
 
         .contactIntro {
           width: min(820px, 100%);
-          padding: clamp(24px, 4vw, 48px) 0 clamp(26px, 4vw, 52px) 36px;
+          padding: clamp(20px, 3vw, 36px) 0 clamp(20px, 3vw, 36px) 36px;
           border-left: 6px solid #f2c94c;
           background: linear-gradient(90deg, rgba(8, 8, 8, 0.56), transparent 92%);
         }
 
-        .contactKicker,
         .contactRowIndex,
         .contactRowLabel {
           color: rgba(242, 201, 76, 0.72);
@@ -103,14 +95,9 @@ export default function Kontakt() {
           text-transform: uppercase;
         }
 
-        .contactKicker {
-          display: block;
-          margin-bottom: 30px;
-        }
-
         .contactIntro h1 {
           margin: 0;
-          font-size: clamp(58px, 9vw, 120px);
+          font-size: clamp(52px, 8vw, 105px);
           line-height: 0.88;
           letter-spacing: -0.07em;
           text-transform: uppercase;
@@ -119,20 +106,12 @@ export default function Kontakt() {
         .contactRule {
           width: min(280px, 72%);
           height: 2px;
-          margin-top: 38px;
+          margin-top: 28px;
           background: #f2c94c;
         }
 
-        .contactLead {
-          max-width: 720px;
-          margin: 32px 0 0;
-          color: #c7c0b3;
-          font-size: clamp(18px, 2.2vw, 25px);
-          line-height: 1.52;
-        }
-
         .contactDirectory {
-          margin-top: clamp(82px, 10vw, 136px);
+          margin-top: clamp(72px, 8vw, 112px);
           border-top: 1px solid rgba(245, 242, 233, 0.24);
         }
 
@@ -166,7 +145,7 @@ export default function Kontakt() {
 
         .contactRowValue {
           min-width: 0;
-          overflow-wrap: anywhere;
+          overflow-wrap: break-word;
           color: #c7c0b3;
           font-size: clamp(16px, 2vw, 22px);
           line-height: 1.35;
@@ -196,7 +175,7 @@ export default function Kontakt() {
         @media (max-width: 700px) {
           .contactContent {
             width: calc(100% - 28px);
-            padding: 96px 0 100px;
+            padding: 82px 0 100px;
           }
 
           .contactIntro {
