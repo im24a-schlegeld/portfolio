@@ -284,7 +284,7 @@ export default function Home() {
 
         .technologySection {
           width: 100%;
-          padding: clamp(72px, 7vw, 105px) clamp(24px, 4vw, 52px) clamp(180px, 16vw, 230px);
+          padding: clamp(72px, 7vw, 105px) clamp(24px, 4vw, 52px) clamp(120px, 11vw, 150px);
           border: 1px solid rgba(245, 242, 233, 0.24);
           border-top-color: rgba(242, 201, 76, 0.55);
           border-radius: 0;
@@ -596,17 +596,35 @@ export default function Home() {
           align-items: center;
           gap: 0;
           opacity: 0;
-          transform: translateY(90px) scale(0.92);
-          transform-origin: 50% 100%;
-          transition:
-            opacity 420ms ease,
-            transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+          transform: scale(0.2);
+          transform-origin: 50% 36%;
           will-change: opacity, transform;
         }
 
         .stopSignMarker.isVisible {
-          opacity: 1;
-          transform: translateY(0) scale(1);
+          animation: stopSignSpawn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes stopSignSpawn {
+          0% {
+            opacity: 0;
+            transform: scale(0.2);
+          }
+
+          62% {
+            opacity: 1;
+            transform: scale(1.07);
+          }
+
+          82% {
+            opacity: 1;
+            transform: scale(0.98);
+          }
+
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
         .stopSignImage {
@@ -627,7 +645,7 @@ export default function Home() {
         .bottomSentinel {
           position: absolute;
           right: 0;
-          bottom: 64px;
+          bottom: 1px;
           width: 1px;
           height: 1px;
           pointer-events: none;
@@ -676,7 +694,7 @@ export default function Home() {
 
           .technologySection {
             padding-inline: clamp(24px, 4vw, 40px);
-            padding-bottom: 230px;
+            padding-bottom: 150px;
           }
 
           .stopSignMarker {
@@ -791,7 +809,7 @@ export default function Home() {
           }
 
           .technologySection {
-            padding: 64px clamp(20px, 5vw, 32px) 180px;
+            padding: 64px clamp(20px, 5vw, 32px) 120px;
           }
 
           .sectionIntro,
@@ -850,7 +868,11 @@ export default function Home() {
           .stopSignMarker,
           .stopSignMarker.isVisible {
             transform: none;
-            transition: none;
+            animation: none;
+          }
+
+          .stopSignMarker.isVisible {
+            opacity: 1;
           }
         }
       `}</style>
