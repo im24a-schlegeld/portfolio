@@ -7,7 +7,7 @@ export const navigationItems = [
 
 export const portfolioContact = {
   email: 'dario@uitikon.ch',
-  emailDisplay: 'dario(a)uitikon.ch',
+  emailDisplay: 'dario@uitikon.ch',
   phone: '0797547501',
   githubUrl: 'https://github.com/im24a-schlegeld',
 };
