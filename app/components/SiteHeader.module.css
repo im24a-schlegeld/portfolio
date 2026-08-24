@@ -56,6 +56,16 @@
   animation-name: roadHeaderStripesRight;
 }
 
+:global(html[data-page-transition='waiting']) .siteHeader ~ * {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:global(html[data-page-transition='revealing']) .siteHeader ~ * {
+  animation: sitePageReveal 440ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .siteHeaderInner {
   position: relative;
   z-index: 1;
@@ -145,6 +155,16 @@
   }
 }
 
+@keyframes sitePageReveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 700px) {
   .siteHeader {
     --site-header-height: 126px;
@@ -174,6 +194,13 @@
 @media (prefers-reduced-motion: reduce) {
   .roadStripeLayer {
     animation: none !important;
+  }
+
+  :global(html[data-page-transition]) .siteHeader ~ * {
+    visibility: visible;
+    opacity: 1;
+    animation: none;
+    pointer-events: auto;
   }
 
   .siteNavLink {

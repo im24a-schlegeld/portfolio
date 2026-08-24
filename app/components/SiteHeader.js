@@ -11,6 +11,7 @@ const ROAD_CYCLE = ROAD_DASH + ROAD_GAP;
 
 export default function SiteHeader({ activeKey, variant = 'default' }) {
   const headerRef = useRef(null);
+  const revealTimerRef = useRef(null);
   const [stripeOffsets, setStripeOffsets] = useState([]);
   const transitionKey = `${variant}:${activeKey ?? ''}`;
 
@@ -54,7 +55,16 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const storedDirection = window.sessionStorage.getItem('site-header-direction');
     headerRef.current?.removeAttribute('data-transition');
 
-    if (!isInternalNavigation) return undefined;
+    if (!isInternalNavigation) {
+      document.documentElement.removeAttribute('data-page-transition');
+      return undefined;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.sessionStorage.removeItem('site-header-pending-navigation');
+      document.documentElement.removeAttribute('data-page-transition');
+      return undefined;
+    }
 
     const direction = isValidDirection(storedDirection) ? storedDirection : 'right';
     headerRef.current?.setAttribute('data-direction', direction);
@@ -88,6 +98,8 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
     const nextIndex = navigationItems.findIndex((item) => item.key === key);
     const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
+    if (revealTimerRef.current) window.clearTimeout(revealTimerRef.current);
+    document.documentElement.setAttribute('data-page-transition', 'waiting');
     window.sessionStorage.setItem('site-header-direction', nextDirection);
     window.sessionStorage.setItem('site-header-pending-navigation', 'true');
   };
@@ -95,6 +107,11 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   const finishHeaderTransition = (event) => {
     if (event.target === event.currentTarget) {
       headerRef.current?.removeAttribute('data-transition');
+      document.documentElement.setAttribute('data-page-transition', 'revealing');
+      revealTimerRef.current = window.setTimeout(() => {
+        document.documentElement.removeAttribute('data-page-transition');
+        revealTimerRef.current = null;
+      }, 460);
     }
   };
 
