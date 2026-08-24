@@ -80,12 +80,13 @@ export default function Home() {
         </section>
 
         <section id="about" className="contentSection aboutSection" aria-labelledby="about-title">
-          <div className="editorialBlock">
+          <Link className="editorialBlock freizeitTeaser" href="/freizeit">
             <h2 id="about-title" className="sectionIndex">02 / Über mich</h2>
-            <div className="aboutLead">Ich besuche die Informatik-Mittelschule und entwickle nebenbei eigene Projekte.</div>
+            <div className="aboutLead">Was mich ausserhalb der Informatik bewegt.</div>
             <div className="editorialRule" aria-hidden="true" />
-            <p>Mich interessiert besonders, wie aus einer Idee eine funktionierende Anwendung wird. Dabei probiere ich verschiedene Technologien aus und entwickle jedes Projekt Schritt für Schritt weiter.</p>
-          </div>
+            <p>Motorrad, Tauchen und Pfadi sind der Ausgleich zu meinen Projekten. Auf der Freizeitseite werden diese Interessen mit eigenen Animationen erzählt.</p>
+            <strong className="freizeitTeaserCta">Freizeit ansehen <span aria-hidden="true">→</span></strong>
+          </Link>
         </section>
 
         <section id="education" className="contentSection educationSection" aria-labelledby="education-title">
@@ -432,6 +433,26 @@ export default function Home() {
           min-width: 0;
         }
 
+        .freizeitTeaser {
+          display: block;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .freizeitTeaser:focus-visible {
+          outline: 2px solid var(--paint);
+          outline-offset: 12px;
+        }
+
+        .freizeitTeaser .editorialRule {
+          transition: width 260ms ease;
+        }
+
+        .freizeitTeaser:hover .editorialRule,
+        .freizeitTeaser:focus-visible .editorialRule {
+          width: min(360px, 90%);
+        }
+
         .aboutLead {
           max-width: 780px;
           margin-top: 16px;
@@ -447,6 +468,29 @@ export default function Home() {
           color: #c7c0b3;
           font-size: 16px;
           line-height: 1.62;
+        }
+
+        .freizeitTeaserCta {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 24px;
+          padding-bottom: 5px;
+          border-bottom: 1px solid var(--paint-muted);
+          color: var(--paint);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
+
+        .freizeitTeaserCta span {
+          transition: transform 220ms ease;
+        }
+
+        .freizeitTeaser:hover .freizeitTeaserCta span,
+        .freizeitTeaser:focus-visible .freizeitTeaserCta span {
+          transform: translateX(5px);
         }
 
         .timelineBlock,
@@ -877,7 +921,9 @@ export default function Home() {
 
         @media (prefers-reduced-motion: reduce) {
           .projectItem,
-          .projectItemCta span {
+          .projectItemCta span,
+          .freizeitTeaser .editorialRule,
+          .freizeitTeaserCta span {
             transition: none;
           }
 
