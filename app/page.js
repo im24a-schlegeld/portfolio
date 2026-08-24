@@ -167,14 +167,14 @@ export default function Home() {
           z-index: 1;
           width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          padding: 0 0 28px;
+          padding: 0;
         }
 
         .centerRoadLine {
           position: absolute;
           z-index: 0;
           top: 0;
-          bottom: -72px;
+          bottom: 0;
           left: 50%;
           width: 18px;
           pointer-events: none;
@@ -266,6 +266,16 @@ export default function Home() {
         .projectsSection,
         .contentSection {
           padding-block: clamp(120px, 10vw, 160px);
+        }
+
+        .technologySection {
+          position: relative;
+          z-index: 2;
+          padding-bottom: 28px;
+          background-color: var(--asphalt);
+          background-image: var(--asphalt-surface);
+          background-position: var(--asphalt-surface-position);
+          background-size: var(--asphalt-surface-size);
         }
 
         .sectionIntro {
@@ -506,9 +516,10 @@ export default function Home() {
 
         .technologyDirectory {
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          width: 100%;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          width: min(100%, 1040px);
           margin: 36px 0 0;
+          margin-inline: auto;
           padding: 0;
           list-style: none;
           border-top: 1px solid rgba(245, 242, 233, 0.24);
@@ -525,10 +536,8 @@ export default function Home() {
           color: var(--white);
         }
 
-        .technologyDirectory li:nth-child(4n + 2),
-        .technologyDirectory li:nth-child(4n + 3),
-        .technologyDirectory li:nth-child(4n + 4) {
-          padding-left: 18px;
+        .technologyDirectory li:nth-child(even) {
+          padding-left: 24px;
           border-left: 1px solid rgba(245, 242, 233, 0.18);
         }
 
@@ -555,7 +564,7 @@ export default function Home() {
           justify-content: flex-start;
           width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          padding: 72px 0 110px;
+          padding: 24px 0 48px;
         }
 
         .stopSignMarker {
@@ -579,25 +588,6 @@ export default function Home() {
           height: 220px;
           background: linear-gradient(180deg, #8a8a8a 0%, #5f5f5f 50%, #747474 100%);
           box-shadow: inset 2px 0 0 rgba(255, 255, 255, 0.22), inset -2px 0 0 rgba(0, 0, 0, 0.18);
-        }
-
-        @media (max-width: 1200px) {
-          .technologyDirectory {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-          }
-
-          .technologyDirectory li:nth-child(4n + 2),
-          .technologyDirectory li:nth-child(4n + 3),
-          .technologyDirectory li:nth-child(4n + 4) {
-            padding-left: 0;
-            border-left: 0;
-          }
-
-          .technologyDirectory li:nth-child(3n + 2),
-          .technologyDirectory li:nth-child(3n + 3) {
-            padding-left: 18px;
-            border-left: 1px solid rgba(245, 242, 233, 0.18);
-          }
         }
 
         @media (max-width: 1050px) {
@@ -701,20 +691,6 @@ export default function Home() {
             margin: 36px 0 0;
           }
 
-          .technologyDirectory {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
-          .technologyDirectory li:nth-child(3n + 2),
-          .technologyDirectory li:nth-child(3n + 3) {
-            padding-left: 0;
-            border-left: 0;
-          }
-
-          .technologyDirectory li:nth-child(even) {
-            padding-left: 12px;
-            border-left: 1px solid rgba(245, 242, 233, 0.18);
-          }
         }
 
         @media (max-width: 760px) {
@@ -757,6 +733,10 @@ export default function Home() {
             padding-left: var(--mobile-content-offset);
           }
 
+          .technologySection {
+            padding-bottom: 28px;
+          }
+
           .sectionIntro,
           .projectList,
           .editorialBlock,
@@ -773,7 +753,7 @@ export default function Home() {
           .stopSignWrap {
             width: calc(100% - var(--mobile-content-offset) - var(--mobile-stop-gutter));
             margin-left: var(--mobile-content-offset);
-            padding: 42px 0 92px;
+            padding: 16px 0 48px;
           }
 
           .stopSignMarker {

@@ -1,5 +1,8 @@
 .siteHeader {
   --site-header-height: 92px;
+  --road-pattern: 122px;
+  --road-stripe-center-position: calc(50% - 102px);
+  --road-stripe-height: 18px;
   box-sizing: border-box;
   position: relative;
   z-index: 50;
@@ -24,17 +27,17 @@
   content: '';
   position: absolute;
   right: 0;
-  bottom: 8px;
+  bottom: 0;
   left: 0;
-  height: 8px;
+  height: var(--road-stripe-height);
   pointer-events: none;
   background: repeating-linear-gradient(
     90deg,
-    transparent 0 32px,
-    #f2c94c 32px 82px,
-    transparent 82px 118px
+    transparent 0 28px,
+    #f2c94c 28px 82px,
+    transparent 82px 122px
   );
-  background-position: 0 0;
+  background-position: var(--road-stripe-center-position) 0;
   animation: none;
 }
 
@@ -115,27 +118,29 @@
 
 @keyframes roadHeaderStripesLeft {
   from {
-    background-position: -118px 0;
+    background-position: calc(var(--road-stripe-center-position) - var(--road-pattern)) 0;
   }
 
   to {
-    background-position: 0 0;
+    background-position: var(--road-stripe-center-position) 0;
   }
 }
 
 @keyframes roadHeaderStripesRight {
   from {
-    background-position: 118px 0;
+    background-position: calc(var(--road-stripe-center-position) + var(--road-pattern)) 0;
   }
 
   to {
-    background-position: 0 0;
+    background-position: var(--road-stripe-center-position) 0;
   }
 }
 
 @media (max-width: 700px) {
   .siteHeader {
     --site-header-height: 126px;
+    --road-stripe-height: 8px;
+    --road-stripe-center-position: 0px;
   }
 
   .siteHeaderInner {
