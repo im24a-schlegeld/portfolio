@@ -1,12 +1,14 @@
 .siteHeader {
   --site-header-height: 92px;
-  --road-pattern: 122px;
-  --road-stripe-center-position: calc(50% - 102px);
+  --road-dash: 54px;
+  --road-gap: 68px;
+  --road-cycle: 122px;
   --road-stripe-height: 18px;
   box-sizing: border-box;
   position: relative;
   z-index: 50;
   min-height: var(--site-header-height);
+  overflow: hidden;
   border-bottom: 0;
   background: linear-gradient(180deg, #0b0c0d 0%, #090a0b 100%);
   color: #f5f2e9;
@@ -23,37 +25,37 @@
   );
 }
 
-.siteHeader::after {
-  content: '';
+.roadStripeLayer {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: var(--road-stripe-height);
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0 28px,
-    #f2c94c 28px 82px,
-    transparent 82px 122px
-  );
-  background-position: var(--road-stripe-center-position) 0;
+  transform: translateX(0);
   animation: none;
 }
 
-.siteHeader[data-transition='true']::after {
+.roadStripe {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: var(--road-dash);
+  height: var(--road-stripe-height);
+  background: #f2c94c;
+  transform: translateX(calc(-50% + var(--stripe-offset)));
+}
+
+.siteHeader[data-transition='true'] .roadStripeLayer {
   animation: roadHeaderStripesLeft 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.siteHeader[data-transition='true'][data-direction='right']::after {
+.siteHeader[data-transition='true'][data-direction='right'] .roadStripeLayer {
   animation-name: roadHeaderStripesRight;
 }
 
-.siteHeader * {
-  box-sizing: border-box;
-}
-
 .siteHeaderInner {
+  position: relative;
+  z-index: 1;
   width: min(1180px, calc(100% - 40px));
   min-height: var(--site-header-height);
   margin: 0 auto;
@@ -61,6 +63,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+}
+
+.siteHeader * {
+  box-sizing: border-box;
 }
 
 .siteLogo {
@@ -118,21 +124,21 @@
 
 @keyframes roadHeaderStripesLeft {
   from {
-    background-position: calc(var(--road-stripe-center-position) - var(--road-pattern)) 0;
+    transform: translateX(calc(-1 * var(--road-cycle)));
   }
 
   to {
-    background-position: var(--road-stripe-center-position) 0;
+    transform: translateX(0);
   }
 }
 
 @keyframes roadHeaderStripesRight {
   from {
-    background-position: calc(var(--road-stripe-center-position) + var(--road-pattern)) 0;
+    transform: translateX(var(--road-cycle));
   }
 
   to {
-    background-position: var(--road-stripe-center-position) 0;
+    transform: translateX(0);
   }
 }
 
@@ -140,7 +146,6 @@
   .siteHeader {
     --site-header-height: 126px;
     --road-stripe-height: 8px;
-    --road-stripe-center-position: 0px;
   }
 
   .siteHeaderInner {
@@ -164,7 +169,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .siteHeader::after {
+  .roadStripeLayer {
     animation: none !important;
   }
 
