@@ -22,7 +22,7 @@ export default function StopSignReveal() {
       const remainingScroll = page.scrollHeight - (window.scrollY + window.innerHeight);
 
       // Browser zoom can leave a sub-pixel remainder at the real scroll limit.
-      if (!hasRevealed && remainingScroll <= 0.5) {
+      if (!hasRevealed && remainingScroll < 1) {
         hasRevealed = true;
         setShowStopSign(true);
       }

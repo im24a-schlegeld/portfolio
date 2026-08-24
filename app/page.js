@@ -84,7 +84,7 @@ export default function Home() {
             <h2 id="about-title" className="sectionIndex">02 / Über mich</h2>
             <div className="aboutLead">Was mich ausserhalb der Informatik bewegt.</div>
             <div className="editorialRule" aria-hidden="true" />
-            <p>Motorrad, Tauchen und Pfadi sind der Ausgleich zu meinen Projekten. Auf der Freizeitseite werden diese Interessen mit eigenen Animationen erzählt.</p>
+            <p>Motorrad, Tauchen und Pfadi gehören genauso zu mir wie meine technischen Projekte. Auf der Freizeitseite erfährst du mehr darüber.</p>
             <strong className="freizeitTeaserCta">Freizeit ansehen <span aria-hidden="true">→</span></strong>
           </Link>
         </section>
