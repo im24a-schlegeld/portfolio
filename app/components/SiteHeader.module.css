@@ -56,14 +56,32 @@
   animation-name: roadHeaderStripesRight;
 }
 
-:global(html[data-page-transition='waiting']) .siteHeader ~ * {
+.pageTransitionCurtain {
+  position: fixed;
+  z-index: 49;
+  inset: 0;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
+  background-color: #090a0b;
+  background-image: var(--asphalt-surface);
+  background-position: var(--asphalt-surface-position);
+  background-size: var(--asphalt-surface-size);
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  will-change: opacity;
 }
 
-:global(html[data-page-transition='revealing']) .siteHeader ~ * {
-  animation: sitePageReveal 440ms cubic-bezier(0.22, 1, 0.36, 1) both;
+:global(html[data-page-transition='waiting']) .pageTransitionCurtain {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:global(html[data-page-transition='revealing']) .pageTransitionCurtain {
+  visibility: visible;
+  pointer-events: auto;
+  animation: sitePageCurtainReveal 440ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .siteHeaderInner {
@@ -155,13 +173,13 @@
   }
 }
 
-@keyframes sitePageReveal {
+@keyframes sitePageCurtainReveal {
   from {
-    opacity: 0;
+    opacity: 1;
   }
 
   to {
-    opacity: 1;
+    opacity: 0;
   }
 }
 
@@ -196,11 +214,9 @@
     animation: none !important;
   }
 
-  :global(html[data-page-transition]) .siteHeader ~ * {
-    visibility: visible;
-    opacity: 1;
+  .pageTransitionCurtain {
+    display: none;
     animation: none;
-    pointer-events: auto;
   }
 
   .siteNavLink {

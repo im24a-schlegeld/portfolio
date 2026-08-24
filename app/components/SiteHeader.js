@@ -116,45 +116,48 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   };
 
   return (
-    <header
-      ref={headerRef}
-      className={`${styles.siteHeader} ${variant === 'home' ? styles.siteHeaderHome : ''}`}
-      data-site-header="true"
-      data-direction="right"
-    >
-      <div className={styles.siteHeaderInner}>
-        <Link className={styles.siteLogo} href="/" onClick={(event) => handleNavigation(event, 'home')}>
-          Dario Schlegel
-        </Link>
-
-        <nav className={styles.siteNav} aria-label="Hauptnavigation">
-          {navigationItems.map((item) => (
-            <Link
-              className={styles.siteNavLink}
-              href={item.href}
-              key={item.key}
-              aria-current={item.key === activeKey ? 'page' : undefined}
-              onClick={(event) => handleNavigation(event, item.key)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      <div
-        className={styles.roadStripeLayer}
-        aria-hidden="true"
-        onAnimationEnd={finishHeaderTransition}
+    <>
+      <header
+        ref={headerRef}
+        className={`${styles.siteHeader} ${variant === 'home' ? styles.siteHeaderHome : ''}`}
+        data-site-header="true"
+        data-direction="right"
       >
-        {stripeOffsets.map((offset) => (
-          <span
-            className={styles.roadStripe}
-            key={offset}
-            style={{ '--stripe-offset': `${offset}px` }}
-          />
-        ))}
-      </div>
-    </header>
+        <div className={styles.siteHeaderInner}>
+          <Link className={styles.siteLogo} href="/" onClick={(event) => handleNavigation(event, 'home')}>
+            Dario Schlegel
+          </Link>
+
+          <nav className={styles.siteNav} aria-label="Hauptnavigation">
+            {navigationItems.map((item) => (
+              <Link
+                className={styles.siteNavLink}
+                href={item.href}
+                key={item.key}
+                aria-current={item.key === activeKey ? 'page' : undefined}
+                onClick={(event) => handleNavigation(event, item.key)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div
+          className={styles.roadStripeLayer}
+          aria-hidden="true"
+          onAnimationEnd={finishHeaderTransition}
+        >
+          {stripeOffsets.map((offset) => (
+            <span
+              className={styles.roadStripe}
+              key={offset}
+              style={{ '--stripe-offset': `${offset}px` }}
+            />
+          ))}
+        </div>
+      </header>
+      <div className={styles.pageTransitionCurtain} aria-hidden="true" />
+    </>
   );
 }
