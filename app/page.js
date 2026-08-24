@@ -288,7 +288,12 @@ export default function Home() {
           border: 1px solid rgba(245, 242, 233, 0.24);
           border-top-color: rgba(242, 201, 76, 0.55);
           border-radius: 0;
-          background: rgba(5, 5, 5, 0.22);
+          background-color: var(--asphalt-dark);
+          background-image:
+            linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
+            var(--asphalt-surface);
+          background-position: var(--asphalt-surface-position);
+          background-size: var(--asphalt-surface-size);
         }
 
         .sectionIntro {
@@ -502,8 +507,8 @@ export default function Home() {
 
         .timelineDetails {
           width: 100%;
-          max-width: min(720px, calc(44% - 42px));
-          margin: 28px 0 0 6%;
+          max-width: min(720px, calc(50% - 42px));
+          margin: 28px 0 0 auto;
         }
 
         .timelineDetails h3 {
@@ -684,6 +689,7 @@ export default function Home() {
 
           .timelineDetails {
             max-width: 720px;
+            margin-left: 0;
           }
 
           .directoryBlock > h2,
