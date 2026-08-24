@@ -49,10 +49,10 @@ export const projects = [
   },
   {
     id: 'lyrics-separator',
-    title: 'LyricsSeparator',
+    title: 'lyricsseparator',
     description: 'Eine MP3 hochladen und den Song in einzelne Lyric-Zeilen aufteilen.',
     detailText: [
-      'LyricsSeparator ist ein Projekt, das ich ursprünglich in der Schule begonnen habe.',
+      'lyricsseparator ist ein Projekt, das ich ursprünglich in der Schule begonnen habe.',
       'Der Benutzer kann eine MP3-Datei eines Songs hochladen. Die Anwendung verarbeitet die Datei und gibt den Inhalt anschliessend in einzelnen Lyric-Zeilen zurück.',
       'Bei diesem Projekt wollte ich ausprobieren, wie ich eine externe API in eine eigene Anwendung einbauen kann. Statt nur einzelne API-Anfragen zu testen, wollte ich daraus eine Anwendung mit einem klaren Ablauf machen.',
     ],
@@ -62,7 +62,7 @@ export const projects = [
     media: {
       type: 'website',
       src: 'https://lyricsseperator-xi.vercel.app/',
-      label: 'LyricsSeparator',
+      label: 'lyricsseparator',
     },
   },
   {
