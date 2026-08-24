@@ -11,7 +11,6 @@ const ROAD_CYCLE = ROAD_DASH + ROAD_GAP;
 
 export default function SiteHeader({ activeKey, variant = 'default' }) {
   const headerRef = useRef(null);
-  const lastTransitionKeyRef = useRef(null);
   const [stripeOffsets, setStripeOffsets] = useState([]);
   const transitionKey = `${variant}:${activeKey ?? ''}`;
 
@@ -57,28 +56,36 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   }, []);
 
   useEffect(() => {
-    if (lastTransitionKeyRef.current === transitionKey) return undefined;
-    lastTransitionKeyRef.current = transitionKey;
-
     const isValidDirection = (value) => value === 'left' || value === 'right';
     const isInternalNavigation = window.sessionStorage.getItem('site-header-pending-navigation') === 'true';
     const storedDirection = window.sessionStorage.getItem('site-header-direction');
-    const direction = isInternalNavigation && isValidDirection(storedDirection)
-      ? storedDirection
-      : 'right';
-
-    headerRef.current?.setAttribute('data-direction', direction);
     headerRef.current?.removeAttribute('data-transition');
-    window.sessionStorage.removeItem('site-header-pending-navigation');
+
+    if (!isInternalNavigation) return undefined;
+
+    const direction = isValidDirection(storedDirection) ? storedDirection : 'right';
+    headerRef.current?.setAttribute('data-direction', direction);
 
     const frame = window.requestAnimationFrame(() => {
       headerRef.current?.setAttribute('data-transition', 'true');
+      window.sessionStorage.removeItem('site-header-pending-navigation');
     });
 
     return () => window.cancelAnimationFrame(frame);
   }, [transitionKey]);
 
-  const handleNavigation = (key) => {
+  const handleNavigation = (event, key) => {
+    const isModifiedClick = event.button !== 0
+      || event.metaKey
+      || event.ctrlKey
+      || event.shiftKey
+      || event.altKey;
+
+    if (isModifiedClick || key === activeKey) {
+      window.sessionStorage.removeItem('site-header-pending-navigation');
+      return;
+    }
+
     const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
     const nextIndex = navigationItems.findIndex((item) => item.key === key);
     const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
@@ -96,7 +103,7 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
       data-direction="right"
     >
       <div className={styles.siteHeaderInner}>
-        <Link className={styles.siteLogo} href="/" onClick={() => handleNavigation('home')}>
+        <Link className={styles.siteLogo} href="/" onClick={(event) => handleNavigation(event, 'home')}>
           Dario Schlegel
         </Link>
 
@@ -107,7 +114,7 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
               href={item.href}
               key={item.key}
               aria-current={item.key === activeKey ? 'page' : undefined}
-              onClick={() => handleNavigation(item.key)}
+              onClick={(event) => handleNavigation(event, item.key)}
             >
               {item.label}
             </Link>
