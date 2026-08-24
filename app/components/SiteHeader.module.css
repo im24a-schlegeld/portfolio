@@ -31,7 +31,10 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  transform: translateX(0);
+  backface-visibility: hidden;
+  contain: paint;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
   animation: none;
 }
 
@@ -46,7 +49,7 @@
 }
 
 .siteHeader[data-transition='true'] .roadStripeLayer {
-  animation: roadHeaderStripesLeft 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: roadHeaderStripesLeft 620ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .siteHeader[data-transition='true'][data-direction='right'] .roadStripeLayer {
@@ -124,21 +127,21 @@
 
 @keyframes roadHeaderStripesLeft {
   from {
-    transform: translateX(calc(-1 * var(--road-cycle)));
+    transform: translate3d(calc(-1 * var(--road-cycle)), 0, 0);
   }
 
   to {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes roadHeaderStripesRight {
   from {
-    transform: translateX(var(--road-cycle));
+    transform: translate3d(var(--road-cycle), 0, 0);
   }
 
   to {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 

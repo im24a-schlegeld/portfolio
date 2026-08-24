@@ -14,13 +14,6 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   const [stripeOffsets, setStripeOffsets] = useState([]);
   const transitionKey = `${variant}:${activeKey ?? ''}`;
 
-  const restartHeaderTransition = () => {
-    headerRef.current?.removeAttribute('data-transition');
-    window.requestAnimationFrame(() => {
-      headerRef.current?.setAttribute('data-transition', 'true');
-    });
-  };
-
   useEffect(() => {
     const updateStripeOffsets = () => {
       const headerWidth = headerRef.current?.clientWidth ?? window.innerWidth;
@@ -66,12 +59,18 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const direction = isValidDirection(storedDirection) ? storedDirection : 'right';
     headerRef.current?.setAttribute('data-direction', direction);
 
-    const frame = window.requestAnimationFrame(() => {
-      headerRef.current?.setAttribute('data-transition', 'true');
-      window.sessionStorage.removeItem('site-header-pending-navigation');
+    let transitionFrame;
+    const paintFrame = window.requestAnimationFrame(() => {
+      transitionFrame = window.requestAnimationFrame(() => {
+        headerRef.current?.setAttribute('data-transition', 'true');
+        window.sessionStorage.removeItem('site-header-pending-navigation');
+      });
     });
 
-    return () => window.cancelAnimationFrame(frame);
+    return () => {
+      window.cancelAnimationFrame(paintFrame);
+      if (transitionFrame) window.cancelAnimationFrame(transitionFrame);
+    };
   }, [transitionKey]);
 
   const handleNavigation = (event, key) => {
@@ -91,8 +90,12 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
     window.sessionStorage.setItem('site-header-direction', nextDirection);
     window.sessionStorage.setItem('site-header-pending-navigation', 'true');
-    headerRef.current?.setAttribute('data-direction', nextDirection);
-    restartHeaderTransition();
+  };
+
+  const finishHeaderTransition = (event) => {
+    if (event.target === event.currentTarget) {
+      headerRef.current?.removeAttribute('data-transition');
+    }
   };
 
   return (
@@ -122,7 +125,11 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
         </nav>
       </div>
 
-      <div className={styles.roadStripeLayer} aria-hidden="true">
+      <div
+        className={styles.roadStripeLayer}
+        aria-hidden="true"
+        onAnimationEnd={finishHeaderTransition}
+      >
         {stripeOffsets.map((offset) => (
           <span
             className={styles.roadStripe}
