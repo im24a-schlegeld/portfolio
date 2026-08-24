@@ -231,7 +231,7 @@ export default function Projekte() {
         .projectsIntro h1 {
           max-width: 840px;
           margin: 0;
-          font-size: clamp(64px, 12vw, 150px);
+          font-size: clamp(52px, 9vw, 112px);
           line-height: 0.78;
           letter-spacing: -0.08em;
           text-transform: uppercase;

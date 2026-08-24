@@ -23,7 +23,11 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
       const offsets = [];
 
       if (headerWidth <= 700) {
-        for (let left = ROAD_GAP / 2; left + ROAD_DASH <= headerWidth; left += ROAD_CYCLE) {
+        for (
+          let left = ROAD_GAP / 2 - ROAD_CYCLE;
+          left < headerWidth + ROAD_CYCLE;
+          left += ROAD_CYCLE
+        ) {
           offsets.push(left + halfDash - halfViewport);
         }
 
@@ -33,9 +37,9 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
 
       for (let index = 0; ; index += 1) {
         const dashCenter = ROAD_GAP / 2 + halfDash + index * ROAD_CYCLE;
-        const visibleWidthAtEdge = halfViewport - (dashCenter - halfDash);
+        const canEnterViewport = dashCenter - halfDash < halfViewport + ROAD_CYCLE;
 
-        if (visibleWidthAtEdge < ROAD_DASH) break;
+        if (!canEnterViewport) break;
 
         offsets.push(dashCenter, -dashCenter);
       }

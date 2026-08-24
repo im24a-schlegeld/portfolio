@@ -40,11 +40,6 @@ export default function Home() {
             <div className="heroRule" aria-hidden="true" />
             <p>Ich besuche die Informatik-Mittelschule und entwickle neben dem Unterricht eigene Projekte.</p>
           </div>
-          <div className="heroMeta" aria-label="Portfolio-Schwerpunkte">
-            <span>Applikationsentwicklung</span>
-            <span>Zürich / Schweiz</span>
-            <span>Praktikum 2027 — 2028</span>
-          </div>
         </section>
 
         <section id="projects" className="projectsSection" aria-labelledby="projects-title">
@@ -209,7 +204,7 @@ export default function Home() {
           column-gap: clamp(64px, 8vw, 140px);
           align-items: end;
           min-height: auto;
-          padding-block: clamp(90px, 9vw, 130px) clamp(80px, 8vw, 110px);
+          padding-block: clamp(90px, 9vw, 130px) clamp(36px, 4vw, 56px);
         }
 
         .heroIntro {
@@ -222,7 +217,6 @@ export default function Home() {
 
         .heroKicker,
         .sectionIndex,
-        .heroMeta,
         .projectItemCategory {
           color: var(--paint-muted);
           font-size: 11px;
@@ -263,18 +257,13 @@ export default function Home() {
           line-height: 1.55;
         }
 
-        .heroMeta {
-          display: grid;
-          gap: 18px;
-          min-width: 0;
-          padding: 0 0 12px 22px;
-          border-left: 1px solid var(--paint-soft);
-          line-height: 1.35;
-        }
-
         .projectsSection,
         .contentSection {
           padding-block: clamp(72px, 7vw, 105px);
+        }
+
+        .projectsSection {
+          padding-top: clamp(40px, 4vw, 60px);
         }
 
         .finalRoadSection {
@@ -718,11 +707,6 @@ export default function Home() {
             padding-left: var(--mobile-content-offset);
           }
 
-          .heroMeta {
-            width: min(420px, 100%);
-            margin-left: 28px;
-          }
-
           .projectsSection,
           .contentSection {
             padding-left: var(--mobile-content-offset);
@@ -843,7 +827,7 @@ export default function Home() {
             display: block;
             min-height: 0;
             padding-left: 0;
-            padding-block: 76px 64px;
+            padding-block: 76px 36px;
           }
 
           .heroIntro {
@@ -857,15 +841,14 @@ export default function Home() {
             font-size: clamp(52px, 16vw, 88px);
           }
 
-          .heroMeta {
-            width: auto;
-            margin: 32px 0 0 var(--mobile-content-offset);
-          }
-
           .projectsSection,
           .contentSection {
             padding-block: 64px;
             padding-left: var(--mobile-content-offset);
+          }
+
+          .projectsSection {
+            padding-top: 40px;
           }
 
           .technologySection {
