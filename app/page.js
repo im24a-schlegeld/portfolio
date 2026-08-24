@@ -455,6 +455,11 @@ export default function Home() {
           min-width: 0;
         }
 
+        .educationSection .timelineBlock {
+          width: calc(50% - 42px);
+          margin-left: auto;
+        }
+
         .directoryBlock > h2,
         .directoryBlock > p {
           width: min(780px, calc(50% - 42px));
@@ -507,8 +512,8 @@ export default function Home() {
 
         .timelineDetails {
           width: 100%;
-          max-width: min(720px, calc(50% - 42px));
-          margin: 28px 0 0 auto;
+          max-width: 720px;
+          margin: 28px 0 0;
         }
 
         .timelineDetails h3 {
@@ -689,6 +694,11 @@ export default function Home() {
 
           .timelineDetails {
             max-width: 720px;
+            margin-left: 0;
+          }
+
+          .educationSection .timelineBlock {
+            width: 100%;
             margin-left: 0;
           }
 
