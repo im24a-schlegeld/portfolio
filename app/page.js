@@ -3,6 +3,13 @@ import Link from 'next/link';
 import SiteHeader from './components/SiteHeader';
 import { projects, technologyList } from '../data/portfolio';
 
+const hiddenMainTechnologies = new Set([
+  'NoSQL',
+  'Git',
+  'Applikationssicherheit',
+  'Datenschutz',
+]);
+
 export const metadata = {
   title: 'Portfolio',
   description: 'Portfolio von Dario Schlegel mit Projekten aus Informatik, Frontend, Interface Design und persönlichen Arbeiten.',
@@ -93,12 +100,14 @@ export default function Home() {
             <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
             <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
             <ul className="technologyDirectory">
-              {technologyList.map((technology, index) => (
-                <li key={technology}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <strong>{technology}</strong>
-                </li>
-              ))}
+              {technologyList
+                .filter((technology) => !hiddenMainTechnologies.has(technology))
+                .map((technology, index) => (
+                  <li key={technology}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <strong>{technology}</strong>
+                  </li>
+                ))}
             </ul>
           </div>
         </section>
@@ -199,8 +208,8 @@ export default function Home() {
           grid-template-columns: minmax(0, calc(50% - 42px)) minmax(250px, 1fr);
           column-gap: clamp(64px, 8vw, 140px);
           align-items: end;
-          min-height: 720px;
-          padding-block: clamp(150px, 15vw, 210px) clamp(130px, 13vw, 180px);
+          min-height: auto;
+          padding-block: clamp(90px, 9vw, 130px) clamp(80px, 8vw, 110px);
         }
 
         .heroIntro {
@@ -224,7 +233,7 @@ export default function Home() {
 
         .heroKicker {
           display: block;
-            margin-bottom: 32px;
+          margin-bottom: 24px;
         }
 
         .heroIntro h1 {
@@ -242,13 +251,13 @@ export default function Home() {
         .editorialRule {
           width: min(260px, 70%);
           height: 2px;
-          margin-top: 38px;
+          margin-top: 26px;
           background: var(--paint);
         }
 
         .heroIntro p {
           max-width: 540px;
-          margin: 30px 0 0;
+          margin: 20px 0 0;
           color: #c7c0b3;
           font-size: clamp(16px, 1.8vw, 20px);
           line-height: 1.55;
@@ -265,7 +274,7 @@ export default function Home() {
 
         .projectsSection,
         .contentSection {
-          padding-block: clamp(120px, 10vw, 160px);
+          padding-block: clamp(72px, 7vw, 105px);
         }
 
         .technologySection {
@@ -281,12 +290,12 @@ export default function Home() {
         .sectionIntro {
           width: min(780px, calc(50% - 42px));
           min-width: 0;
-          margin-bottom: 38px;
+          margin-bottom: 28px;
         }
 
         .sectionIndex {
           display: block;
-          margin: 0 0 22px;
+          margin: 0 0 16px;
           font-size: 11px;
         }
 
@@ -316,7 +325,7 @@ export default function Home() {
         .projectItem {
           display: block;
           min-width: 0;
-          padding: clamp(32px, 4vw, 52px) 0;
+          padding: clamp(26px, 3vw, 40px) 0;
           border-top: 1px solid rgba(245, 242, 233, 0.24);
           color: inherit;
           text-decoration: none;
@@ -416,7 +425,7 @@ export default function Home() {
 
         .aboutLead {
           max-width: 780px;
-          margin-top: 22px;
+          margin-top: 16px;
           color: var(--white);
           font-size: clamp(22px, 3vw, 38px);
           line-height: 1.35;
@@ -425,7 +434,7 @@ export default function Home() {
 
         .editorialBlock p {
           max-width: 680px;
-          margin: 24px 0 0;
+          margin: 16px 0 0;
           color: #c7c0b3;
           font-size: 16px;
           line-height: 1.62;
@@ -451,7 +460,7 @@ export default function Home() {
           grid-template-columns: auto minmax(0, 1fr) auto;
           align-items: center;
           gap: 24px;
-          margin-top: 52px;
+          margin-top: 36px;
         }
 
         .timelineScale strong {
@@ -490,7 +499,7 @@ export default function Home() {
         .timelineDetails {
           width: 100%;
           max-width: min(720px, calc(44% - 42px));
-          margin: 36px 0 0 6%;
+          margin: 28px 0 0 6%;
         }
 
         .timelineDetails h3 {
@@ -518,11 +527,11 @@ export default function Home() {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           width: min(100%, 1040px);
-          margin: 36px 0 0;
+          margin: 24px 0 0;
           margin-inline: auto;
           padding: 0;
           list-style: none;
-          border-top: 1px solid rgba(245, 242, 233, 0.24);
+          border: 1px solid rgba(245, 242, 233, 0.24);
         }
 
         .technologyDirectory li {
@@ -530,8 +539,8 @@ export default function Home() {
           align-items: baseline;
           gap: 12px;
           min-width: 0;
-          min-height: 90px;
-          padding: 18px 14px 16px 0;
+          min-height: 70px;
+          padding: 14px 14px 12px 0;
           border-bottom: 1px solid rgba(245, 242, 233, 0.24);
           color: var(--white);
         }
@@ -559,12 +568,12 @@ export default function Home() {
 
         .stopSignWrap {
           position: relative;
-          z-index: 1;
+          z-index: 3;
           display: flex;
           justify-content: flex-start;
           width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
-          padding: 24px 0 48px;
+          padding: 0 0 24px;
         }
 
         .stopSignMarker {
@@ -573,6 +582,7 @@ export default function Home() {
           align-items: center;
           gap: 0;
           margin-left: clamp(70px, 13vw, 170px);
+          transform: translateY(-44px);
         }
 
         .stopSignImage {
@@ -658,7 +668,7 @@ export default function Home() {
             align-items: flex-start;
             flex-direction: column;
             gap: 12px;
-            margin-top: 40px;
+            margin-top: 32px;
             padding-left: 22px;
           }
 
@@ -688,7 +698,7 @@ export default function Home() {
 
           .timelineDetails {
             max-width: 720px;
-            margin: 36px 0 0;
+            margin: 24px 0 0;
           }
 
         }
@@ -708,7 +718,7 @@ export default function Home() {
             display: block;
             min-height: 0;
             padding-left: 0;
-            padding-block: 118px 96px;
+            padding-block: 76px 64px;
           }
 
           .heroIntro {
@@ -724,12 +734,12 @@ export default function Home() {
 
           .heroMeta {
             width: auto;
-            margin: 44px 0 0 var(--mobile-content-offset);
+            margin: 32px 0 0 var(--mobile-content-offset);
           }
 
           .projectsSection,
           .contentSection {
-            padding-block: 112px 84px;
+            padding-block: 64px;
             padding-left: var(--mobile-content-offset);
           }
 
@@ -747,17 +757,18 @@ export default function Home() {
           }
 
           .sectionIntro {
-            margin-bottom: 28px;
+            margin-bottom: 20px;
           }
 
           .stopSignWrap {
             width: calc(100% - var(--mobile-content-offset) - var(--mobile-stop-gutter));
             margin-left: var(--mobile-content-offset);
-            padding: 16px 0 48px;
+            padding: 0 0 32px;
           }
 
           .stopSignMarker {
             margin-left: 12px;
+            transform: translateY(-28px);
           }
 
           .stopSignImage {
