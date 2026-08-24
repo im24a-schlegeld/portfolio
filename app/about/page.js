@@ -166,6 +166,8 @@ function DesktopFreizeitStory({
                   <a
                     className="swordLink"
                     href="https://www.flamberg.ch/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Pfadi Flamberg Website öffnen"
                   >
                     <SwordModel
