@@ -7,28 +7,46 @@ import styles from './SiteHeader.module.css';
 
 export default function SiteHeader({ activeKey, variant = 'default' }) {
   const headerRef = useRef(null);
+  const lastTransitionKeyRef = useRef(null);
+  const transitionKey = `${variant}:${activeKey ?? ''}`;
+
+  const restartHeaderTransition = () => {
+    headerRef.current?.removeAttribute('data-transition');
+    window.requestAnimationFrame(() => {
+      headerRef.current?.setAttribute('data-transition', 'true');
+    });
+  };
 
   useEffect(() => {
-    const storedDirection = window.sessionStorage.getItem('site-header-direction');
-    if (storedDirection === 'left' || storedDirection === 'right') {
-      headerRef.current?.setAttribute('data-direction', storedDirection);
-    }
+    if (lastTransitionKeyRef.current === transitionKey) return undefined;
+    lastTransitionKeyRef.current = transitionKey;
 
-    if (variant !== 'home') return undefined;
+    const isValidDirection = (value) => value === 'left' || value === 'right';
+    const isInternalNavigation = window.sessionStorage.getItem('site-header-pending-navigation') === 'true';
+    const storedDirection = window.sessionStorage.getItem('site-header-direction');
+    const direction = isInternalNavigation && isValidDirection(storedDirection)
+      ? storedDirection
+      : 'right';
+
+    headerRef.current?.setAttribute('data-direction', direction);
+    headerRef.current?.removeAttribute('data-transition');
+    window.sessionStorage.removeItem('site-header-pending-navigation');
 
     const frame = window.requestAnimationFrame(() => {
       headerRef.current?.setAttribute('data-transition', 'true');
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [variant]);
+  }, [transitionKey]);
 
   const handleNavigation = (key) => {
     const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
     const nextIndex = navigationItems.findIndex((item) => item.key === key);
     const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
     window.sessionStorage.setItem('site-header-direction', nextDirection);
+    window.sessionStorage.setItem('site-header-pending-navigation', 'true');
     headerRef.current?.setAttribute('data-direction', nextDirection);
+    restartHeaderTransition();
   };
 
   return (

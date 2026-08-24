@@ -166,13 +166,17 @@ function DesktopFreizeitStory({
                   <a
                     className="swordLink"
                     href="https://www.flamberg.ch/"
-                    aria-label="Flamberg Website öffnen"
+                    aria-label="Pfadi Flamberg Website öffnen"
                   >
                     <SwordModel
                       className="swordModel"
                       scrollProgressRef={swordScrollProgressRef}
                       mediaQuery="all"
                     />
+                    <span className="swordHint" aria-hidden="true">
+                      <span>Pfadi entdecken</span>
+                      <span className="swordHintArrow">→</span>
+                    </span>
                   </a>
                 </div>
               </div>
@@ -726,6 +730,36 @@ export default function About() {
           outline-offset: 10px;
         }
 
+        .swordHint {
+          position: absolute;
+          z-index: 4;
+          left: 50%;
+          bottom: 6px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding-bottom: 6px;
+          border-bottom: 1px solid var(--freizeit-beige-accent);
+          color: var(--freizeit-beige-ink);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          line-height: 1;
+          text-transform: uppercase;
+          white-space: nowrap;
+          transform: translateX(-50%);
+        }
+
+        .swordHintArrow {
+          color: var(--freizeit-beige-accent);
+          transition: transform 220ms ease;
+        }
+
+        .swordLink:hover .swordHintArrow,
+        .swordLink:focus-visible .swordHintArrow {
+          transform: translateX(5px);
+        }
+
         .swordModel {
           position: relative;
           width: 100%;
@@ -1090,6 +1124,11 @@ export default function About() {
             height: clamp(170px, 28vh, 290px);
           }
 
+          .swordHint {
+            bottom: 2px;
+            font-size: 10px;
+          }
+
           .bikegroup {
             left: 50%;
             top: 50%;
@@ -1249,6 +1288,13 @@ export default function About() {
           .swordMotion {
             width: 100%;
             height: clamp(150px, 26vh, 220px);
+          }
+
+          .swordHint {
+            bottom: 0;
+            padding-bottom: 4px;
+            font-size: 9px;
+            letter-spacing: 0.1em;
           }
 
           .bikeTitle {

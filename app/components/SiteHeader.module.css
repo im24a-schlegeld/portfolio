@@ -20,7 +20,7 @@
   );
 }
 
-.siteHeaderHome::after {
+.siteHeader::after {
   content: '';
   position: absolute;
   right: 0;
@@ -38,11 +38,11 @@
   animation: none;
 }
 
-.siteHeaderHome[data-transition='true']::after {
+.siteHeader[data-transition='true']::after {
   animation: roadHeaderStripesLeft 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.siteHeaderHome[data-transition='true'][data-direction='right']::after {
+.siteHeader[data-transition='true'][data-direction='right']::after {
   animation-name: roadHeaderStripesRight;
 }
 
@@ -159,8 +159,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .siteHeaderHome::after {
-    animation: none;
+  .siteHeader::after {
+    animation: none !important;
   }
 
   .siteNavLink {
