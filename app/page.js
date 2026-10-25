@@ -35,33 +35,24 @@ export default function Home() {
 
         <section className="intersectionHero" aria-labelledby="hero-title">
           <div className="heroIntro">
-            <span className="heroKicker">Portfolio / Informatik</span>
             <h1 id="hero-title"><span>Dario</span><span>Schlegel</span></h1>
-            <div className="heroRule" aria-hidden="true" />
             <p>Ich besuche die Informatik-Mittelschule und entwickle neben dem Unterricht eigene Projekte.</p>
           </div>
         </section>
 
         <section id="projects" className="projectsSection" aria-labelledby="projects-title">
           <div className="sectionIntro">
-            <span className="sectionIndex">01 / Ausgewählte Projekte</span>
             <h2 id="projects-title">Projekte</h2>
             <p>Arbeiten aus der Schule und aus eigener Entwicklung.</p>
           </div>
 
           <div className="projectList">
-            {projects.map((project, index) => (
+            {projects.map((project) => (
               <Link
                 className="projectItem"
                 href={`/projekte#${project.id}`}
                 key={project.id}
               >
-                <div className="projectItemTop">
-                  <span className="projectItemNumber">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="projectItemCategory">
-                    {project.category || (project.id === 'smash-a-meerkat' ? 'Java / Game' : project.id === 'lyrics-separator' ? 'Web / API' : 'App / Web')}
-                  </span>
-                </div>
                 <div className="projectItemMain">
                   <div className="projectItemCopy">
                     <h3>{project.title}</h3>
@@ -76,17 +67,17 @@ export default function Home() {
 
         <section id="about" className="contentSection aboutSection" aria-labelledby="about-title">
           <Link className="editorialBlock freizeitTeaser" href="/freizeit">
-            <h2 id="about-title" className="sectionIndex">02 / Über mich</h2>
-            <div className="aboutLead">Was mich ausserhalb der Informatik bewegt.</div>
+            <h2 id="about-title" className="sectionIndex">Abseits vom Bildschirm</h2>
+            <div className="aboutLead">Motorrad, Tauchen und Pfadi.</div>
             <div className="editorialRule" aria-hidden="true" />
-            <p>Motorrad, Tauchen und Pfadi gehören genauso zu mir wie meine technischen Projekte. Auf der Freizeitseite erfährst du mehr darüber.</p>
+            <p>Was ich mache, wenn ich gerade nicht programmiere.</p>
             <strong className="freizeitTeaserCta">Freizeit ansehen <span aria-hidden="true">→</span></strong>
           </Link>
         </section>
 
         <section id="education" className="contentSection educationSection" aria-labelledby="education-title">
           <div className="timelineBlock">
-            <h2 id="education-title" className="sectionIndex">03 / Ausbildung</h2>
+            <h2 id="education-title" className="sectionIndex">Ausbildung</h2>
             <div className="timelineScale" aria-label="Ausbildungszeitraum 2024 bis 2027">
               <strong>2024</strong>
               <span className="timelineLine" aria-hidden="true" />
@@ -104,12 +95,11 @@ export default function Home() {
         <div className="finalRoadSection">
           <section id="technologies" className="contentSection technologySection" aria-labelledby="technologies-title">
             <div className="directoryBlock">
-              <h2 id="technologies-title" className="sectionIndex">04 / Technologien</h2>
-              <p>Mit diesen Technologien habe ich im Unterricht oder in eigenen Projekten bereits gearbeitet.</p>
+              <h2 id="technologies-title" className="sectionIndex">Technologien</h2>
+              <p>Damit habe ich in der Schule und in eigenen Projekten gearbeitet.</p>
               <ul className="technologyDirectory">
-                {mainPageTechnologies.map((technology, index) => (
+                {mainPageTechnologies.map((technology) => (
                   <li key={technology}>
-                    <span>{String(index + 1).padStart(2, '0')}</span>
                     <strong>{technology}</strong>
                   </li>
                 ))}
@@ -235,7 +225,7 @@ export default function Home() {
           max-width: 760px;
           margin: 0;
           color: var(--white);
-          font-size: clamp(60px, 8.4vw, 118px);
+          font-size: clamp(56px, 7.5vw, 96px);
           line-height: 0.86;
           letter-spacing: -0.055em;
         }
@@ -289,7 +279,11 @@ export default function Home() {
         .sectionIndex {
           display: block;
           margin: 0 0 16px;
-          font-size: 11px;
+          color: #c7c0b3;
+          font-size: 19px;
+          font-weight: 600;
+          letter-spacing: 0;
+          text-transform: none;
         }
 
         .sectionIntro h2 {
@@ -364,7 +358,7 @@ export default function Home() {
           align-items: end;
           gap: 24px 48px;
           min-width: 0;
-          margin-top: 22px;
+          margin-top: 0;
         }
 
         .projectItemCopy {

@@ -207,7 +207,6 @@ export default function Projekte() {
       <SiteHeader activeKey="projects" />
       <section className="projectsIntro" aria-labelledby="projects-title">
         <h1 id="projects-title">Projekte</h1>
-        <p className="introText">Projekte aus der Schule und aus eigener Arbeit.</p>
       </section>
 
       <section className="projectStack projectsList" aria-label="Projekte">
@@ -267,10 +266,10 @@ export default function Projekte() {
         .projectsIntro h1 {
           max-width: 840px;
           margin: 0;
-          font-size: clamp(52px, 9vw, 112px);
-          line-height: 0.78;
-          letter-spacing: -0.08em;
-          text-transform: uppercase;
+          font-size: clamp(44px, 6vw, 80px);
+          line-height: 1;
+          letter-spacing: -0.045em;
+          text-transform: none;
         }
 
         .introText {
@@ -1060,9 +1059,9 @@ export default function Projekte() {
 
         .showcaseInfo h2 {
           margin: 0;
-          font-size: clamp(34px, 4.8vw, 68px);
-          line-height: 0.92;
-          letter-spacing: -0.065em;
+          font-size: clamp(30px, 3.8vw, 52px);
+          line-height: 1.05;
+          letter-spacing: -0.04em;
           text-transform: none;
         }
 
