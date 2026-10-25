@@ -51,7 +51,6 @@ export const projects = [
     technologies: ['React', 'TypeScript', 'Three.js', 'Vite', 'Shopify'],
     liveUrl: 'https://game.pfusch-clothing.ch/',
     liveLabel: 'Spiel öffnen',
-    githubUrl: 'https://github.com/im24a-schlegeld/Pfusch-Game',
     media: {
       type: 'game',
       src: 'https://game.pfusch-clothing.ch/',
