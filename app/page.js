@@ -59,7 +59,7 @@ export default function Home() {
                 <div className="projectItemTop">
                   <span className="projectItemNumber">{String(index + 1).padStart(2, '0')}</span>
                   <span className="projectItemCategory">
-                    {project.id === 'smash-a-meerkat' ? 'Java / Game' : project.id === 'lyrics-separator' ? 'Web / API' : 'App / Web'}
+                    {project.category || (project.id === 'smash-a-meerkat' ? 'Java / Game' : project.id === 'lyrics-separator' ? 'Web / API' : 'App / Web')}
                   </span>
                 </div>
                 <div className="projectItemMain">
@@ -212,7 +212,6 @@ export default function Home() {
           width: 100%;
           padding: clamp(30px, 4vw, 52px) 0 clamp(30px, 4vw, 52px) 36px;
           border-left: 6px solid var(--paint);
-          background: linear-gradient(90deg, rgba(8, 8, 8, 0.6), transparent 92%);
         }
 
         .heroKicker,
@@ -275,15 +274,10 @@ export default function Home() {
         .technologySection {
           width: 100%;
           padding: clamp(72px, 7vw, 105px) clamp(24px, 4vw, 52px) clamp(120px, 11vw, 150px);
-          border: 1px solid rgba(245, 242, 233, 0.24);
+          border-block: 1px solid rgba(245, 242, 233, 0.24);
           border-top-color: rgba(242, 201, 76, 0.55);
           border-radius: 0;
-          background-color: var(--asphalt-dark);
-          background-image:
-            linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
-            var(--asphalt-surface);
-          background-position: 0 0, var(--asphalt-surface-position);
-          background-size: 100% 100%, var(--asphalt-surface-size);
+          background: none;
         }
 
         .sectionIntro {

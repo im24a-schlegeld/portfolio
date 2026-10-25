@@ -31,6 +31,34 @@ export const technologyList = [
 
 export const projects = [
   {
+    id: 'wheelie-escape',
+    title: 'Wheelie Escape',
+    category: '3D-Spiel / KI',
+    description: 'Ein 3D-Motorradspiel und mein Experiment mit KI-gestützter Softwareentwicklung.',
+    detailText: [
+      'Wheelies halten, dem Verkehr ausweichen und die eigene Bestzeit verbessern: Wheelie Escape ist ein 3D-Arcadespiel mit verschiedenen Motorrädern, einer anpassbaren Garage, Herausforderungen und einem Fortschrittssystem.',
+      'Ich habe das Spiel für meine eigene Marke PFUSCH-Clothing konzipiert. Im Mittelpunkt stand die Frage, wie weit ich eine komplexe Spielidee mit generativer KI umsetzen kann und wo ihre Grenzen liegen.',
+    ],
+    role: {
+      title: 'Meine Rolle & KI-Einsatz',
+      paragraphs: [
+        'Der Programmcode entstand vollständig mithilfe generativer KI. Meine Arbeit lag in der Spielidee, den Anforderungen und der Steuerung der Entwicklung: Funktionen beschreiben, Ergebnisse ausprobieren, Fehler erkennen und gezielte Korrekturen anstossen.',
+        'Dabei wollte ich vor allem besser prompten lernen: Aufgaben in kleinere Schritte aufteilen, gewünschtes Verhalten genauer erklären und der KI bei Problemen konkretes Feedback geben. So konnte ich ihre Fähigkeiten und Grenzen an einem eigenen Spiel kennenlernen.',
+        'Zum Projekt gehört ausserdem die Anbindung von Kundenkonten und Spielständen über Shopify.',
+      ],
+    },
+    technologies: ['React', 'TypeScript', 'Three.js', 'Vite', 'Shopify'],
+    liveUrl: 'https://game.pfusch-clothing.ch/',
+    liveLabel: 'Spiel öffnen',
+    githubUrl: 'https://github.com/im24a-schlegeld/Pfusch-Game',
+    media: {
+      type: 'game',
+      src: 'https://game.pfusch-clothing.ch/',
+      poster: '/wheelie-escape-preview.webp',
+      label: 'Wheelie Escape',
+    },
+  },
+  {
     id: 'smash-a-meerkat',
     title: 'Smash a Meerkat',
     description: 'Kleines Java-Spiel aus einem Gruppenprojekt in der Schule.',

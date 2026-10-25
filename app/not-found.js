@@ -62,9 +62,8 @@ export default function NotFound() {
           width: min(720px, calc(100% - 28px));
           margin: clamp(100px, 15vw, 180px) auto 80px;
           padding: clamp(28px, 6vw, 58px);
-          border: 1px solid rgba(245, 242, 233, 0.14);
-          background: rgba(8, 8, 8, 0.9);
-          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+          border-top: 1px solid rgba(245, 242, 233, 0.24);
+          background: #080808;
         }
 
         .code {

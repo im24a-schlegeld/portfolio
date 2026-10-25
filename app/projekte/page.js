@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import ProjectEmbed from './ProjectEmbed';
+import GamePreview from './GamePreview';
 import SiteHeader from '../components/SiteHeader';
 import { projects } from '../../data/portfolio';
 
@@ -9,6 +10,10 @@ export const metadata = {
 };
 
 function ProjectMedia({ project }) {
+  if (project.media?.type === 'game') {
+    return <GamePreview {...project.media} title={project.title} />;
+  }
+
   if (!project.media) {
     return (
       <div className="mediaFrame mediaPlaceholder" aria-label={`${project.title} ohne Vorschau`}>
@@ -125,7 +130,7 @@ function ProjectActions({ project }) {
     <div className="actions compactActions" aria-label={`${project.title} Projektaktionen`}>
       {project.liveUrl && (
         <a className="primaryAction" href={project.liveUrl} target="_blank" rel="noreferrer">
-          Projekt ansehen <span aria-hidden="true">-&gt;</span>
+          {project.liveLabel || 'Projekt ansehen'} <span aria-hidden="true">-&gt;</span>
           <span className="srOnly"> in neuem Tab öffnen</span>
         </a>
       )}
@@ -154,6 +159,13 @@ function ProjectShowcase({ project }) {
         <div className="projectDetailText">
           {project.detailText.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
+
+        {project.role && (
+          <section className="projectRole" aria-labelledby={`${project.id}-role`}>
+            <h3 id={`${project.id}-role`}>{project.role.title}</h3>
+            {project.role.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </section>
+        )}
 
         {project.technologies.length > 0 && (
           <div className="techList compactTech" aria-label={`${project.title} Technologien`}>
@@ -190,8 +202,7 @@ export default function Projekte() {
           overflow-x: clip;
           color: #f7f2e8;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
-          background:
-            linear-gradient(135deg, #070707 0%, #151411 48%, #050505 100%);
+          background: #0b0c0d;
         }
 
         .projectsPage::before {
@@ -483,6 +494,26 @@ export default function Projekte() {
           line-height: 1.62;
         }
 
+        .projectRole {
+          margin-top: 28px;
+          padding-top: 22px;
+          border-top: 1px solid rgba(245, 242, 233, 0.18);
+        }
+
+        .projectRole h3 {
+          margin: 0 0 14px;
+          color: #f7f2e8;
+          font-size: 19px;
+          line-height: 1.3;
+        }
+
+        .projectRole p {
+          margin: 12px 0 0;
+          color: #cfc7ba;
+          font-size: 16px;
+          line-height: 1.62;
+        }
+
         .actions {
           display: flex;
           flex-wrap: wrap;
@@ -549,10 +580,10 @@ export default function Projekte() {
           min-height: 34px;
           display: inline-flex;
           align-items: center;
-          padding: 0 12px;
-          border: 1px solid rgba(242, 201, 76, 0.24);
+          padding: 0 12px 0 0;
+          border: 0;
           color: rgba(247, 242, 232, 0.84);
-          background: rgba(0, 0, 0, 0.24);
+          background: none;
           font-size: 12px;
           font-weight: 800;
           letter-spacing: 0.08em;
@@ -699,12 +730,8 @@ export default function Projekte() {
           grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.76fr);
           align-items: start;
           gap: clamp(24px, 5vw, 68px);
-          padding: clamp(18px, 3vw, 28px);
-          border: 1px solid rgba(245, 242, 233, 0.12);
-          background: rgba(9, 9, 9, 0.78);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.08),
-            0 24px 70px rgba(0, 0, 0, 0.32);
+          padding: clamp(26px, 4vw, 46px) 0;
+          border-top: 1px solid rgba(245, 242, 233, 0.2);
           animation: projectReveal 680ms ease both;
         }
 
@@ -724,11 +751,8 @@ export default function Projekte() {
           position: relative;
           min-width: 0;
           overflow: hidden;
-          border: 1px solid rgba(242, 201, 76, 0.24);
+          border: 1px solid rgba(245, 242, 233, 0.2);
           background: #050505;
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.11),
-            0 24px 58px rgba(0, 0, 0, 0.38);
           transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
         }
 
@@ -815,11 +839,8 @@ export default function Projekte() {
           justify-content: center;
           align-items: center;
           padding: clamp(16px, 3vw, 28px);
-          border: 1px solid rgba(242, 201, 76, 0.2);
-          background: rgba(5, 5, 5, 0.72);
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.08),
-            0 24px 58px rgba(0, 0, 0, 0.34);
+          border: 0;
+          background: none;
           transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
         }
 
@@ -963,6 +984,54 @@ export default function Projekte() {
           margin-bottom: clamp(20px, 3vw, 36px);
         }
 
+        .gamePreviewScreen {
+          position: relative;
+          display: block;
+          aspect-ratio: 16 / 9;
+          overflow: hidden;
+          background: #080808;
+        }
+
+        .gamePoster {
+          object-fit: cover;
+        }
+
+        .gamePreviewBar {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px 20px;
+          padding: 10px 14px;
+          border-top: 1px solid rgba(245, 242, 233, 0.2);
+        }
+
+        .gamePreviewBar a {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          min-height: 44px;
+          padding: 0;
+          border: 0;
+          color: #f2c94c;
+          background: none;
+          font: inherit;
+          font-size: 13px;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .gamePreviewBar > span {
+          color: #aaa395;
+          font-size: 12px;
+        }
+
+        .gamePreviewScreen:focus-visible,
+        .gamePreviewBar a:focus-visible {
+          outline: 2px solid #f2c94c;
+          outline-offset: -3px;
+        }
+
         .showcaseInfo h2 {
           margin: 0;
           font-size: clamp(34px, 4.8vw, 68px);
@@ -1057,7 +1126,7 @@ export default function Projekte() {
           }
 
           .projectShowcase {
-            padding: 14px;
+            padding: 26px 0;
           }
 
           .actions a {

@@ -83,7 +83,6 @@ export default function Kontakt() {
           width: min(820px, 100%);
           padding: clamp(20px, 3vw, 36px) 0 clamp(20px, 3vw, 36px) 36px;
           border-left: 6px solid #f2c94c;
-          background: linear-gradient(90deg, rgba(8, 8, 8, 0.56), transparent 92%);
         }
 
         .contactRowIndex,
