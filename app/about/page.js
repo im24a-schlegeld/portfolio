@@ -684,7 +684,7 @@ export default function About() {
         .title {
           margin: 0;
           font-size: 40px;
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+          font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
           font-weight: 700;
           letter-spacing: -0.02em;
           color: var(--freizeit-beige-ink);
@@ -1240,7 +1240,7 @@ export default function About() {
 
           html,
           body {
-            overflow-x: hidden;
+            overflow-x: clip;
           }
 
           .container {
@@ -1271,6 +1271,7 @@ export default function About() {
           .pfadiStage {
             gap: clamp(10px, 1.8vh, 16px);
             padding: clamp(72px, 11vh, 92px) 0 14px;
+            padding-inline: clamp(16px, 5vw, 24px);
           }
 
           .pfadiCopyMotion {

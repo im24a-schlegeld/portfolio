@@ -153,6 +153,12 @@
   background: #f2c94c;
 }
 
+.siteNavLink:focus-visible,
+.siteLogo:focus-visible {
+  outline: 2px solid #f2c94c;
+  outline-offset: 2px;
+}
+
 @keyframes roadHeaderStripesLeft {
   from {
     transform: translate3d(calc(-1 * var(--road-cycle)), 0, 0);

@@ -76,12 +76,13 @@ export default function NotFound() {
           text-transform: uppercase;
         }
 
-        h1 {
+        .notFoundCard h1 {
           margin: 0;
           font-size: clamp(48px, 10vw, 96px);
           line-height: 0.88;
           letter-spacing: -0.065em;
           text-transform: uppercase;
+          overflow-wrap: anywhere;
         }
 
         .notFoundCard > p:last-of-type {
@@ -92,14 +93,14 @@ export default function NotFound() {
           line-height: 1.6;
         }
 
-        nav {
+        .notFoundCard nav {
           display: flex;
           flex-wrap: wrap;
           gap: 10px;
           margin-top: 30px;
         }
 
-        nav a {
+        .notFoundCard nav a {
           min-height: 40px;
           display: inline-flex;
           align-items: center;

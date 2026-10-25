@@ -207,6 +207,11 @@ export default function Projekte() {
           mask-image: none;
         }
 
+        .projectsPage,
+        .projectsPage * {
+          box-sizing: border-box;
+        }
+
         .projectsIntro,
         .featuredProject,
         .technicalHighlights {
@@ -783,13 +788,20 @@ export default function Projekte() {
         .websiteScreen {
           position: relative;
           min-height: 0;
+          aspect-ratio: 16 / 10;
           overflow: hidden;
           background: #050505;
+          container-type: inline-size;
         }
 
         .websiteScreen iframe {
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          width: 1440px;
+          height: 900px;
+          transform: scale(calc(100cqw / 1440px));
+          transform-origin: top left;
         }
 
         .gameplayFrame video {
@@ -886,7 +898,7 @@ export default function Projekte() {
         }
 
         .websiteFrame {
-          aspect-ratio: 16 / 10;
+          aspect-ratio: auto;
           display: grid;
           grid-template-rows: 42px minmax(0, 1fr);
         }
@@ -1030,10 +1042,6 @@ export default function Projekte() {
           .browserTop {
             min-height: 42px;
             padding: 0 12px;
-          }
-
-          .gameplayFrame {
-            aspect-ratio: 4 / 3;
           }
 
           .phoneMockup {

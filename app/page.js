@@ -192,7 +192,7 @@ export default function Home() {
           opacity: 0.96;
         }
 
-        section {
+        .roadMap section {
           position: relative;
           z-index: 1;
           min-width: 0;
@@ -282,8 +282,8 @@ export default function Home() {
           background-image:
             linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
             var(--asphalt-surface);
-          background-position: var(--asphalt-surface-position);
-          background-size: var(--asphalt-surface-size);
+          background-position: 0 0, var(--asphalt-surface-position);
+          background-size: 100% 100%, var(--asphalt-surface-size);
         }
 
         .sectionIntro {

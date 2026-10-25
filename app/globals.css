@@ -4,11 +4,12 @@
   --background: #070707;
   --foreground: #ededed;
   --asphalt-surface:
-    radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 0.55px, transparent 0.9px),
-    radial-gradient(circle, rgba(0, 0, 0, 0.72) 0 0.9px, transparent 1.3px),
-    linear-gradient(180deg, #191919 0%, #101010 48%, #080808 100%);
-  --asphalt-surface-position: 0 0, 3px 2px, 0 0;
-  --asphalt-surface-size: 5px 5px, 8px 8px, 100% 100%;
+    radial-gradient(ellipse at 18% 24%, rgba(0, 0, 0, 0.2), transparent 55%),
+    radial-gradient(ellipse at 82% 68%, rgba(0, 0, 0, 0.28), transparent 60%),
+    url('/asphalt-grain.svg'),
+    linear-gradient(180deg, #181818 0%, #121212 48%, #0d0d0d 100%);
+  --asphalt-surface-position: 0 0, 0 0, 0 0, 0 0;
+  --asphalt-surface-size: 100% 100%, 100% 100%, 240px 240px, 100% 100%;
 }
 
 @theme inline {
