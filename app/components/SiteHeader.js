@@ -1,57 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { navigationItems } from '../../data/portfolio';
 import styles from './SiteHeader.module.css';
 
-const ROAD_DASH = 54;
-const ROAD_GAP = 68;
-const ROAD_CYCLE = ROAD_DASH + ROAD_GAP;
-
 export default function SiteHeader({ activeKey, variant = 'default' }) {
   const headerRef = useRef(null);
-  const revealTimerRef = useRef(null);
-  const [stripeOffsets, setStripeOffsets] = useState([]);
   const transitionKey = `${variant}:${activeKey ?? ''}`;
-
-  useEffect(() => {
-    const updateStripeOffsets = () => {
-      const headerWidth = headerRef.current?.clientWidth ?? window.innerWidth;
-      const halfViewport = headerWidth / 2;
-      const halfDash = ROAD_DASH / 2;
-      const offsets = [];
-
-      if (headerWidth <= 700) {
-        for (
-          let left = ROAD_GAP / 2 - ROAD_CYCLE;
-          left < headerWidth + ROAD_CYCLE;
-          left += ROAD_CYCLE
-        ) {
-          offsets.push(left + halfDash - halfViewport);
-        }
-
-        setStripeOffsets(offsets);
-        return;
-      }
-
-      for (let index = 0; ; index += 1) {
-        const dashCenter = ROAD_GAP / 2 + halfDash + index * ROAD_CYCLE;
-        const canEnterViewport = dashCenter - halfDash < halfViewport + ROAD_CYCLE;
-
-        if (!canEnterViewport) break;
-
-        offsets.push(dashCenter, -dashCenter);
-      }
-
-      setStripeOffsets(offsets);
-    };
-
-    updateStripeOffsets();
-    window.addEventListener('resize', updateStripeOffsets);
-
-    return () => window.removeEventListener('resize', updateStripeOffsets);
-  }, []);
 
   useEffect(() => {
     const isValidDirection = (value) => value === 'left' || value === 'right';
@@ -102,7 +58,6 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
     const nextIndex = navigationItems.findIndex((item) => item.key === key);
     const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
-    if (revealTimerRef.current) window.clearTimeout(revealTimerRef.current);
     document.documentElement.setAttribute('data-page-transition', 'waiting');
     window.sessionStorage.setItem('site-header-direction', nextDirection);
     window.sessionStorage.setItem('site-header-pending-navigation', 'true');
@@ -112,10 +67,15 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     if (event.target === event.currentTarget) {
       headerRef.current?.removeAttribute('data-transition');
       document.documentElement.setAttribute('data-page-transition', 'revealing');
-      revealTimerRef.current = window.setTimeout(() => {
-        document.documentElement.removeAttribute('data-page-transition');
-        revealTimerRef.current = null;
-      }, 460);
+    }
+  };
+
+  const finishPageReveal = (event) => {
+    if (
+      event.target === event.currentTarget
+      && document.documentElement.getAttribute('data-page-transition') === 'revealing'
+    ) {
+      document.documentElement.removeAttribute('data-page-transition');
     }
   };
 
@@ -151,17 +111,13 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
           className={styles.roadStripeLayer}
           aria-hidden="true"
           onAnimationEnd={finishHeaderTransition}
-        >
-          {stripeOffsets.map((offset) => (
-            <span
-              className={styles.roadStripe}
-              key={offset}
-              style={{ '--stripe-offset': `${offset}px` }}
-            />
-          ))}
-        </div>
+        />
       </header>
-      <div className={styles.pageTransitionCurtain} aria-hidden="true" />
+      <div
+        className={styles.pageTransitionCurtain}
+        aria-hidden="true"
+        onAnimationEnd={finishPageReveal}
+      />
     </>
   );
 }

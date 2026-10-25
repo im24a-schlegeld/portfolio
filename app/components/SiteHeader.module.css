@@ -2,7 +2,7 @@
   --site-header-height: 92px;
   --road-dash: 54px;
   --road-gap: 68px;
-  --road-cycle: 122px;
+  --road-cycle: calc(var(--road-dash) + var(--road-gap));
   --road-stripe-height: 18px;
   box-sizing: border-box;
   position: relative;
@@ -28,27 +28,28 @@
 .roadStripeLayer {
   position: absolute;
   z-index: 0;
-  inset: 0;
-  overflow: hidden;
+  right: calc(-1 * var(--road-cycle));
+  bottom: 0;
+  left: calc(-1 * var(--road-cycle));
+  height: var(--road-stripe-height);
   pointer-events: none;
+  /* Paint beyond both edges so every dash can travel through the viewport. */
+  background-image: linear-gradient(
+    90deg,
+    transparent 0 calc(var(--road-gap) / 2),
+    #f2c94c calc(var(--road-gap) / 2) calc(var(--road-gap) / 2 + var(--road-dash)),
+    transparent calc(var(--road-gap) / 2 + var(--road-dash))
+  );
+  background-size: var(--road-cycle) 100%;
+  background-position: calc(50% + var(--road-cycle) / 2) 0;
+  background-repeat: repeat-x;
   backface-visibility: hidden;
-  contain: paint;
   transform: translate3d(0, 0, 0);
-  will-change: transform;
   animation: none;
 }
 
-.roadStripe {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: var(--road-dash);
-  height: var(--road-stripe-height);
-  background: #f2c94c;
-  transform: translateX(calc(-50% + var(--stripe-offset)));
-}
-
 .siteHeader[data-transition='true'] .roadStripeLayer {
+  will-change: transform;
   animation: roadHeaderStripesLeft 620ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -161,21 +162,21 @@
 
 @keyframes roadHeaderStripesLeft {
   from {
-    transform: translate3d(calc(-1 * var(--road-cycle)), 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(calc(-1 * var(--road-cycle)), 0, 0);
   }
 }
 
 @keyframes roadHeaderStripesRight {
   from {
-    transform: translate3d(var(--road-cycle), 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(var(--road-cycle), 0, 0);
   }
 }
 
@@ -201,6 +202,10 @@
     justify-content: center;
     gap: 12px;
     padding: 16px 0;
+  }
+
+  .roadStripeLayer {
+    background-position: 0 0;
   }
 
   .siteNav {
