@@ -35,10 +35,10 @@ export const projects = [
     title: 'Wheelie Escape',
     category: '3D-Spiel / KI',
     description: 'Ein 3D-Motorradspiel mit Wheelies, Verkehr und einer eigenen Garage.',
-    brand: { name: 'PFUSCH-Clothing', url: 'https://pfusch-clothing.ch/' },
+    brand: { name: 'Pfusch Clothing', url: 'https://pfusch-clothing.ch/' },
     detailText: [
       'In Wheelie Escape hält man Wheelies, weicht dem Verkehr aus und sammelt Punkte. Dazu kommen verschiedene Motorräder, eine Garage und Aufgaben.',
-      'Ich habe das Spiel für meine Kleidermarke PFUSCH-Clothing entwickelt. Ich wollte ausprobieren, was sich mit KI umsetzen lässt und wo sie an ihre Grenzen kommt.',
+      'Ich habe das Spiel für meine Kleidermarke Pfusch Clothing entwickelt. Ich wollte ausprobieren, was sich mit KI umsetzen lässt und wo sie an ihre Grenzen kommt.',
     ],
     role: {
       title: 'Entwicklung mit KI',
@@ -54,7 +54,7 @@ export const projects = [
     media: {
       type: 'game',
       src: 'https://game.pfusch-clothing.ch/',
-      poster: '/wheelie-escape-current.jpg',
+      poster: '/pfusch-game-poster.png',
       label: 'Wheelie Escape',
     },
   },
