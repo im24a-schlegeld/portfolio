@@ -13,7 +13,7 @@ export default function GamePreview({ src, poster, title }) {
         <Image
           className="gamePoster"
           src={poster}
-          alt="Wheelie Escape: Motorradfahrer beim Wheelie auf einer Stadtstrasse"
+          alt="Wheelie Escape: aktuelle Garage mit Supermoto und Motorradauswahl"
           fill
           sizes="(max-width: 980px) 100vw, 650px"
         />

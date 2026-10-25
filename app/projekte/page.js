@@ -144,6 +144,24 @@ function ProjectActions({ project }) {
   );
 }
 
+function ProjectParagraph({ text, brand }) {
+  const brandIndex = brand ? text.indexOf(brand.name) : -1;
+
+  return (
+    <p>
+      {brandIndex < 0 ? text : (
+        <>
+          {text.slice(0, brandIndex)}
+          <a className="projectBrandLink" href={brand.url} target="_blank" rel="noopener noreferrer">
+            {brand.name}
+          </a>
+          {text.slice(brandIndex + brand.name.length)}
+        </>
+      )}
+    </p>
+  );
+}
+
 function ProjectShowcase({ project }) {
   return (
     <article
@@ -157,7 +175,9 @@ function ProjectShowcase({ project }) {
         <p className="description">{project.description}</p>
 
         <div className="projectDetailText">
-          {project.detailText.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {project.detailText.map((paragraph) => (
+            <ProjectParagraph text={paragraph} brand={project.brand} key={paragraph} />
+          ))}
         </div>
 
         {project.role && (
@@ -498,6 +518,12 @@ export default function Projekte() {
           margin-top: 28px;
           padding-top: 22px;
           border-top: 1px solid rgba(245, 242, 233, 0.18);
+        }
+
+        .projectBrandLink {
+          color: #f2c94c;
+          text-decoration: underline;
+          text-underline-offset: 3px;
         }
 
         .projectRole h3 {
