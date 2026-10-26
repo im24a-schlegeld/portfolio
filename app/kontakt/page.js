@@ -6,14 +6,13 @@ export const metadata = {
   description: 'Kontaktseite von Dario Schlegel.',
 };
 
-function ContactRow({ index, label, value, action, href, external = false }) {
+function ContactRow({ label, value, action, href, external = false }) {
   return (
     <a
       className="contactRow"
       href={href}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
     >
-      <span className="contactRowIndex">{index}</span>
       <span className="contactRowLabel">{label}</span>
       <span className="contactRowValue">{value}</span>
       <strong className="contactRowAction">
@@ -36,21 +35,18 @@ export default function Kontakt() {
 
         <div className="contactDirectory" aria-label="Kontaktmöglichkeiten">
           <ContactRow
-            index="01"
             label="E-Mail"
             value={portfolioContact.emailDisplay}
             action="Schreiben"
             href={`mailto:${portfolioContact.email}`}
           />
           <ContactRow
-            index="02"
             label="Telefon"
             value={portfolioContact.phone}
             action="Anrufen"
             href={`tel:${portfolioContact.phone}`}
           />
           <ContactRow
-            index="03"
             label="GitHub"
             value={portfolioContact.githubUrl.replace(/^https?:\/\//, '')}
             action="Öffnen"
@@ -85,7 +81,6 @@ export default function Kontakt() {
           border-left: 6px solid #f2c94c;
         }
 
-        .contactRowIndex,
         .contactRowLabel {
           color: rgba(242, 201, 76, 0.72);
           font-size: 11px;
@@ -116,7 +111,7 @@ export default function Kontakt() {
 
         .contactRow {
           display: grid;
-          grid-template-columns: 52px minmax(150px, 0.35fr) minmax(0, 1fr) auto;
+          grid-template-columns: minmax(150px, 0.35fr) minmax(0, 1fr) auto;
           align-items: center;
           gap: 20px;
           min-width: 0;
@@ -132,10 +127,6 @@ export default function Kontakt() {
         .contactRow:focus-visible {
           border-color: #f2c94c;
           outline: none;
-        }
-
-        .contactRowIndex {
-          color: #f2c94c;
         }
 
         .contactRowLabel {
@@ -183,30 +174,24 @@ export default function Kontakt() {
           }
 
           .contactRow {
-            grid-template-columns: 42px minmax(0, 1fr) auto;
+            grid-template-columns: minmax(0, 1fr) auto;
             gap: 12px;
             min-height: 112px;
             padding: 22px 0;
           }
 
           .contactRowLabel {
-            grid-column: 2 / -1;
+            grid-column: 1 / -1;
             grid-row: 1;
           }
 
-          .contactRowIndex {
-            grid-column: 1;
-            grid-row: 1 / span 2;
-            align-self: start;
-          }
-
           .contactRowValue {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 2;
           }
 
           .contactRowAction {
-            grid-column: 3;
+            grid-column: 2;
             grid-row: 2;
           }
         }
