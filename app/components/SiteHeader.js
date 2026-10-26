@@ -13,6 +13,7 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     const isValidDirection = (value) => value === 'left' || value === 'right';
     const isInternalNavigation = window.sessionStorage.getItem('site-header-pending-navigation') === 'true';
     const storedDirection = window.sessionStorage.getItem('site-header-direction');
+    const storedSteps = Number(window.sessionStorage.getItem('site-header-steps'));
     headerRef.current?.removeAttribute('data-transition');
 
     if (!isInternalNavigation) {
@@ -27,7 +28,11 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     }
 
     const direction = isValidDirection(storedDirection) ? storedDirection : 'right';
+    const steps = Number.isInteger(storedSteps)
+      ? Math.min(navigationItems.length - 1, Math.max(1, storedSteps))
+      : 1;
     headerRef.current?.setAttribute('data-direction', direction);
+    headerRef.current?.style.setProperty('--road-steps', String(steps));
 
     let transitionFrame;
     const paintFrame = window.requestAnimationFrame(() => {
@@ -57,9 +62,11 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
 
     const currentIndex = navigationItems.findIndex((item) => item.key === activeKey);
     const nextIndex = navigationItems.findIndex((item) => item.key === key);
-    const nextDirection = nextIndex >= currentIndex ? 'right' : 'left';
+    const nextDirection = nextIndex >= currentIndex ? 'left' : 'right';
+    const steps = Math.max(1, Math.abs(nextIndex - currentIndex));
     document.documentElement.setAttribute('data-page-transition', 'waiting');
     window.sessionStorage.setItem('site-header-direction', nextDirection);
+    window.sessionStorage.setItem('site-header-steps', String(steps));
     window.sessionStorage.setItem('site-header-pending-navigation', 'true');
   };
 
