@@ -1,5 +1,8 @@
-import FreizeitPage from '../about/page';
+import FreizeitPage from '../components/FreizeitPage';
 
-export { metadata } from '../about/layout';
+export const metadata = {
+  title: 'Freizeit',
+  description: 'Persönliche Interessen von Dario Schlegel: Motorradfahren, Pfadi und Tauchen.',
+};
 
 export default FreizeitPage;
