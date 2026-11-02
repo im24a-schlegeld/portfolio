@@ -87,6 +87,7 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   const finishHeaderTransition = (event) => {
     if (event.target === event.currentTarget) {
       headerRef.current?.removeAttribute('data-transition');
+      headerRef.current?.setAttribute('data-header-reveal', 'true');
       document.documentElement.setAttribute('data-page-transition', 'revealing');
     }
   };
