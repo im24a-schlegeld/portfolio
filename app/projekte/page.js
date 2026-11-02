@@ -205,15 +205,17 @@ export default function Projekte() {
   return (
     <main className="projectsPage">
       <SiteHeader activeKey="projects" />
-      <section className="projectsIntro" aria-labelledby="projects-title">
-        <h1 id="projects-title">Projekte</h1>
-      </section>
+      <div data-page-transition-content>
+        <section className="projectsIntro" aria-labelledby="projects-title">
+          <h1 id="projects-title">Projekte</h1>
+        </section>
 
-      <section className="projectStack projectsList" aria-label="Projekte">
-        {projects.map((project) => (
-          <ProjectShowcase project={project} key={project.title} />
-        ))}
-      </section>
+        <section className="projectStack projectsList" aria-label="Projekte">
+          {projects.map((project) => (
+            <ProjectShowcase project={project} key={project.title} />
+          ))}
+        </section>
+      </div>
 
       <style>{`
         .projectsPage {

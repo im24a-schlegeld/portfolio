@@ -499,7 +499,7 @@ export default function About() {
     <div className="page">
       <FreizeitHeader />
 
-      <main className="freizeitMain">
+      <main className="freizeitMain" data-page-transition-content>
         <div className="desktopFreizeit">
           <DesktopFreizeitStory
             storyRef={storyRef}

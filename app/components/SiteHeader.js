@@ -10,6 +10,20 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   const transitionKey = `${variant}:${activeKey ?? ''}`;
 
   useEffect(() => {
+    const finishPageReveal = (event) => {
+      if (
+        event.target.hasAttribute?.('data-page-transition-content')
+        && document.documentElement.getAttribute('data-page-transition') === 'revealing'
+      ) {
+        document.documentElement.removeAttribute('data-page-transition');
+      }
+    };
+
+    document.addEventListener('animationend', finishPageReveal);
+    return () => document.removeEventListener('animationend', finishPageReveal);
+  }, []);
+
+  useEffect(() => {
     const isValidDirection = (value) => value === 'left' || value === 'right';
     const isInternalNavigation = window.sessionStorage.getItem('site-header-pending-navigation') === 'true';
     const storedDirection = window.sessionStorage.getItem('site-header-direction');
@@ -77,15 +91,6 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     }
   };
 
-  const finishPageReveal = (event) => {
-    if (
-      event.target === event.currentTarget
-      && document.documentElement.getAttribute('data-page-transition') === 'revealing'
-    ) {
-      document.documentElement.removeAttribute('data-page-transition');
-    }
-  };
-
   return (
     <>
       <header
@@ -120,11 +125,6 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
           onAnimationEnd={finishHeaderTransition}
         />
       </header>
-      <div
-        className={styles.pageTransitionCurtain}
-        aria-hidden="true"
-        onAnimationEnd={finishPageReveal}
-      />
     </>
   );
 }

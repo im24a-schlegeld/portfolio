@@ -27,7 +27,7 @@ export default function Kontakt() {
     <main className="contactPage">
       <SiteHeader activeKey="contact" />
 
-      <section className="contactContent" aria-labelledby="contact-title">
+      <section className="contactContent" data-page-transition-content aria-labelledby="contact-title">
         <div className="contactIntro">
           <h1 id="contact-title">Kontakt</h1>
           <div className="contactRule" aria-hidden="true" />
@@ -61,7 +61,10 @@ export default function Kontakt() {
           min-height: 100svh;
           color: #f5f2e9;
           font-family: Bahnschrift, 'Arial Narrow', 'Segoe UI', sans-serif;
-          background: linear-gradient(135deg, #070707 0%, #111111 55%, #070707 100%);
+          background-color: #111111;
+          background-image: var(--asphalt-surface);
+          background-position: var(--asphalt-surface-position);
+          background-size: var(--asphalt-surface-size);
         }
 
         .contactPage,

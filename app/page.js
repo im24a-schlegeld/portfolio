@@ -30,7 +30,7 @@ export default function Home() {
     <div className="roadMain">
       <SiteHeader activeKey="home" variant="home" />
 
-      <main className="roadMap">
+      <main className="roadMap" data-page-transition-content>
         <div className="centerRoadLine" aria-hidden="true" />
 
         <section className="intersectionHero" aria-labelledby="hero-title">
