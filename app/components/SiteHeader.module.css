@@ -13,11 +13,6 @@
   min-height: var(--site-header-height);
   overflow: hidden;
   border-bottom: 0;
-  background: linear-gradient(180deg, #0b0c0d 0%, #090a0b 100%);
-  color: #f5f2e9;
-}
-
-.siteHeaderHome {
   background: linear-gradient(
     180deg,
     #090a0b 0%,
@@ -26,6 +21,7 @@
     rgba(9, 10, 11, 0.54) 90%,
     rgba(9, 10, 11, 0) 100%
   );
+  color: #f5f2e9;
 }
 
 .roadStripeLayer {
@@ -58,10 +54,6 @@
 
 .siteHeader[data-transition='true'][data-direction='right'] .roadStripeLayer {
   animation-name: roadHeaderStripesRight;
-}
-
-.siteHeader[data-header-reveal='true'] {
-  animation: siteHeaderFadeIn 400ms ease both;
 }
 
 :global(html[data-page-transition]) [data-site-header] {
@@ -184,16 +176,6 @@
   }
 }
 
-@keyframes siteHeaderFadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 @media (max-width: 700px) {
   .siteHeader {
     --site-header-height: 126px;
@@ -225,10 +207,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .siteHeader {
-    animation: none;
-  }
-
   .roadStripeLayer {
     animation: none !important;
   }

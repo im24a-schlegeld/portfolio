@@ -28,7 +28,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className="roadMain">
-      <SiteHeader activeKey="home" variant="home" />
+      <SiteHeader activeKey="home" />
 
       <main className="roadMap" data-page-transition-content>
         <div className="centerRoadLine" aria-hidden="true" />

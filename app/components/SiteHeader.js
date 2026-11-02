@@ -5,9 +5,9 @@ import { useEffect, useRef } from 'react';
 import { navigationItems } from '../../data/portfolio';
 import styles from './SiteHeader.module.css';
 
-export default function SiteHeader({ activeKey, variant = 'default' }) {
+export default function SiteHeader({ activeKey }) {
   const headerRef = useRef(null);
-  const transitionKey = `${variant}:${activeKey ?? ''}`;
+  const transitionKey = activeKey ?? '';
 
   useEffect(() => {
     const finishPageReveal = (event) => {
@@ -87,7 +87,6 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
   const finishHeaderTransition = (event) => {
     if (event.target === event.currentTarget) {
       headerRef.current?.removeAttribute('data-transition');
-      headerRef.current?.setAttribute('data-header-reveal', 'true');
       document.documentElement.setAttribute('data-page-transition', 'revealing');
     }
   };
@@ -96,7 +95,7 @@ export default function SiteHeader({ activeKey, variant = 'default' }) {
     <>
       <header
         ref={headerRef}
-        className={`${styles.siteHeader} ${variant === 'home' ? styles.siteHeaderHome : ''}`}
+        className={styles.siteHeader}
         data-site-header="true"
         data-direction="right"
       >
