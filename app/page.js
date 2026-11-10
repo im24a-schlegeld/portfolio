@@ -856,6 +856,23 @@ export default function Home() {
             margin-bottom: 20px;
           }
 
+          .heroKicker {
+            font-size: 13px;
+          }
+
+          .projectItemCategory,
+          .projectItemCta {
+            font-size: 12px;
+          }
+
+          .projectItem p {
+            font-size: 16px;
+          }
+
+          .technologyDirectory li span {
+            font-size: 12px;
+          }
+
           .stopSignWrap {
             inset: 0;
           }

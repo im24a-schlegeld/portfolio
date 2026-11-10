@@ -176,6 +176,10 @@ export default function Kontakt() {
             padding-left: 22px;
           }
 
+          .contactRowLabel {
+            font-size: 13px;
+          }
+
           .contactRow {
             grid-template-columns: minmax(0, 1fr) auto;
             gap: 12px;
@@ -191,11 +195,13 @@ export default function Kontakt() {
           .contactRowValue {
             grid-column: 1;
             grid-row: 2;
+            font-size: 18px;
           }
 
           .contactRowAction {
             grid-column: 2;
             grid-row: 2;
+            font-size: 12px;
           }
         }
 

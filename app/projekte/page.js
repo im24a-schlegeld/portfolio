@@ -1135,6 +1135,30 @@ export default function Projekte() {
             padding-top: 26px;
           }
 
+          .projectMeta,
+          .projectIndex,
+          .browserTop p,
+          .miniBrowserTop p,
+          .embedFallback a,
+          .embedOpenLink {
+            font-size: 13px;
+          }
+
+          .embedFallback span {
+            font-size: 14px;
+          }
+
+          .projectFacts dt,
+          .caseStudy span {
+            font-size: 12px;
+          }
+
+          .projectFacts dd,
+          .caseStudy p,
+          .gamePreviewBar > span {
+            font-size: 15px;
+          }
+
           .browserTop {
             min-height: 42px;
             padding: 0 12px;
@@ -1162,7 +1186,7 @@ export default function Projekte() {
 
           .techList span {
             min-height: 38px;
-            font-size: 12px;
+            font-size: 13px;
           }
         }
 

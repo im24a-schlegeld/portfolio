@@ -1261,11 +1261,11 @@ export default function About() {
 
           .kicker {
             margin-bottom: 5px;
-            font-size: 9px;
+            font-size: 12px;
           }
 
           .title {
-            font-size: clamp(23px, 7.5vw, 30px);
+            font-size: clamp(26px, 7.5vw, 34px);
           }
 
           .pfadiStage {
@@ -1280,12 +1280,12 @@ export default function About() {
 
           .pfadiTitle {
             margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+            font-size: clamp(16px, 4vw, 17px);
           }
 
           .pfadiText {
-            font-size: clamp(14px, 4vw, 17px);
-            line-height: 1.23;
+            font-size: clamp(16px, 4vw, 17px);
+            line-height: 1.25;
           }
 
           .swordMotion {
@@ -1296,7 +1296,7 @@ export default function About() {
           .swordHint {
             bottom: 0;
             padding-bottom: 4px;
-            font-size: 9px;
+            font-size: 12px;
             letter-spacing: 0.1em;
           }
 
@@ -1323,12 +1323,12 @@ export default function About() {
 
           .diveTitle {
             margin-bottom: 6px;
-            font-size: clamp(14px, 4vw, 17px);
+            font-size: clamp(16px, 4vw, 17px);
           }
 
           .diveText {
-            font-size: clamp(14px, 3.9vw, 17px);
-            line-height: 1.22;
+            font-size: clamp(16px, 3.9vw, 17px);
+            line-height: 1.25;
           }
 
           .diveVideoMotion {
@@ -1356,7 +1356,7 @@ export default function About() {
           }
 
           .title {
-            font-size: 22px;
+            font-size: 26px;
           }
 
           .pfadiStage {
@@ -1401,7 +1401,7 @@ export default function About() {
           }
 
           .title {
-            font-size: 22px;
+            font-size: 26px;
           }
 
           .pfadiStage {
@@ -1412,13 +1412,13 @@ export default function About() {
 
           .pfadiTitle,
           .diveTitle {
-            font-size: 13px;
+            font-size: 16px;
           }
 
           .pfadiText,
           .diveText {
-            font-size: 13px;
-            line-height: 1.18;
+            font-size: 16px;
+            line-height: 1.2;
           }
 
           .swordMotion {
